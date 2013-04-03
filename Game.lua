@@ -6,6 +6,7 @@
 local Event			= require("obj.Event")
 local Scheduler		= require("obj.Scheduler")
 local Server		= require("obj.Server")
+local GameState		= require("GameState")
 local Game			= {}
 
 -- game data
@@ -14,18 +15,30 @@ Game.version		= "0.0a"
 Game.defaultPort	= 8000
 
 -- runtime data
+Game.state			= GameState.NEW
 Game.scheduler		= Scheduler:new()
 Game.server			= Server:new()
 
--- begin hosting
-function Game:host(port)
+-- open the game for play
+function Game:open(port)
 	local _, err = Game.server:host(port or Game.defaultPort)
-	Game.scheduler:queue(Game.AcceptEvent:new(os.clock()))
-	Game.scheduler:queue(Game.PollEvent:new(os.clock()))
+	if not _ then
+		return false, err
+	end
+
+	Game:queue(Game.AcceptEvent:new(os.clock()))
+	Game:queue(Game.PollEvent:new(os.clock()))
+	Game:setState(GameState.READY)
+	return true
 end
 
--- stop hosting
-function Game:close()
+-- close the game for play
+function Game:shutdown()
+	for i,v in ipairs(self.server:getClients()) do
+		v:sendLine("The game is now closed! Get over it!")
+	end
+
+	Game:setState(GameState.SHUTDOWN)
 	Game.server:close()
 	Game.scheduler:clear()
 end
@@ -37,40 +50,95 @@ function Game:update()
 	Game.scheduler:poll(os.clock())
 end
 
+-- shortcut for Game.scheduler:queue
+function Game:queue(event)
+	Game.scheduler:queue(event)
+end
+
+-- shortcut for Game.scheduler:deque
+function Game:deque(event)
+	Game.scheduler:deque(event)
+end
+
 function Game:onClientConnect(client)
-	print(os.clock(), "connection", client:getSocket():getpeername())
+	print("Connected client " .. tostring(client))
+	for i,v in ipairs(self.server:getClients()) do
+		v:sendLine(tostring(client) .. " has connected!")
+	end
 end
 
 function Game:onClientDisconnect(client)
-	print(os.clock(), "disconnection", client:getSocket():getpeername())
+	print("Disconnected client " .. tostring(client))
+	for i,v in ipairs(self.server:getClients()) do
+		v:sendLine(tostring(client) .. " has left!")
+	end
 end
 
 function Game:onClientInput(client, input)
-	print(os.clock(), "from", client:getSocket():getpeername(), "'" .. input .."'")
+	for i,v in ipairs(self.server:getClients()) do
+		v:sendLine(tostring(client) .. ": " .. input)
+	end
 end
 
--- EVENTS
+--[[
+	Set the game's state.
+	@param state The state to be assigned.<br/>Valid states can be found in GameState.lua
+]]
+function Game:setState(state)
+	self.state = state
+end
+
+--[[
+	Retreive the game's state.
+	@return The game's state.<br/>Valid states can be found in GameState.lua
+]]
+function Game:getState()
+	return self.state
+end
+
+--[[
+	Check if the game is ready to be played.
+	@return true if the game's state is at GameState.READY.<br/>false otherwise.
+]]
+function Game:isReady()
+	return self.state == GameState.READY
+end
+
+--[[
+	This event acts as the middle ground for client connections, accepting
+	clients on behalf of the server, and informing the game about it.
+]]
 Game.AcceptEvent				= Event:clone()
 Game.AcceptEvent.shouldRepeat	= true
 Game.AcceptEvent.repeatMax		= 0
 Game.AcceptEvent.repeatInterval	= 0.1
+
 function Game.AcceptEvent:run()
 	if not Game.server:isHosted() then
 		return
 	end
 
-	local _, err = Game.server:accept()
-	if not _ then
+	local client, err = Game.server:accept()
+	if not client then
 		return
 	end
 
-	Game:onClientConnect(_)
+	Game:onClientConnect(client)
 end
 
+
+--[[
+	This event acts as the middle ground for client input, polling clients
+	from the server for input and informing the game about it.
+
+	Also is the starting point for destroying clients that have disconnected
+	and cannot be reached.
+]]
 Game.PollEvent					= Event:clone()
 Game.PollEvent.shouldRepeat		= true
 Game.PollEvent.repeatMax		= 0
 Game.PollEvent.repeatInterval	= 0.1
+
 function Game.PollEvent:run()
 	if not Game.server:isHosted() then
 		return
@@ -81,14 +149,14 @@ function Game.PollEvent:run()
 	end
 
 	for i,v in table.safeIPairs(Game.server:getClients()) do
-		local _, err, partial = v:receive("*l")
-		if not _ then
+		local client, err, partial = v:receive("*l")
+		if not client then
 			if err == 'closed' then
 				Game.server:disconnectClient(v)
 				Game:onClientDisconnect(v)
 			end
 		else
-			Game:onClientInput(v, _)
+			Game:onClientInput(v, client)
 		end
 	end
 end

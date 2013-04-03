@@ -9,6 +9,7 @@ local Client	= require("obj.Client")
 local Server	= Cloneable.clone()
 
 -- runtime data
+Server.clientID		= 0 -- ID for next client.
 Server.socket		= nil
 Server.clients		= nil
 
@@ -73,26 +74,32 @@ function Server:accept()
 	end
 
 	self:initializeClientSocket(socket)
-	local client = Client:new(socket)
+	local id		= self.clientID
+	self.clientID	= self.clientID + 1
+	local client	= Client:new(socket, id)
 	self:connectClient(client)
 
 	return client
 end
 
+--[[
+	Start managing a client.
+	@param client	The client to manage.
+]]
 function Server:connectClient(client)
 	table.insert(self.clients, client)
 end
 
+--[[
+	Stop managing a client.
+	@param client	The client to stop managing.
+]]
 function Server:disconnectClient(client)
 	for i,v in table.safeIPairs(self.clients) do
 		if v == client then
 			table.remove(self.clients, i)
 		end
 	end
-end
-
-function Server:getClients()
-	return self.clients
 end
 
 --[[
@@ -117,6 +124,14 @@ end
 ]]
 function Server:isHosted()
 	return (self.socket ~= nil and self.socket:getsockname() ~= nil)
+end
+
+--[[
+	Return the server's list of clients.
+	@return the list of clients.
+]]
+function Server:getClients()
+	return self.clients
 end
 
 return Server

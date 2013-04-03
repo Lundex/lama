@@ -1,16 +1,21 @@
 --[[	Author:	Milkmanjack
 		Date:	3/5/13
-		Allows for pretend inheritance between objects.
+		Allows for pseudo-inheritance between objects.
 ]]
 
 local Cloneable	= {}
 
--- create a class-style clone of a Cloneable.
--- if init is true, initialize as an instance-style clone.
--- arguments beyond the first 2 are passed to the instance's initialization function.
+--[[
+	Create a class-style clone of a Cloneable (one that isn't initialized).
+	If init is true, initialize as an instance-style clone.
+	Arguments beyond the first 2 are passed to the instance's initialization function.
+]]
 function Cloneable.clone(parent, init, ...)
 	local instance = {}
-	setmetatable(instance, {__index=parent or Cloneable})
+	setmetatable(instance, {__index=parent or Cloneable,
+							__tostring=parent and parent.toString or Cloneable.toString
+							}
+	)
 
 	-- should we initialize?
 	-- (only in cases where we're making an active instance)
@@ -21,13 +26,25 @@ function Cloneable.clone(parent, init, ...)
 	return instance
 end
 
--- shortcut for creating an instance-style clone.
--- arguments beyond the first 2 are passed to the instance's initialization function.
+--[[
+	Shortcut for creating an instance-style clone (one that is initialized).
+	Arguments beyond the first 2 are passed to the instance's initialization function.
+]]
 function Cloneable.new(parent, ...)
 	return Cloneable.clone(parent, true, ...)
 end
 
+--[[
+	Entry point for constructor-style initialization of instances.
+]]
 function Cloneable:initialize(...)
+end
+
+--[[
+	Entry point for tostring() access.
+]]
+function Cloneable:toString()
+	return "{cloneable}"
 end
 
 return Cloneable

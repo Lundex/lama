@@ -62,6 +62,7 @@ end
 
 --[[
 	Has this event fired already?
+	@return true if it has fired.<br/>false otherwise.
 ]]
 function Event:hasRun()
 	return self.didRun
@@ -70,6 +71,7 @@ end
 --[[
 	Will this event repeat (anymore)? Takes into consideration whether or not we
 	have reached our repeat maximum (so it will return false if we have reached it).
+	@return true if it will repeat.<br/>false otherwise.
 ]]
 function Event:willRepeat()
 	return self.shouldRepeat == true and (self.currentRepeat < self.repeatMax or self.repeatMax == nil or self.repeatMax == 0)
