@@ -149,14 +149,14 @@ function Game.PollEvent:run()
 	end
 
 	for i,v in table.safeIPairs(Game.server:getClients()) do
-		local client, err, partial = v:receive("*l")
-		if not client then
+		local input, err, partial = v:receive("*a")
+		if not input then
 			if err == 'closed' then
 				Game.server:disconnectClient(v)
 				Game:onClientDisconnect(v)
 			end
 		else
-			Game:onClientInput(v, client)
+			Game:onClientInput(v, input)
 		end
 	end
 end
