@@ -154,7 +154,21 @@ function Game.PollEvent:run()
 			if err == 'closed' then
 				Game.server:disconnectClient(v)
 				Game:onClientDisconnect(v)
+
+			-- actual processing starts here because we're using the *a pattern for receive()
+			-- this way we don't lose things like client negotiations
+			-- though we don't support them right now anyway
+			elseif partial ~= nil and string.len(partial) > 0 then
+				local stripped = string.match(partial, "(.+)\n")
+				if stripped then
+					Game:onClientInput(v, stripped)
+				else
+					print("bad input from " .. tostring(v) .. ": " .. partial)
+				end
 			end
+
+		-- this is where we'd start normal processing if we used the socket's *l receive pattern.
+		-- just here for posterity's sake right now.
 		else
 			Game:onClientInput(v, input)
 		end
