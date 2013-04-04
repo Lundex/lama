@@ -1,11 +1,10 @@
-local Game = require("Game")
-local _, err = Game:open()
+local Game		= require("Game")
+local _, err = Game.open()
 if not _ then
-	print("Failed to host world:", err)
-	return
+	Game.error("failed to open game: " .. err)
+	exit(0)
 end
 
-print("Hosting game server on port " .. Game.defaultPort .. ".")
-while Game:isReady() do
-	Game:update()
+while Game.isReady() do
+	Game.update()
 end

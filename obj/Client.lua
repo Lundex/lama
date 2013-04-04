@@ -26,11 +26,11 @@ end
 ]]
 function Client:toString()
 	if not self.socket then
-		return string.format("client#%d@nil", self.id or -1)
+		return string.format("{client#%d@nil}", self.id or -1)
 	end
 
 	local addr, port = self.socket:getpeername()
-	return string.format("client#%d@%s", self.id or -1, addr)
+	return string.format("{client#%d@%s}", self.id or -1, addr)
 end
 
 --[[
