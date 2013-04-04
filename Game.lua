@@ -108,7 +108,7 @@ function Game.fatal(message)
 	game.fileLogger:fatal(message)
 end
 
-function Game.logCommand(client, command)
+function Game.logCommand(client, input)
 	Game.commandLogger:info(tostring(client) .. ": '" .. input .. "'")
 end
 -- /logger shortcuts
@@ -119,8 +119,11 @@ end
 ]]
 function Game.onClientConnect(client)
 	Game.info("Connected client " .. tostring(client))
+	client:sendLine("Welcome to " .. Game.getName() .. " v" .. Game.getVersion() .."!")
 	for i,v in ipairs(Game.server:getClients()) do
-		v:sendLine(tostring(client) .. " has connected!")
+		if v ~= client then
+			v:sendLine(tostring(client) .. " has connected!")
+		end
 	end
 end
 
@@ -130,8 +133,11 @@ end
 ]]
 function Game.onClientDisconnect(client)
 	Game.info("Disconnected client " .. tostring(client))
+	client:sendLine("Goodbye!")
 	for i,v in ipairs(Game.server:getClients()) do
-		v:sendLine(tostring(client) .. " has left!")
+		if v ~= client then
+			v:sendLine(tostring(client) .. " has left!")
+		end
 	end
 end
 
@@ -141,6 +147,12 @@ end
 ]]
 function Game.onClientInput(client, input)
 	Game.logCommand(client, input)
+	if input == "quit" then
+		Game.onClientDisconnect(client)
+		Game.server:disconnectClient(client)
+		return
+	end
+
 	for i,v in ipairs(Game.server:getClients()) do
 		v:sendLine(tostring(client) .. ": " .. input)
 	end
@@ -152,6 +164,22 @@ end
 ]]
 function Game.setState(state)
 	Game.state = state
+end
+
+--[[
+	Retreive the game's name.
+	@return The name of the game.
+]]
+function Game.getName()
+	return Game.name
+end
+
+--[[
+	Retreive the game's version.
+	@return The version of the game.
+]]
+function Game.getVersion()
+	return Game.version
 end
 
 --[[
@@ -218,14 +246,14 @@ function Game.PollEvent:run()
 		local input, err, partial = v:receive("*a")
 		if not input then
 			if err == 'closed' then
-				Game.server:disconnectClient(v)
 				Game.onClientDisconnect(v)
+				Game.server:disconnectClient(v)
 
 			-- actual processing starts here because we're using the *a pattern for receive()
 			-- this way we don't lose things like client negotiations
 			-- though we don't support them right now anyway
 			elseif partial ~= nil and string.len(partial) > 0 then
-				local stripped = string.match(partial, "(.+)\n")
+				local stripped = string.match(partial, "(.+)[\r?][\n?]")
 				if stripped then
 					Game.onClientInput(v, stripped)
 				else
