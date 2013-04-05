@@ -1,15 +1,18 @@
 --[[	Author:	Milkmanjack
 		Date:	4/1/13
-		Singleton that handles game logic.
+		Package that handles game processing.
 ]]
 
 require("logging")
 require("logging.file")
 require("logging.console")
+local Telnet		= require("Telnet")
+local Nanny			= require("Nanny")
+local ClientState	= require("ClientState")
+local GameState		= require("GameState")
 local Event			= require("obj.Event")
 local Scheduler		= require("obj.Scheduler")
 local Server		= require("obj.Server")
-local GameState		= require("GameState")
 local Game			= {}
 
 -- game data
@@ -33,13 +36,13 @@ Game.commandLogger:setLevel(logging.DEBUG)
 
 -- open the game for play
 function Game.open(port)
-	Game.info("Preparing to host server on port " .. (port or Game.defaultPort) .. "...")
+	Game.info(string.format("Preparing to host game server on port %d...", port or Game.defaultPort))
 	local _, err = Game.server:host(port or Game.defaultPort)
 	if not _ then
 		return false, err
 	end
 
-	Game.info("Preparing necessary scheduler events...")
+	Game.info("Preparing scheduler...")
 	Game.queue(Game.AcceptEvent:new(os.clock()))
 	Game.queue(Game.PollEvent:new(os.clock()))
 	Game.setState(GameState.READY)
@@ -57,7 +60,7 @@ function Game.shutdown()
 	Game.setState(GameState.SHUTDOWN)
 	Game.server:close()
 	Game.scheduler:clear()
-	Game.info("Game has been shut down!")
+	Game.info("Shut down!")
 end
 
 --[[
@@ -119,12 +122,11 @@ end
 ]]
 function Game.onClientConnect(client)
 	Game.info("Connected client " .. tostring(client))
-	client:sendLine("Welcome to " .. Game.getName() .. " v" .. Game.getVersion() .."!")
-	for i,v in ipairs(Game.server:getClients()) do
-		if v ~= client then
-			v:sendLine(tostring(client) .. " has connected!")
-		end
-	end
+
+	-- I'll streamline this later
+	Nanny.greet(client)
+	client:setState(ClientState.NAME)
+	Nanny.askForName(client)
 end
 
 --[[
@@ -134,11 +136,6 @@ end
 function Game.onClientDisconnect(client)
 	Game.info("Disconnected client " .. tostring(client))
 	client:sendLine("Goodbye!")
-	for i,v in ipairs(Game.server:getClients()) do
-		if v ~= client then
-			v:sendLine(tostring(client) .. " has left!")
-		end
-	end
 end
 
 --[[
@@ -147,15 +144,32 @@ end
 ]]
 function Game.onClientInput(client, input)
 	Game.logCommand(client, input)
+
+	-- for testing purposes (and convenience).
 	if input == "quit" then
 		Game.onClientDisconnect(client)
 		Game.server:disconnectClient(client)
 		return
 	end
 
-	for i,v in ipairs(Game.server:getClients()) do
-		v:sendLine(tostring(client) .. ": " .. input)
+	-- in-between states
+	if client:getState() ~= ClientState.PLAYING then
+		Nanny.process(client, input)
+		return
 	end
+
+	-- talk and stuff
+	for i,v in ipairs(Game.server:getClients()) do
+		v:sendLine(string.format("%s: %s", tostring(client), input))
+	end
+end
+
+--[[
+	Check if the game is ready to be played.
+	@return true if the game's state is at GameState.READY.<br/>false otherwise.
+]]
+function Game.isReady()
+	return Game.state == GameState.READY
 end
 
 --[[
@@ -191,14 +205,6 @@ function Game.getState()
 end
 
 --[[
-	Check if the game is ready to be played.
-	@return true if the game's state is at GameState.READY.<br/>false otherwise.
-]]
-function Game.isReady()
-	return Game.state == GameState.READY
-end
-
---[[
 	This event acts as the middle ground for client connections, accepting
 	clients on behalf of the server, and informing the game about it.
 ]]
@@ -208,7 +214,7 @@ Game.AcceptEvent.repeatMax		= 0
 Game.AcceptEvent.repeatInterval	= 0.1
 
 function Game.AcceptEvent:run()
-	if not Game.server:isHosted() then
+	if not Game.isReady() or not Game.server:isHosted() then
 		return
 	end
 
@@ -234,7 +240,7 @@ Game.PollEvent.repeatMax		= 0
 Game.PollEvent.repeatInterval	= 0.1
 
 function Game.PollEvent:run()
-	if not Game.server:isHosted() then
+	if not Game.isReady() or not Game.server:isHosted() then
 		return
 	end
 
@@ -257,7 +263,7 @@ function Game.PollEvent:run()
 				if stripped then
 					Game.onClientInput(v, stripped)
 				else
-					Game.debug("bad input from " .. tostring(v) .. ": " .. partial)
+					Game.debug(string.format("bad input from %s: {%s}", tostring(v), partial))
 				end
 			end
 

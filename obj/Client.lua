@@ -49,11 +49,16 @@ function Client:send(data, i, j)
 	return self.socket:send(data, i, j)
 end
 
+function Client:sendString(str)
+	str = string.gsub(str, "\n", "\r\n")
+	self:send(str)
+end
+
 --[[
 	Sends the given string to the client followed by a linebreak.
 ]]
-function Client:sendLine(string)
-	self:send(string .. "\n\r")
+function Client:sendLine(str)
+	self:sendString(string.format("%s%s", str, "\r\n"))
 end
 
 --[[

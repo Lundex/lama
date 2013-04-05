@@ -1,6 +1,6 @@
 --[[	Author:	Milkmanjack
 		Date:	4/2/13
-		Singleton meant to give context for enum-styled members.
+		Package meant to give context for enum-styled members.
 ]]
 
 local GameState		= {}

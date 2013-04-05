@@ -1,0 +1,4 @@
+4/4/2013 - Curtis Erickson
+
+--	Find out why Putty only recognizes CRLF linebreaks, and if it's a prevalent factor among MUD clients.
+	In the mean time, I'm gonna remedy this by replacing all outgoing LF linebreaks with CRLF.

@@ -1,0 +1,23 @@
+--[[
+	For reference:
+	http://www.mudbytes.net/index.php?a=files&s=displayfile&fid=2645&d=colour_V2.0/&f=colour_V2.0/patch_rom24_colour2.0
+
+	I have a better compilation in an old MUD project somewhere that I'll probably use over this.
+]]
+
++#define CLEAR		"\e[0m"		/* Resets Colour	*/
++#define C_RED		"\e[0;31m"	/* Normal Colours	*/
++#define C_GREEN		"\e[0;32m"
++#define C_YELLOW	"\e[0;33m"
++#define C_BLUE		"\e[0;34m"
++#define C_MAGENTA	"\e[0;35m"
++#define C_CYAN		"\e[0;36m"
++#define C_WHITE		"\e[0;37m"
++#define C_D_GREY	"\e[1;30m"  	/* Light Colors		*/
++#define C_B_RED		"\e[1;31m"
++#define C_B_GREEN	"\e[1;32m"
++#define C_B_YELLOW	"\e[1;33m"
++#define C_B_BLUE	"\e[1;34m"
++#define C_B_MAGENTA	"\e[1;35m"
++#define C_B_CYAN	"\e[1;36m"
++#define C_B_WHITE	"\e[1;37m"
