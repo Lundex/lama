@@ -1,4 +1,11 @@
 4/4/2013 - Curtis Erickson
 
 --	Find out why Putty only recognizes CRLF linebreaks, and if it's a prevalent factor among MUD clients.
+
 	In the mean time, I'm gonna remedy this by replacing all outgoing LF linebreaks with CRLF.
+
+--	Figure out a way to have the various singletons accessible across different files without having to re-include it every time. The alternative is to have even the singletons be instance-based, but I don't think I want to do that.
+
+	Instead, I'll probably just have the Game singleton be a global as opposed to requiring it be required every time you want to access it.
+
+	Technically speaking I can just access package.loaded.Game... but I think I won't do that. Better to have it be a global.

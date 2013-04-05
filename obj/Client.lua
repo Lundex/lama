@@ -4,21 +4,17 @@
 ]]
 
 local socket		= require("socket")
-local ClientState	= require("ClientState")
 local Cloneable		= require("obj.Cloneable")
 local Client		= Cloneable.clone()
 
 -- runtime data
-Client.state	= ClientState.NEW
-Client.id		= nil -- ID for this client. generally on a per-server basis.
 Client.socket	= nil
 
 --[[
 	Attaches a client socket to the client.
 ]]
-function Client:initialize(socket, id)
+function Client:initialize(socket)
 	self.socket	= socket
-	self.id		= id
 end
 
 --[[
@@ -26,11 +22,11 @@ end
 ]]
 function Client:toString()
 	if not self.socket then
-		return string.format("{client#%d@nil}", self.id or -1)
+		return "{client@nil}"
 	end
 
 	local addr, port = self.socket:getpeername()
-	return string.format("{client#%d@%s}", self.id or -1, addr)
+	return string.format("{client@%s}", addr)
 end
 
 --[[
@@ -69,27 +65,11 @@ function Client:close()
 end
 
 --[[
-	Set the client's state.
-	@param state The state to be assigned.<br/>Valid states can be found in ClientState.lua
-]]
-function Client:setState(state)
-	self.state = state
-end
-
---[[
 	Retreive the client's socket.
 	@return The client's socket.</br>nil if no socket is attached.
 ]]
 function Client:getSocket()
 	return self.socket
-end
-
---[[
-	Retreive the client's state.
-	@return The client's state.<br/>Valid states can be found in ClientState.lua
-]]
-function Client:getState()
-	return self.state
 end
 
 --[[

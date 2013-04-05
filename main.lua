@@ -2,7 +2,7 @@ local Game		= require("Game")
 local _, err = Game.open()
 if not _ then
 	Game.error("failed to open game: " .. err)
-	exit(0)
+	os.exit(0)
 end
 
 while Game.isReady() do

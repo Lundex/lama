@@ -9,7 +9,6 @@ local Client	= require("obj.Client")
 local Server	= Cloneable.clone()
 
 -- runtime data
-Server.clientID		= 0 -- ID for next client.
 Server.socket		= nil
 Server.clients		= nil
 
@@ -74,9 +73,7 @@ function Server:accept()
 	end
 
 	self:initializeClientSocket(socket)
-	local id		= self.clientID
-	self.clientID	= self.clientID + 1
-	local client	= Client:new(socket, id)
+	local client	= Client:new(socket)
 	self:connectClient(client)
 
 	return client

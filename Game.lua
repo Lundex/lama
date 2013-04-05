@@ -8,11 +8,12 @@ require("logging.file")
 require("logging.console")
 local Telnet		= require("Telnet")
 local Nanny			= require("Nanny")
-local ClientState	= require("ClientState")
+local PlayerState	= require("PlayerState")
 local GameState		= require("GameState")
 local Event			= require("obj.Event")
 local Scheduler		= require("obj.Scheduler")
 local Server		= require("obj.Server")
+local Player		= require("obj.Player")
 local Game			= {}
 
 -- game data
@@ -22,6 +23,8 @@ Game.defaultPort	= 8000
 
 -- runtime data
 Game.state			= GameState.NEW
+Game.playerID		= 0
+Game.players		= {}
 Game.scheduler		= Scheduler:new()
 Game.server			= Server:new()
 
@@ -111,72 +114,77 @@ function Game.fatal(message)
 	game.fileLogger:fatal(message)
 end
 
-function Game.logCommand(client, input)
-	Game.commandLogger:info(tostring(client) .. ": '" .. input .. "'")
+function Game.logCommand(player, input)
+	Game.commandLogger:info(tostring(player) .. ": '" .. input .. "'")
 end
 -- /logger shortcuts
 
 --[[
-	Primary response to client connection.
-	@param client	The client that has connected.
+	Primary response to player connection.
+	@param player	The player that has connected.
 ]]
-function Game.connectClient(client)
-	Game.onClientConnect(client)
+function Game.connectPlayer(player)
+	table.insert(Game.players, player)
+	Game.onPlayerConnect(player)
 end
 
 --[[
-	Secondary response to client connection.
-	@param client	The client that has connected.
+	Secondary response to player connection.
+	@param player	The player that has connected.
 ]]
-function Game.onClientConnect(client)
-	Game.info(string.format("Connected client %s!", tostring(client)))
+function Game.onPlayerConnect(player)
+	Game.info(string.format("Connected player %s!", tostring(player:getClient())))
 
 	-- I'll streamline this later
-	Nanny.greet(client)
-	client:setState(ClientState.NAME)
-	Nanny.askForName(client)
+	Nanny.greet(player)
 end
 
 --[[
-	Primary response to client disconnection.
-	@param client	The client that has disconnected.
+	Primary response to player disconnection.
+	@param player	The player that has disconnected.
 ]]
-function Game.disconnectClient(client)
-	Game.onClientDisconnect(client)
-	Game.server:disconnectClient(client)
+function Game.disconnectPlayer(player)
+	Game.onPlayerDisconnect(player)
+	Game.server:disconnectClient(player:getClient())
+
+	for i,v in ipairs(Game.players) do
+		if v == player then
+			table.remove(Game.players, i)
+		end
+	end
 end
 
 --[[
-	Secondary response to disconnecting a client.
-	@param client	The client that has idsconnected.
+	Secondary response to disconnecting a player.
+	@param player	The player that has idsconnected.
 ]]
-function Game.onClientDisconnect(client)
-	Game.info(string.format("Disconnected client %s!", tostring(client)))
-	client:sendLine("Goodbye!")
+function Game.onPlayerDisconnect(player)
+	Game.info(string.format("Disconnected player %s!", tostring(player:getClient())))
+	player:sendLine("Goodbye!")
 end
 
 --[[
-	Response to client input.
-	@param client	The client that has connected.
+	Response to player input.
+	@param player	The player that has connected.
 ]]
-function Game.onClientInput(client, input)
-	Game.logCommand(client, input)
+function Game.onPlayerInput(player, input)
+	Game.logCommand(player, input)
 
 	-- for testing purposes (and convenience).
 	if input == "quit" then
-		Game.disconnectClient(client)
+		Game.disconnectPlayer(player)
 		return
 	end
 
 	-- in-between states
-	if client:getState() ~= ClientState.PLAYING then
-		Nanny.process(client, input)
+	if player:getState() ~= PlayerState.PLAYING then
+		Nanny.process(player, input)
 		return
 	end
 
 	-- talk and stuff
-	for i,v in ipairs(Game.server:getClients()) do
-		v:sendLine(string.format("%s: %s", tostring(client), input))
+	for i,v in ipairs(Game.getPlayers()) do
+		v:sendLine(string.format("%s: %s", tostring(player), input))
 	end
 end
 
@@ -194,6 +202,14 @@ end
 ]]
 function Game.setState(state)
 	Game.state = state
+end
+
+--[[
+	Retreive the game's player list.
+	@return List of players.
+]]
+function Game.getPlayers()
+	return Game.players
 end
 
 --[[
@@ -239,7 +255,9 @@ function Game.AcceptEvent:run()
 		return
 	end
 
-	Game.connectClient(client)
+	local player = Player:new(client, Game.playerID)
+	Game.connectPlayer(player, Game.playerID)
+	Game.playerID = Game.playerID+1
 end
 
 
@@ -260,23 +278,24 @@ function Game.PollEvent:run()
 		return
 	end
 
-	if #Game.server:getClients() < 1 then
+	if #Game.players < 1 then
 		return
 	end
 
-	for i,v in table.safeIPairs(Game.server:getClients()) do
-		local input, err, partial = v:receive("*a")
+	for i,v in table.safeIPairs(Game.players) do
+		local client = v:getClient()
+		local input, err, partial = client:receive("*a")
 		if not input then
 			if err == 'closed' then
-				Game.disconnectClient(v)
+				Game.disconnectPlayer(v)
 
 			-- actual processing starts here because we're using the *a pattern for receive()
 			-- this way we don't lose things like client negotiations
 			-- though we don't support them right now anyway
 			elseif partial ~= nil and string.len(partial) > 0 then
-				local stripped = string.match(partial, "(.+)[\r?][\n?]")
+				local stripped = string.match(partial, "(.-)[\r?][\n?]")
 				if stripped then
-					Game.clientInput(v, stripped)
+					Game.onPlayerInput(v, stripped)
 				else
 					Game.debug(string.format("bad input from %s: {%s}", tostring(v), partial))
 				end
@@ -285,7 +304,7 @@ function Game.PollEvent:run()
 		-- this is where we'd start normal processing if we used the socket's *l receive pattern.
 		-- just here for posterity's sake right now.
 		else
-			Game.clientInput(v, input)
+			Game.onPlayerInput(v, input)
 		end
 	end
 end
