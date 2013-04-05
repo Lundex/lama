@@ -117,11 +117,19 @@ end
 -- /logger shortcuts
 
 --[[
-	Response to connecting a client.
+	Primary response to client connection.
+	@param client	The client that has connected.
+]]
+function Game.connectClient(client)
+	Game.onClientConnect(client)
+end
+
+--[[
+	Secondary response to client connection.
 	@param client	The client that has connected.
 ]]
 function Game.onClientConnect(client)
-	Game.info("Connected client " .. tostring(client))
+	Game.info(string.format("Connected client %s!", tostring(client)))
 
 	-- I'll streamline this later
 	Nanny.greet(client)
@@ -130,11 +138,20 @@ function Game.onClientConnect(client)
 end
 
 --[[
-	Response to disconnecting a client.
+	Primary response to client disconnection.
+	@param client	The client that has disconnected.
+]]
+function Game.disconnectClient(client)
+	Game.onClientDisconnect(client)
+	Game.server:disconnectClient(client)
+end
+
+--[[
+	Secondary response to disconnecting a client.
 	@param client	The client that has idsconnected.
 ]]
 function Game.onClientDisconnect(client)
-	Game.info("Disconnected client " .. tostring(client))
+	Game.info(string.format("Disconnected client %s!", tostring(client)))
 	client:sendLine("Goodbye!")
 end
 
@@ -147,8 +164,7 @@ function Game.onClientInput(client, input)
 
 	-- for testing purposes (and convenience).
 	if input == "quit" then
-		Game.onClientDisconnect(client)
-		Game.server:disconnectClient(client)
+		Game.disconnectClient(client)
 		return
 	end
 
@@ -223,7 +239,7 @@ function Game.AcceptEvent:run()
 		return
 	end
 
-	Game.onClientConnect(client)
+	Game.connectClient(client)
 end
 
 
@@ -252,8 +268,7 @@ function Game.PollEvent:run()
 		local input, err, partial = v:receive("*a")
 		if not input then
 			if err == 'closed' then
-				Game.onClientDisconnect(v)
-				Game.server:disconnectClient(v)
+				Game.disconnectClient(v)
 
 			-- actual processing starts here because we're using the *a pattern for receive()
 			-- this way we don't lose things like client negotiations
@@ -261,7 +276,7 @@ function Game.PollEvent:run()
 			elseif partial ~= nil and string.len(partial) > 0 then
 				local stripped = string.match(partial, "(.+)[\r?][\n?]")
 				if stripped then
-					Game.onClientInput(v, stripped)
+					Game.clientInput(v, stripped)
 				else
 					Game.debug(string.format("bad input from %s: {%s}", tostring(v), partial))
 				end
@@ -270,7 +285,7 @@ function Game.PollEvent:run()
 		-- this is where we'd start normal processing if we used the socket's *l receive pattern.
 		-- just here for posterity's sake right now.
 		else
-			Game.onClientInput(v, input)
+			Game.clientInput(v, input)
 		end
 	end
 end
