@@ -20,7 +20,12 @@ function MapObject:toString()
 end
 
 function MapObject:moveToMap(map)
+	if self.map then
+		self.map:removeFromContents(self)
+	end
+
 	self.map = map
+	map:addToContents(self)
 end
 
 function MapObject:setLoc(mapObject)
@@ -55,7 +60,7 @@ function MapObject:getName()
 	return self.name
 end
 
-function MapObject:getDescription())
+function MapObject:getDescription()
 	return self.description
 end
 

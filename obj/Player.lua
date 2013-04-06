@@ -8,14 +8,13 @@ local Client		= require("obj.Client")
 local Player		= Cloneable.clone()
 
 -- runtime data
-Player.id			= 0
+Player.id			= -1
 Player.state		= PlayerState.NEW
 Player.client		= nil -- the client attached to this player
 Player.mob			= nil -- the mob attached to this player
 
-function Player:initialize(client, id)
+function Player:initialize(client)
 	self.client	= client
-	self.id		= id
 end
 
 function Player:toString()
@@ -34,6 +33,10 @@ function Player:sendLine(str)
 	return self.client:sendLine(str)
 end
 
+function Player:setID(id)
+	self.id = id
+end
+
 function Player:setState(state)
 	self.state = state
 end
@@ -45,6 +48,10 @@ function Player:setMob(mob)
 
 	self.mob = mob
 	mob:setPlayer(self)
+end
+
+function Player:getID()
+	return self.id
 end
 
 function Player:getState()

@@ -16,7 +16,9 @@ MapTile.z			= 0
 
 function MapTile:initialize(map,x,y,z)
 	self:moveToMap(map)
-	self:setXYZLoc(x,y,z)
+	if x and y and z then
+		self:setXYZLoc(x,y,z)
+	end
 end
 
 function MapTile:setXYZLoc(x,y,z)

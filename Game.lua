@@ -242,6 +242,16 @@ function Game.getState()
 end
 
 --[[
+	Get a unique player ID.
+	@return A unique player ID.
+]]
+function Game.nextPlayerID()
+	local id = Game.playerID
+	Game.playerID = Game.playerID+1
+	return id
+end
+
+--[[
 	This event acts as the middle ground for client connections, accepting
 	clients on behalf of the server, and informing the game about it.
 ]]
@@ -260,9 +270,8 @@ function Game.AcceptEvent:run()
 		return
 	end
 
-	local player = Player:new(client, Game.playerID)
-	Game.connectPlayer(player, Game.playerID)
-	Game.playerID = Game.playerID+1
+	local player = Player:new(client)
+	Game.connectPlayer(player)
 end
 
 

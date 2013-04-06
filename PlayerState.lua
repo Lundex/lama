@@ -28,7 +28,7 @@ PlayerState.names[PlayerState.NEW_CHAR_PASSWORD]			= "(new char) password"
 PlayerState.names[PlayerState.NEW_CHAR_PASSWORD_CONFIRM]	= "(new char) password confirm"
 PlayerState.names[PlayerState.LOAD_CHAR_PASSWORD]			= "(load char) password"
 PlayerState.names[PlayerState.MOTD]							= "MOTD"
-PlayerState.names[PlayerState.PLAYING]						= "PLAYING"
+PlayerState.names[PlayerState.PLAYING]						= "playing"
 
 -- quick access
 function PlayerState:name(state)

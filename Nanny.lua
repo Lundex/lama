@@ -19,6 +19,7 @@ function Nanny.process(player, input)
 
 	elseif player:getState() == PlayerState.MOTD then
 		local mob = player:getMob()
+		player:setID(Game.nextPlayerID()) -- now that they're finally playing
 		player:setState(PlayerState.PLAYING)
 		mob:moveToMap(Game.map)
 		mob:setXYZLoc(1,1,1)
