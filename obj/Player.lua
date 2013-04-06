@@ -5,7 +5,6 @@
 
 local Cloneable		= require("obj.Cloneable")
 local Client		= require("obj.Client")
-local PlayerState	= require("PlayerState")
 local Player		= Cloneable.clone()
 
 -- runtime data
@@ -37,6 +36,15 @@ end
 
 function Player:setState(state)
 	self.state = state
+end
+
+function Player:setMob(mob)
+	if self.mob then
+		self.mob:unsetPlayer(self)
+	end
+
+	self.mob = mob
+	mob:setPlayer(self)
 end
 
 function Player:getState()

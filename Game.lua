@@ -6,14 +6,15 @@
 require("logging")
 require("logging.file")
 require("logging.console")
-local Telnet		= require("Telnet")
-local Nanny			= require("Nanny")
-local PlayerState	= require("PlayerState")
-local GameState		= require("GameState")
+require("Nanny")
+require("Telnet")
+require("PlayerState")
+require("GameState")
 local Event			= require("obj.Event")
 local Scheduler		= require("obj.Scheduler")
 local Server		= require("obj.Server")
 local Player		= require("obj.Player")
+local Map			= require("obj.Map")
 local Game			= {}
 
 -- game data
@@ -23,10 +24,14 @@ Game.defaultPort	= 8000
 
 -- runtime data
 Game.state			= GameState.NEW
-Game.playerID		= 0
-Game.players		= {}
 Game.scheduler		= Scheduler:new()
 Game.server			= Server:new()
+
+Game.playerID		= 0
+Game.players		= {}
+
+Game.map			= Map:new()
+Game.map:generate(100,100,1)
 
 Game.logger			= logging.console()
 Game.logger:setLevel(logging.DEBUG)
@@ -160,7 +165,7 @@ end
 ]]
 function Game.onPlayerDisconnect(player)
 	Game.info(string.format("Disconnected player %s!", tostring(player:getClient())))
-	player:sendLine("Goodbye!")
+	Nanny.sendOff(player)
 end
 
 --[[
@@ -308,5 +313,9 @@ function Game.PollEvent:run()
 		end
 	end
 end
+
+-- assigns a global of the same name
+-- this is so we only have to include it once.
+_G.Game = Game
 
 return Game

@@ -3,7 +3,6 @@
 		Package that handles processing of new players.
 ]]
 
-local PlayerState	= require("PlayerState")
 local Mob			= require("obj.Mob")
 local Nanny			= {}
 
@@ -14,12 +13,17 @@ local Nanny			= {}
 ]]
 function Nanny.process(player, input)
 	if player:getState() == PlayerState.NAME then
-		player.mob		= Mob:new(input)
+		player:setMob(Mob:new(input))
 		player:setState(PlayerState.MOTD)
 		Nanny.MOTD(player)
 
 	elseif player:getState() == PlayerState.MOTD then
+		local mob = player:getMob()
 		player:setState(PlayerState.PLAYING)
+		mob:moveToMap(Game.map)
+		mob:setXYZLoc(1,1,1)
+		player:sendLine(string.format("%s\
+%s\n", mob:getLoc():getName(), mob:getLoc():getDescription()))
 		Nanny.introduce(player)
 	end
 end
@@ -43,14 +47,22 @@ end
 function Nanny.introduce(player)
 	player:sendLine(string.format("Welcome to %s, %s!", tostring(package.loaded.Game.getName()), tostring(player.mob)))
 
---[[
 	for i,v in ipairs(Game.getPlayers()) do
-		v:sendLine(string.format("Please welcome %s!", tostring(player)))
+		if v ~= player then
+			v:sendLine(string.format("Please welcome %s!", tostring(player)))
+		end
 	end
-]]
-
--- GONNA HAVE TO FIGURE SOMETHIN' OUT
 end
+
+function Nanny.sendOff(player)
+	player:sendLine("Goodbye!")
+
+	for i,v in ipairs(Game.getPlayers()) do
+		if v ~= player then
+			v:sendLine(string.format("Please welcome %s!", tostring(player)))
+		end
+	end
+end	
 
 function Nanny.MOTD(player)
 	player:sendLine(Nanny.getMOTD())
@@ -98,5 +110,7 @@ function Nanny.getGreeting()
     \\':: |_       _| ::'/\
  jgs `---` `\"\"\"\"\"` `---`"
 end
+
+_G.Nanny = Nanny
 
 return Nanny

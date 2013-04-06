@@ -19,4 +19,6 @@ function GameState:name(state)
 	return self.names[state]
 end
 
+_G.GameState = GameState
+
 return GameState

@@ -35,4 +35,6 @@ function Telnet.commandName(command)
 	return Telnet.commands.names[command] or ("INVALID (" .. tostring(command or 0) .. ")")
 end
 
+_G.Telnet = Telnet
+
 return Telnet

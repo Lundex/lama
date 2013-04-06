@@ -34,6 +34,28 @@ function Cloneable.new(parent, ...)
 	return Cloneable.clone(parent, true, ...)
 end
 
+function Cloneable.getParent(clone)
+	if clone == Cloneable then
+		return nil
+	end
+
+	local mt = getmetatable(clone)
+	return mt.__index
+end
+
+function Cloneable.isChildOf(clone, ancestor)
+	local parent = clone:getParent()
+	while parent do
+		if parent == ancestor then
+			return true
+		end
+
+		parent = parent:getParent()
+	end
+
+	return false
+end
+
 --[[
 	Entry point for constructor-style initialization of instances.
 ]]
