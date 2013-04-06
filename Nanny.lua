@@ -20,12 +20,16 @@ function Nanny.process(player, input)
 	elseif player:getState() == PlayerState.MOTD then
 		local mob = player:getMob()
 		player:setID(Game.nextPlayerID()) -- now that they're finally playing
-		player:setState(PlayerState.PLAYING)
+
+		-- move our mob to starting point
 		mob:moveToMap(Game.map)
 		mob:setXYZLoc(1,1,1)
 		player:sendLine(string.format("%s\
 %s\n", mob:getLoc():getName(), mob:getLoc():getDescription()))
+
+		-- introduce us
 		Nanny.introduce(player)
+		player:setState(PlayerState.PLAYING) -- we're playing
 	end
 end
 
@@ -47,22 +51,12 @@ end
 
 function Nanny.introduce(player)
 	player:sendLine(string.format("Welcome to %s, %s!", tostring(package.loaded.Game.getName()), tostring(player.mob)))
-
-	for i,v in ipairs(Game.getPlayers()) do
-		if v ~= player then
-			v:sendLine(string.format("Please welcome %s!", tostring(player)))
-		end
-	end
+	Game.announce(string.format("%s has joined!", tostring(player)))
 end
 
 function Nanny.sendOff(player)
 	player:sendLine("Goodbye!")
-
-	for i,v in ipairs(Game.getPlayers()) do
-		if v ~= player then
-			v:sendLine(string.format("Please welcome %s!", tostring(player)))
-		end
-	end
+	Game.announce(string.format("%s has left!", tostring(player)))
 end	
 
 function Nanny.MOTD(player)

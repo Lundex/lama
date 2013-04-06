@@ -24,14 +24,11 @@ Game.defaultPort	= 8000
 
 -- runtime data
 Game.state			= GameState.NEW
-Game.scheduler		= Scheduler:new()
-Game.server			= Server:new()
+Game.scheduler		= nil
+Game.server			= nil
 
 Game.playerID		= 0
 Game.players		= {}
-
-Game.map			= Map:new()
-Game.map:generate(100,100,1)
 
 Game.logger			= logging.console()
 Game.logger:setLevel(logging.DEBUG)
@@ -42,18 +39,29 @@ Game.logger:setLevel(logging.DEBUG)
 Game.commandLogger	= logging.file("logs/%s-commands.log", "%m%d%y")
 Game.commandLogger:setLevel(logging.DEBUG)
 
+Game.map			= nil
+
 -- open the game for play
 function Game.open(port)
 	Game.info(string.format("Preparing to host game server on port %d...", port or Game.defaultPort))
-	local _, err = Game.server:host(port or Game.defaultPort)
+	local server = Server:new()
+	local _, err = server:host(port or Game.defaultPort)
 	if not _ then
 		return false, err
 	end
 
+	Game.server = server
+
 	Game.info("Preparing scheduler...")
+	Game.scheduler = Scheduler:new()
 	Game.queue(Game.AcceptEvent:new(os.clock()))
 	Game.queue(Game.PollEvent:new(os.clock()))
 	Game.setState(GameState.READY)
+
+	Game.info("Generating map...")
+	Game.map = Map:new()
+	Game.map:generate(100,100,1)
+
 	Game.info("Game is ready for business...")
 	return true
 end
@@ -78,59 +86,13 @@ function Game.update()
 	Game.scheduler:poll(os.clock())
 end
 
--- shortcut for Game.scheduler:queue
-function Game.queue(event)
-	Game.scheduler:queue(event)
-end
-
--- shortcut for Game.scheduler:deque
-function Game.deque(event)
-	Game.scheduler:deque(event)
-end
-
-function Game.log(level, message)
-	Game.logger:log(level, message)
-	Game.fileLogger:log(level, message)
-end
-
--- logger shortcuts
-function Game.debug(message)
-	Game.logger:debug(message)
-	Game.fileLogger:debug(message)
-end
-
-function Game.info(message)
-	Game.logger:info(message)
-	Game.fileLogger:info(message)
-end
-
-function Game.warn(message)
-	Game.logger:warn(message)
-	Game.fileLogger:warn(message)
-end
-
-function Game.error(message)
-	Game.logger:error(message)
-	Game.fileLogger:error(message)
-end
-
-function Game.fatal(message)
-	Game.logger:fatal(message)
-	game.fileLogger:fatal(message)
-end
-
-function Game.logCommand(player, input)
-	Game.commandLogger:info(tostring(player) .. ": '" .. input .. "'")
-end
--- /logger shortcuts
-
 --[[
 	Primary response to player connection.
 	@param player	The player that has connected.
 ]]
 function Game.connectPlayer(player)
-	table.insert(Game.players, player)
 	Game.onPlayerConnect(player)
+	table.insert(Game.players, player)
 end
 
 --[[
@@ -149,14 +111,14 @@ end
 	@param player	The player that has disconnected.
 ]]
 function Game.disconnectPlayer(player)
-	Game.onPlayerDisconnect(player)
 	Game.server:disconnectClient(player:getClient())
-
 	for i,v in ipairs(Game.players) do
 		if v == player then
 			table.remove(Game.players, i)
 		end
 	end
+
+	Game.onPlayerDisconnect(player)
 end
 
 --[[
@@ -165,7 +127,9 @@ end
 ]]
 function Game.onPlayerDisconnect(player)
 	Game.info(string.format("Disconnected player %s!", tostring(player:getClient())))
-	Nanny.sendOff(player)
+	if player:getState() == PlayerState.PLAYING then
+		Nanny.sendOff(player)
+	end
 end
 
 --[[
@@ -188,8 +152,14 @@ function Game.onPlayerInput(player, input)
 	end
 
 	-- talk and stuff
+	Game.announce(string.format("%s: '%s'", tostring(player), input), PlayerState.PLAYING)
+end
+
+function Game.announce(message, minState)
 	for i,v in ipairs(Game.getPlayers()) do
-		v:sendLine(string.format("%s: %s", tostring(player), input))
+		if v:getState() >= minState then
+			v:sendLine(message)
+		end
 	end
 end
 
@@ -250,6 +220,52 @@ function Game.nextPlayerID()
 	Game.playerID = Game.playerID+1
 	return id
 end
+
+-- shortcut for Game.scheduler:queue
+function Game.queue(event)
+	Game.scheduler:queue(event)
+end
+
+-- shortcut for Game.scheduler:deque
+function Game.deque(event)
+	Game.scheduler:deque(event)
+end
+
+-- logger shortcuts
+function Game.log(level, message)
+	Game.logger:log(level, message)
+	Game.fileLogger:log(level, message)
+end
+
+function Game.debug(message)
+	Game.logger:debug(message)
+	Game.fileLogger:debug(message)
+end
+
+function Game.info(message)
+	Game.logger:info(message)
+	Game.fileLogger:info(message)
+end
+
+function Game.warn(message)
+	Game.logger:warn(message)
+	Game.fileLogger:warn(message)
+end
+
+function Game.error(message)
+	Game.logger:error(message)
+	Game.fileLogger:error(message)
+end
+
+function Game.fatal(message)
+	Game.logger:fatal(message)
+	game.fileLogger:fatal(message)
+end
+
+function Game.logCommand(player, input)
+	Game.commandLogger:info(tostring(player) .. ": '" .. input .. "'")
+end
+-- /logger shortcuts
 
 --[[
 	This event acts as the middle ground for client connections, accepting
