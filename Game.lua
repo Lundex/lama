@@ -111,14 +111,9 @@ end
 	@param player	The player that has disconnected.
 ]]
 function Game.disconnectPlayer(player)
-	Game.server:disconnectClient(player:getClient())
-	for i,v in ipairs(Game.players) do
-		if v == player then
-			table.remove(Game.players, i)
-		end
-	end
-
+	table.removeValue(Game.players, player)
 	Game.onPlayerDisconnect(player)
+	Game.server:disconnectClient(player:getClient())
 end
 
 --[[
@@ -157,7 +152,7 @@ end
 
 function Game.announce(message, minState)
 	for i,v in ipairs(Game.getPlayers()) do
-		if v:getState() >= minState then
+		if not minState or v:getState() >= minState then
 			v:sendLine(message)
 		end
 	end

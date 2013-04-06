@@ -34,6 +34,17 @@ function table.safeIPairs(t)
 end
 
 --[[
+	Shortcut to remove a value from a table (as opposed to by index).
+]]
+function table.removeValue(t, value)
+	for i,v in pairs(t) do
+		if v == value then
+			table.remove(t, i)
+		end
+	end
+end
+
+--[[
 	Converts the members of a table into a string, using tostring()
 	to convert the individual members, placing delimiters between
 	each member.

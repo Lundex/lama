@@ -13,9 +13,14 @@ local Nanny			= {}
 ]]
 function Nanny.process(player, input)
 	if player:getState() == PlayerState.NAME then
-		player:setMob(Mob:new(input))
-		player:setState(PlayerState.MOTD)
-		Nanny.MOTD(player)
+		if string.len(input) < 3 or string.len(input) > 12 then
+			Nanny.messageNameLengthLimit(player)
+			Nanny.askForName(player)
+		else
+			player:setMob(Mob:new(input))
+			player:setState(PlayerState.MOTD)
+			Nanny.MOTD(player)
+		end
 
 	elseif player:getState() == PlayerState.MOTD then
 		local mob = player:getMob()
@@ -33,38 +38,37 @@ function Nanny.process(player, input)
 	end
 end
 
---[[
-	Ask the player for a name.
-	@param player	The player to ask.
-]]
 function Nanny.askForName(player)
 	player:sendString("What is your name? ")
 end
 
---[[
-	Tell them their name input was invalid.
-	@param player	The player to message.
-]]
-function Nanny.messageNameIsInvalid(player)
+function Nanny.messageNameInvalid(player)
 	player:sendLine("It was a rhetorical question!")
 end
 
+function Nanny.messageNameLengthLimit(player)
+	player:sendLine("Your name must be between 3 and 12 characters.")
+end
+
 function Nanny.introduce(player)
-	player:sendLine(string.format("Welcome to %s, %s!", tostring(package.loaded.Game.getName()), tostring(player.mob)))
-	Game.announce(string.format("%s has joined!", tostring(player)))
+	player:sendLine(string.format("Welcome to %s, %s!", tostring(Game.getName()), tostring(player)))
+	Game.announce(string.format("%s has joined!", tostring(player)), PlayerState.PLAYING)
 end
 
 function Nanny.sendOff(player)
 	player:sendLine("Goodbye!")
-	Game.announce(string.format("%s has left!", tostring(player)))
+	Game.announce(string.format("%s has left!", tostring(player)), PlayerState.PLAYING)
 end	
 
 function Nanny.MOTD(player)
+	player:sendLine("")
 	player:sendLine(Nanny.getMOTD())
+	player:sendLine("")
+	player:sendString("< PRESS ENTER >")
 end
 
 function Nanny.getMOTD()
-	return "\n\[WELCOME TO MFin' LAMA\]\n<hit enter>"
+	return "\[WELCOME TO MFin' LAMA\]"
 end
 
 --[[

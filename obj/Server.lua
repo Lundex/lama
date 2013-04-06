@@ -97,6 +97,8 @@ function Server:disconnectClient(client)
 			table.remove(self.clients, i)
 		end
 	end
+
+	client:getSocket():close()
 end
 
 --[[
