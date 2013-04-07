@@ -1,3 +1,8 @@
+--[[	Author:	Milkmanjack
+		Date:	4/6/13
+		Objects that are contained in a Map, and can interact with it.
+]]
+
 local Cloneable	= require("obj.Cloneable")
 local MapObject	= Cloneable.clone()
 

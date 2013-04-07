@@ -1,3 +1,9 @@
+--[[	Author:	Milkmanjack
+		Date:	4/6/13
+		Contains the map grid and static tiles within.
+		Also contains everything that is contained in those tiles.
+]]
+
 local Cloneable	= require("obj.Cloneable")
 local MapTile	= require("obj.MapTile")
 local Map		= Cloneable.clone()

@@ -1,3 +1,9 @@
+--[[	Author:	Milkmanjack
+		Date:	4/6/13
+		Static tiles that contain other MapObjects.
+		The lowest-level location for a MapObject, essentially.
+]]
+
 local MapObject	= require("obj.MapObject")
 local MapTile	= MapObject:clone()
 

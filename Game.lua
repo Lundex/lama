@@ -15,6 +15,7 @@ local Scheduler		= require("obj.Scheduler")
 local Server		= require("obj.Server")
 local Player		= require("obj.Player")
 local Map			= require("obj.Map")
+local CommandParser	= require("obj.CommandParser")
 local Game			= {}
 
 -- game data
@@ -24,8 +25,9 @@ Game.defaultPort	= 8000
 
 -- runtime data
 Game.state			= GameState.NEW
-Game.scheduler		= nil
+Game.scheduler		= nil -- these are loaded at game startup
 Game.server			= nil
+Game.parser			= nil
 
 Game.playerID		= 0
 Game.players		= {}
@@ -43,7 +45,8 @@ Game.map			= nil
 
 -- open the game for play
 function Game.open(port)
-	Game.info(string.format("Preparing to host game server on port %d...", port or Game.defaultPort))
+	port = port or Game.defaultPort
+	Game.info(string.format("Preparing to host game server on port %d...", port))
 	local server = Server:new()
 	local _, err = server:host(port or Game.defaultPort)
 	if not _ then
@@ -62,6 +65,9 @@ function Game.open(port)
 	Game.map = Map:new()
 	Game.map:generate(100,100,1)
 
+	Game.info("Loading command parser...")
+	Game.parser = CommandParser:new()
+
 	Game.info("Game is ready for business...")
 	return true
 end
@@ -76,6 +82,11 @@ function Game.shutdown()
 	Game.setState(GameState.SHUTDOWN)
 	Game.server:close()
 	Game.scheduler:clear()
+	Game.server		= nil
+	Game.scheduler 	= nil
+	Game.map		= nil
+	Game.parser		= nil
+
 	Game.info("Shut down!")
 end
 
@@ -146,16 +157,8 @@ function Game.onPlayerInput(player, input)
 		return
 	end
 
-	-- talk and stuff
---	Game.announce(string.format("%s: '%s'", tostring(player), input), PlayerState.PLAYING)
-	if input == "look" then
-		local msg
-		for i,v in ipairs(player:getMob():getLoc():getContents()) do
-			msg = string.format("%s%s%s", msg or "", msg and "\n" or "", tostring(v))
-		end
-
-		player:sendLine(msg)
-	end
+	-- command parsing for in-game players
+	Game.parser:parse(player, input)
 end
 
 function Game.announce(message, minState)
