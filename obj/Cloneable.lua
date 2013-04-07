@@ -28,12 +28,15 @@ end
 
 --[[
 	Shortcut for creating an instance-style clone (one that is initialized).
-	Arguments beyond the first 2 are passed to the instance's initialization function.
+	Arguments beyond the first are passed to the instance's initialization function.
 ]]
 function Cloneable.new(parent, ...)
 	return Cloneable.clone(parent, true, ...)
 end
 
+--[[
+	Get the direct parent of this Cloneable.
+]]
 function Cloneable.getParent(clone)
 	if clone == Cloneable then
 		return nil
@@ -43,7 +46,14 @@ function Cloneable.getParent(clone)
 	return mt.__index
 end
 
-function Cloneable.isChildOf(clone, ancestor)
+--[[
+	Traverses a clone's parentage via their metatable's __index value.
+	Determines whether or not this clone is a clone of another Cloneable.
+	@param clone	The Cloneable to check.
+	@param ancestor	The Cloneable we might be a clone of.
+	@return true if given clone is a clone of given ancestor.<br/>false otherwise.
+]]
+function Cloneable.isCloneOf(clone, ancestor)
 	local parent = clone:getParent()
 	while parent do
 		if parent == ancestor then

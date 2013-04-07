@@ -47,7 +47,25 @@ function Player:setMob(mob)
 	end
 
 	self.mob = mob
-	mob:setPlayer(self)
+
+	-- make sure it's mutual
+	if mob:getPlayer() ~= self then
+		mob:setPlayer(self)
+	end
+end
+
+function Player:unsetMob()
+	local oldMob = self.mob
+	self.mob = nil
+
+	-- make sure it's mutual
+	if oldMob:getPlayer() == self then
+		oldMob:unsetPlayer()
+	end
+end
+
+function Player:unsetClient()
+	self.client = nil
 end
 
 function Player:getID()

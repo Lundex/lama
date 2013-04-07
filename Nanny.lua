@@ -17,25 +17,41 @@ function Nanny.process(player, input)
 			Nanny.messageNameLengthLimit(player)
 			Nanny.askForName(player)
 		else
-			player:setMob(Mob:new(input))
+			local mob = Mob:new()
+			mob:setName(input)
+			player:setMob(mob)
 			player:setState(PlayerState.MOTD)
 			Nanny.MOTD(player)
 		end
 
 	elseif player:getState() == PlayerState.MOTD then
-		local mob = player:getMob()
-		player:setID(Game.nextPlayerID()) -- now that they're finally playing
+		Nanny.login(player)
+	end
+end
 
-		-- move our mob to starting point
-		mob:moveToMap(Game.map)
-		mob:setXYZLoc(1,1,1)
-		player:sendLine(string.format("%s\
+function Nanny.login(player)
+	local mob = player:getMob()
+	player:setID(Game.nextPlayerID()) -- now that they're finally playing
+
+	-- move our mob to starting point
+	mob:moveToMap(Game.map)
+	mob:setXYZLoc(1,1,1)
+	player:sendLine(string.format("%s\
 %s\n", mob:getLoc():getName(), mob:getLoc():getDescription()))
 
-		-- introduce us
-		Nanny.introduce(player)
-		player:setState(PlayerState.PLAYING) -- we're playing
-	end
+	-- introduce us
+	Nanny.introduce(player)
+	player:setState(PlayerState.PLAYING) -- we're playing
+end
+
+function Nanny.logout(player)
+	local mob = player:getMob()
+	Nanny.sendOff(player)
+
+	-- remove their mob from the map
+	mob:moveToMap(nil)
+
+	player:setState(PlayerState.DISCONNECTING) -- we are disconnecting
 end
 
 function Nanny.askForName(player)
@@ -50,11 +66,13 @@ function Nanny.messageNameLengthLimit(player)
 	player:sendLine("Your name must be between 3 and 12 characters.")
 end
 
+-- this occurs before the player is players
 function Nanny.introduce(player)
 	player:sendLine(string.format("Welcome to %s, %s!", tostring(Game.getName()), tostring(player)))
 	Game.announce(string.format("%s has joined!", tostring(player)), PlayerState.PLAYING)
 end
 
+-- this occurs after the player is disconnected
 function Nanny.sendOff(player)
 	player:sendLine("Goodbye!")
 	Game.announce(string.format("%s has left!", tostring(player)), PlayerState.PLAYING)
@@ -68,7 +86,7 @@ function Nanny.MOTD(player)
 end
 
 function Nanny.getMOTD()
-	return "\[WELCOME TO MFin' LAMA\]"
+	return "\[THIS IS THE MESSAGE OF THE DAY\]"
 end
 
 --[[

@@ -19,14 +19,6 @@ Mob.moves			= 100
 
 Mob.player			= nil -- this is a cross-reference to a player that is controlling us.
 
-function Mob:initialize(name)
-	self.name	= name
-end
-
-function Mob:toString()
-	return self.name
-end
-
 function Mob:send(data, i, j)
 	if self.player then
 		return self.player:send(data,i,j)
@@ -47,10 +39,21 @@ end
 
 function Mob:setPlayer(player)
 	self.player = player
+
+	-- make sure it's mutual
+	if player:getMob() ~= self then
+		player:setMob(self)
+	end
 end
 
-function Mob:unsetPlayer(player)
+function Mob:unsetPlayer()
+	local oldPlayer = self.player
 	self.player = nil
+
+	-- make sure it's mutual
+	if oldPlayer:getMob() == self then
+		oldPlayer:unsetMob()
+	end
 end
 
 function Mob:isPlayerControlled()

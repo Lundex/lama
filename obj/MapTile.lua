@@ -15,7 +15,11 @@ MapTile.y			= 0
 MapTile.z			= 0
 
 function MapTile:initialize(map,x,y,z)
-	self:moveToMap(map)
+	self.contents	= {}
+	if map then
+		self:moveToMap(map)
+	end
+
 	if x and y and z then
 		self:setXYZLoc(x,y,z)
 	end
@@ -28,7 +32,8 @@ function MapTile:setXYZLoc(x,y,z)
 end
 
 function MapTile:getLoc()
-	return self:getX(),self:getY(),self:getZ()
+--	return self:getX(),self:getY(),self:getZ()
+	return self
 end
 
 function MapTile:getX()

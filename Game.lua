@@ -111,9 +111,9 @@ end
 	@param player	The player that has disconnected.
 ]]
 function Game.disconnectPlayer(player)
-	table.removeValue(Game.players, player)
-	Game.onPlayerDisconnect(player)
-	Game.server:disconnectClient(player:getClient())
+	Game.onPlayerDisconnect(player) -- disconnect the player
+	table.removeValue(Game.players, player) -- remove from players list (no longer recognized as a player)
+	Game.server:disconnectClient(player:getClient()) -- kill the client
 end
 
 --[[
@@ -123,7 +123,7 @@ end
 function Game.onPlayerDisconnect(player)
 	Game.info(string.format("Disconnected player %s!", tostring(player:getClient())))
 	if player:getState() == PlayerState.PLAYING then
-		Nanny.sendOff(player)
+		Nanny.logout(player)
 	end
 end
 
@@ -147,7 +147,15 @@ function Game.onPlayerInput(player, input)
 	end
 
 	-- talk and stuff
-	Game.announce(string.format("%s: '%s'", tostring(player), input), PlayerState.PLAYING)
+--	Game.announce(string.format("%s: '%s'", tostring(player), input), PlayerState.PLAYING)
+	if input == "look" then
+		local msg
+		for i,v in ipairs(player:getMob():getLoc():getContents()) do
+			msg = string.format("%s%s%s", msg or "", msg and "\n" or "", tostring(v))
+		end
+
+		player:sendLine(msg)
+	end
 end
 
 function Game.announce(message, minState)

@@ -26,7 +26,7 @@ function Client:toString()
 	end
 
 	local addr, port = self.socket:getpeername()
-	return string.format("{client@%s}", addr)
+	return string.format("{client@%s}", addr or "unknown")
 end
 
 --[[
