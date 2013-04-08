@@ -5,6 +5,7 @@
 ]]
 
 local MapObject	= require("obj.MapObject")
+local Mob		= require("obj.Mob")
 local MapTile	= MapObject:clone()
 
 -- we have a tricky situation here cause MapTiles inherit from MapObjects (which I think I should change).
@@ -31,6 +32,9 @@ function MapTile:initialize(map,x,y,z)
 	end
 end
 
+function MapTile:onEnter(mapObject)
+end
+
 function MapTile:setXYZLoc(x,y,z)
 	self.x = x
 	self.y = y
@@ -38,7 +42,6 @@ function MapTile:setXYZLoc(x,y,z)
 end
 
 function MapTile:getLoc()
---	return self:getX(),self:getY(),self:getZ()
 	return self
 end
 

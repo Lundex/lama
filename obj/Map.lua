@@ -46,16 +46,6 @@ function Map:generate(width,height,layers)
 	end
 end
 
-function Map:contains(mapObject)
-	for i,v in ipairs(self.contents) do
-		if v == mapObject then
-			return true
-		end
-	end
-
-	return false
-end
-
 function Map:addToContents(mapObject)
 	table.insert(self.contents, mapObject)
 
@@ -91,6 +81,35 @@ function Map:setTile(tile, x, y, z)
 	self.tiles[z][y][x] = tile
 end
 
+function Map:getStep(mapObject, direction)
+	local x,y,z = mapObject:getX(), mapObject:getY(), mapObject:getZ()
+
+	-- update new xyz location
+	if direction == Direction.NORTH or direction == Direction.NORTHEAST or direction == Direction.NORTHWEST then
+		y = y + 1
+	elseif direction == Direction.SOUTH or direction == Direction.SOUTHEAST or direction == Direction.SOUTHWEST then
+		y = y - 1
+	end
+
+	if direction == Direction.EAST or direction == NORTHEAST or direction == NORTHWEST then
+		x = x + 1
+	elseif direction == Direction.WEST or direction == Direction.NORTHWEST or direction == Direction.SOUTHWEST then
+		x = x - 1
+	end
+
+	return self:getTile(x,y,z)
+end
+
+function Map:contains(mapObject)
+	for i,v in ipairs(self.contents) do
+		if v == mapObject then
+			return true
+		end
+	end
+
+	return false
+end
+
 function Map:getContents()
 	return self.contents
 end
@@ -114,7 +133,7 @@ function Map:getTile(x,y,z)
 		return nil
 	end
 
-	return self.tiles[x][y][z]
+	return self.tiles[z][y][x]
 end
 
 return Map

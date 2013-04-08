@@ -14,26 +14,51 @@ function CommandParser:initialize()
 	self.commands = {}
 end
 
-function CommandParser:parse(player, input)
+-- this is all hard-coded just because I'm too lazy to make real commands right now.
+function CommandParser:parse(player, mob, input)
 	-- parsing goes here
-	if string.find(input, "look") == 1 then
-		local msg
-		for i,v in ipairs(player:getMob():getLoc():getContents()) do
-			local display
-			if v:isCloneOf(Mob) then
-				display = string.format("%s is here.", v:getName())
-			else
-				display = tostring(v)
-			end
-
-			msg = string.format("%s%s%s", msg or "", msg and "\n" or "", display or "?")
+	if string.find("north", input) == 1 then
+		if mob:step(Direction.NORTH) then
+			mob:showRoom()
+		else
+			player:sendMessage("Alas, you cannot go that way.", MessageMode.FAILURE)
 		end
 
-		player:sendLine(msg)
+	elseif string.find("south", input) == 1 then
+		if mob:step(Direction.SOUTH) then
+			mob:showRoom()
+		else
+			player:sendMessage("Alas, you cannot go that way.", MessageMode.FAILURE)
+		end
+
+	elseif string.find("east", input) == 1 then
+		if mob:step(Direction.EAST) then
+			mob:showRoom()
+		else
+			player:sendMessage("Alas, you cannot go that way.", MessageMode.FAILURE)
+		end
+
+	elseif string.find("west", input) == 1 then
+		if mob:step(Direction.WEST) then
+			mob:showRoom()
+		else
+			player:sendMessage("Alas, you cannot go that way.", MessageMode.FAILURE)
+		end
+
+	elseif string.find("who", input) == 1 then
+		local msg = "\[ Connected Players ]"
+		for i,v in ipairs(Game:getPlayers()) do
+			msg = string.format("%s\n-> %s", msg, tostring(v))
+		end
+
+		player:sendMessage(msg)
+
+	elseif string.find("look", input) == 1 then
+		player:getMob():showRoom()
 
 	elseif string.find(input, "ooc") == 1 then
 		local msg = string.sub(input, 5)
-		Game.announce(string.format("%s OOC: '%s'", player:getMob():getName(), msg), PlayerState.PLAYING)
+		Game.announce(string.format("%s OOC: '%s'", mob:getName(), msg), MessageMode.CHAT, PlayerState.PLAYING)
 	end
 end
 

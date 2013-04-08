@@ -15,8 +15,8 @@ GameState.names[GameState.READY]		= "ready"
 GameState.names[GameState.SHUTDOWN]		= "shutdown"
 
 -- quick access
-function GameState:name(state)
-	return self.names[state]
+function GameState.name(state)
+	return GameState.names[state]
 end
 
 _G.GameState = GameState

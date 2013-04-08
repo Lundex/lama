@@ -5,6 +5,7 @@
 
 local Cloneable		= require("obj.Cloneable")
 local Client		= require("obj.Client")
+local Mob			= require("obj.Mob")
 local Player		= Cloneable.clone()
 
 -- runtime data
@@ -12,6 +13,7 @@ Player.id			= -1
 Player.state		= PlayerState.NEW
 Player.client		= nil -- the client attached to this player
 Player.mob			= nil -- the mob attached to this player
+Player.messageMode	= nil -- the current message mode
 
 function Player:initialize(client)
 	self.client	= client
@@ -23,6 +25,53 @@ end
 
 function Player:send(data, i, j)
 	return self.client:send(data,i,j)
+end
+
+function Player:clearMessageMode()
+	self.messageMode = nil
+end
+
+function Player:setMessageMode(mode)
+	self.messageMode = mode
+end
+
+function Player:getMessageMode(mode)
+	return self.messageMode
+end
+
+function Player:sendMessage(msg, mode, autobreak)
+	if mode == nil then
+		mode = MessageMode.GENERAL
+	end
+
+	if autobreak == nil then
+		autobreak = true
+	end
+
+	local oldMode = self:getMessageMode()
+	if oldMode ~= mode then
+		self:setMessageMode(mode)
+
+		-- separate the next message from the previous
+		-- but only if the previous mode was not nil
+		if oldMode ~= nil then
+			self:sendLine()
+		end
+	end
+
+	-- if autobreak is true, append a linebreak to the message. (default)
+	if autobreak == true then
+		self:sendLine(msg)
+
+	-- otherwise, just send it as a string with no linebreak
+	else
+		self:sendString(msg)
+	end
+end
+
+-- shortcut to sendMessage() that provides the question message mode, and no linebreak that follows
+function Player:askQuestion(msg)
+	self:sendMessage(msg, MessageMode.QUESTION, false)
 end
 
 function Player:sendString(str)

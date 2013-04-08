@@ -33,8 +33,8 @@ PlayerState.names[PlayerState.MOTD]							= "MOTD"
 PlayerState.names[PlayerState.PLAYING]						= "playing"
 
 -- quick access
-function PlayerState:name(state)
-	return self.names[state]
+function PlayerState.name(state)
+	return PlayerState.names[state]
 end
 
 _G.PlayerState = PlayerState

@@ -51,6 +51,15 @@ function MapObject:moveToMap(map)
 	end
 end
 
+function MapObject:step(direction)
+	local newLoc = self.map:getStep(self, direction)
+	if newLoc then
+		return self:move(newLoc)
+	end
+
+	return false
+end
+
 -- respects result of permitEntrance before setting location directly
 function MapObject:move(mapObject)
 	if not mapObject:permitEntrance(self) then

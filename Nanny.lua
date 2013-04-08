@@ -32,15 +32,14 @@ end
 function Nanny.login(player)
 	local mob = player:getMob()
 	player:setID(Game.nextPlayerID()) -- now that they're finally playing
+	Nanny.introduce(player)
 
 	-- move our mob to starting point
 	mob:moveToMap(Game.map)
 	mob:setXYZLoc(1,1,1)
-	player:sendLine(string.format("%s\
-%s\n", mob:getLoc():getName(), mob:getLoc():getDescription()))
+	player:getMob():showRoom()
 
 	-- introduce us
-	Nanny.introduce(player)
 	player:setState(PlayerState.PLAYING) -- we're playing
 end
 
@@ -55,34 +54,28 @@ function Nanny.logout(player)
 end
 
 function Nanny.askForName(player)
-	player:sendString("What is your name? ")
-end
-
-function Nanny.messageNameInvalid(player)
-	player:sendLine("It was a rhetorical question!")
+	player:askQuestion("What is your name? ")
 end
 
 function Nanny.messageNameLengthLimit(player)
-	player:sendLine("Your name must be between 3 and 12 characters.")
+	player:sendMessage("Your name must be between 3 and 12 characters.", MessageMode.FAILURE)
 end
 
--- this occurs before the player is players
+-- this occurs before the player is considered an active player
 function Nanny.introduce(player)
-	player:sendLine(string.format("Welcome to %s, %s!", tostring(Game.getName()), tostring(player)))
-	Game.announce(string.format("%s has joined!", tostring(player)), PlayerState.PLAYING)
+	player:sendMessage(string.format("\nWelcome to %s, %s!", tostring(Game.getName()), tostring(player)), MessageMode.GENERAL)
+	Game.announce(string.format("%s has joined!", tostring(player)), MessageMode.INFO, PlayerState.PLAYING)
 end
 
 -- this occurs after the player is disconnected
 function Nanny.sendOff(player)
-	player:sendLine("Goodbye!")
-	Game.announce(string.format("%s has left!", tostring(player)), PlayerState.PLAYING)
+	player:sendLine("\n!Goodbye!")
+	Game.announce(string.format("%s has left!", tostring(player)), MessageMode.INFO, PlayerState.PLAYING)
 end	
 
 function Nanny.MOTD(player)
-	player:sendLine("")
-	player:sendLine(Nanny.getMOTD())
-	player:sendLine("")
-	player:sendString("< PRESS ENTER >")
+	player:sendMessage("\n" .. Nanny.getMOTD(), MessageMode.GENERAL)
+	player:sendMessage("< PRESS ENTER >", MessageMode.GENERAL, false)
 end
 
 function Nanny.getMOTD()
@@ -96,6 +89,7 @@ end
 function Nanny.greet(player)
 	player:sendLine(Nanny.getGreeting())
 	player:setState(PlayerState.NAME)
+	player:sendLine()
 	Nanny.askForName(player)
 end
 
@@ -104,28 +98,19 @@ end
 	@return The message.
 ]]
 function Nanny.getGreeting()
-	return "      __            /^\\\
-    .'  \\          / :.\\\
-   /     \\         | :: \\\
-  /   /.  \\       / ::: |\
- |    |::. \\     / :::'/\
- |   / \\::. |   / :::'/\
- `--`   \\'  `~~~ ':'/`\
-         /         (\
-        /   0 _ 0   \\\
-      \\/     \\_/     \\/ Welcome to\
-    -== '.'   |   '.' ==-     lama v0.0a!\
-      /\\    '-^-'    /\\\
-        \\   _   _   /\
-       .-`-((\\o/))-`-.\
-  _   /     //^\\\\     \\   _\
-.\"o\".(    , .:::. ,    ).\"o\".\
-|o  o\\\\    \\:::::/    //o  o|\
- \\    \\\\   |:::::|   //    /\
-  \\    \\\\__/:::::\\__//    /\
-   \\ .:.\\  `':::'`  /.:. /\
-    \\':: |_       _| ::'/\
- jgs `---` `\"\"\"\"\"` `---`"
+	return [[milkmanjack@home ~>
+$ cd /projects/lama
+
+milkmanjack@home ~/projects/lama>
+$ lua
+Lua 5.1.4  Copyright (C) 1994-2008 Lua.org, PUC-Rio
+> dofile("Game.lua")
+> =Game.version
+0.0a
+> =Game.name
+lama
+> Game.open()
+...]]
 end
 
 _G.Nanny = Nanny

@@ -22,11 +22,11 @@ end
 ]]
 function Client:toString()
 	if not self.socket then
-		return "{client@nil}"
+		return "client@nil"
 	end
 
 	local addr, port = self.socket:getpeername()
-	return string.format("{client@%s}", addr or "unknown")
+	return string.format("client@%s", addr or "unknown")
 end
 
 --[[
@@ -46,7 +46,7 @@ function Client:send(data, i, j)
 end
 
 function Client:sendString(str)
-	str = string.gsub(str, "\n", "\r\n")
+	str = string.gsub(str or "", "\n", "\r\n")
 	self:send(str)
 end
 
@@ -54,7 +54,7 @@ end
 	Sends the given string to the client followed by a linebreak.
 ]]
 function Client:sendLine(str)
-	self:sendString(string.format("%s%s", str, "\r\n"))
+	self:sendString(string.format("%s%s", str or "", "\r\n"))
 end
 
 --[[

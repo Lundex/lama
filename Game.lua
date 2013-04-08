@@ -10,6 +10,8 @@ require("Nanny")
 require("Telnet")
 require("PlayerState")
 require("GameState")
+require("MessageMode")
+require("Direction")
 local Event			= require("obj.Event")
 local Scheduler		= require("obj.Scheduler")
 local Server		= require("obj.Server")
@@ -145,6 +147,10 @@ end
 function Game.onPlayerInput(player, input)
 	Game.logCommand(player, input)
 
+	-- this assumes that there will be echoing at some stage
+	-- in the future, only do this if we know there will be echoing
+	player:clearMessageMode()
+
 	-- for testing purposes (and convenience).
 	if input == "quit" then
 		Game.disconnectPlayer(player)
@@ -158,13 +164,13 @@ function Game.onPlayerInput(player, input)
 	end
 
 	-- command parsing for in-game players
-	Game.parser:parse(player, input)
+	Game.parser:parse(player, player:getMob(), input)
 end
 
-function Game.announce(message, minState)
+function Game.announce(message, mode, minState)
 	for i,v in ipairs(Game.getPlayers()) do
 		if not minState or v:getState() >= minState then
-			v:sendLine(message)
+			v:sendMessage(message, mode)
 		end
 	end
 end
@@ -329,9 +335,17 @@ function Game.PollEvent:run()
 			-- this way we don't lose things like client negotiations
 			-- though we don't support them right now anyway
 			elseif partial ~= nil and string.len(partial) > 0 then
-				local stripped = string.match(partial, "(.-)[\r?][\n?]")
-				if stripped then
-					Game.onPlayerInput(v, stripped)
+				-- this is essentially an iterator that'll traverse an entire
+				-- input string if it spans multiple lines, sending each one to
+				-- Game.onPlayerInput().
+				-- it's kinda tacky.
+				local multiple = string.gmatch(partial, "(.-)[\r?][\n?]")
+				local first = multiple()
+				if first then
+					Game.onPlayerInput(v, first)
+					for cmd in multiple do
+						Game.onPlayerInput(v, cmd)
+					end
 				else
 					Game.debug(string.format("bad input from %s: {%s}", tostring(v), partial))
 				end
