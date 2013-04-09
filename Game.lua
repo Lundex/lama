@@ -1,7 +1,6 @@
---[[	Author:	Milkmanjack
-		Date:	4/1/13
-		Package that handles game processing.
-]]
+--- The bread and butter of the project.
+-- @author milkmanjack
+module("Game", package.seeall)
 
 require("logging")
 require("logging.file")
@@ -18,6 +17,23 @@ local Server		= require("obj.Server")
 local Player		= require("obj.Player")
 local Map			= require("obj.Map")
 local CommandParser	= require("obj.CommandParser")
+
+--- The Game table.
+-- @class table
+-- @name Game
+-- @field name The name we would like to be called.
+-- @field version The version of this release.
+-- @field defaultPort The port we'll use if one isn't provided.
+-- @field state Our state. Always a member of the <i>GameState</i> table.
+-- @field playerID Unique ID to be assigned to the next new <i>Player</i>.
+-- @field players List of <i>Players</i> connected to us.
+-- @field server The <i>Server</i>, obviously.
+-- @field scheduler Unique <i>Scheduler</i> we're using.
+-- @field parser <i>CommandParser</i> we're using.
+-- @field map The <i>Map</i> we'll be using.
+-- @field logger <i>Logger</i> that prints to the standard output.
+-- @field fileLogger <i>Logger</i> that prints to the standard log file for this session.
+-- @field commandLogger <i>Logger</i> that prints all command input to the standard command log file for this session.
 local Game			= {}
 
 -- game data
@@ -27,91 +43,89 @@ Game.defaultPort	= 8000
 
 -- runtime data
 Game.state			= GameState.NEW
-Game.scheduler		= nil -- these are loaded at game startup
-Game.server			= nil
-Game.parser			= nil
 
 Game.playerID		= 0
+--- Contains all <i>Player</i>s connected to the game.
+-- @class table
+-- @name Game.players
 Game.players		= {}
+
+Game.server			= Server:new()
+Game.scheduler		= Scheduler:new()
+Game.parser			= CommandParser:new()
+Game.map			= Map:new()
 
 Game.logger			= logging.console()
 Game.logger:setLevel(logging.DEBUG)
 
 Game.fileLogger		= logging.file("logs/%s.log", "%m%d%y")
-Game.logger:setLevel(logging.DEBUG)
+Game.fileLogger:setLevel(logging.DEBUG)
 
 Game.commandLogger	= logging.file("logs/%s-commands.log", "%m%d%y")
 Game.commandLogger:setLevel(logging.DEBUG)
 
-Game.map			= nil
-
--- open the game for play
+--- Open the game for play.
+-- @param port The port to be hosted on. Defaults to Game.defaultPort{@link Game.defaultPort}.
+-- @return true on success.<br/>false followed by an error otherwise.
 function Game.open(port)
 	port = port or Game.defaultPort
 	Game.info(string.format("Preparing to host game server on port %d...", port))
-	local server = Server:new()
-	local _, err = server:host(port or Game.defaultPort)
+	local _, err = Game.server:host(port or Game.defaultPort)
 	if not _ then
 		return false, err
 	end
 
-	Game.server = server
-
 	Game.info("Preparing scheduler...")
-	Game.scheduler = Scheduler:new()
 	Game.queue(Game.AcceptEvent:new(os.clock()))
 	Game.queue(Game.PollEvent:new(os.clock()))
+
+	if not Game.map:getTiles() then
+		Game.info("Generating map...")
+		Game.map:generate(100,100,1)
+	else
+		Game.info("Map already generated...")
+	end
+
 	Game.setState(GameState.READY)
-
-	Game.info("Generating map...")
-	Game.map = Map:new()
-	Game.map:generate(100,100,1)
-
-	Game.info("Loading command parser...")
-	Game.parser = CommandParser:new()
-
 	Game.info("Game is ready for business...")
 	return true
 end
 
--- close the game for play
+--- Shutdown the game.
+-- @return <i>true</i> on success.<br/><i>false</i> followed by an error otherwise.
 function Game.shutdown()
+	if not Game.isReady() then
+		return false, "Game not running"
+	end
+
 	Game.info("Shutting down game...")
-	for i,v in ipairs(Game.server:getClients()) do
-		v:sendLine("The game is now closed! Get over it!")
+	for i,v in table.safeIPairs(Game:getPlayers()) do
+		self:disconnectPlayer(v)
 	end
 
 	Game.setState(GameState.SHUTDOWN)
 	Game.server:close()
 	Game.scheduler:clear()
-	Game.server		= nil
-	Game.scheduler 	= nil
-	Game.map		= nil
-	Game.parser		= nil
 
-	Game.info("Shut down!")
+	Game.info("Game is shutdown!")
+	return true
 end
 
---[[
-	Update the game and poll the scheduler.
-]]
+--- Updates the game as necessary. Things like updating the scheduler and such.
 function Game.update()
 	Game.scheduler:poll(os.clock())
 end
 
---[[
-	Primary response to player connection.
-	@param player	The player that has connected.
-]]
+--- Connects a <i>Player</i>.<br/>
+-- Calls <i>Game.onPlayerConnect(player)</i> before adding to players list.
+-- @param player The <i>Player</i> to be connected.
 function Game.connectPlayer(player)
 	Game.onPlayerConnect(player)
 	table.insert(Game.players, player)
 end
 
---[[
-	Secondary response to player connection.
-	@param player	The player that has connected.
-]]
+--- Specifies further actions for a connecting <i>Player</i>.
+-- @param player The <i>Player</i> connecting.
 function Game.onPlayerConnect(player)
 	Game.info(string.format("Connected player %s!", tostring(player:getClient())))
 
@@ -119,20 +133,17 @@ function Game.onPlayerConnect(player)
 	Nanny.greet(player)
 end
 
---[[
-	Primary response to player disconnection.
-	@param player	The player that has disconnected.
-]]
+--- Disconnect a <i>Player</i>.<br/>
+-- Calls <i>Game.onPlayerDisconnect(player)</i> before removing from players list or destroying client.
+-- @param player The <i>Player</i> to be disconnected.
 function Game.disconnectPlayer(player)
 	Game.onPlayerDisconnect(player) -- disconnect the player
 	table.removeValue(Game.players, player) -- remove from players list (no longer recognized as a player)
 	Game.server:disconnectClient(player:getClient()) -- kill the client
 end
 
---[[
-	Secondary response to disconnecting a player.
-	@param player	The player that has idsconnected.
-]]
+--- Specifies further actions for a disconnecting <i>Player</i>.
+-- @param player The <i>Player</i> disconnecting.
 function Game.onPlayerDisconnect(player)
 	Game.info(string.format("Disconnected player %s!", tostring(player:getClient())))
 	if player:getState() == PlayerState.PLAYING then
@@ -140,10 +151,10 @@ function Game.onPlayerDisconnect(player)
 	end
 end
 
---[[
-	Response to player input.
-	@param player	The player that has connected.
-]]
+
+--- Determine what to do with input given by a <i>Player</i>.
+-- @param player The <i>Player</i> providing the input.
+-- @param input The input to be processed.
 function Game.onPlayerInput(player, input)
 	Game.logCommand(player, input)
 
@@ -167,6 +178,18 @@ function Game.onPlayerInput(player, input)
 	Game.parser:parse(player, player:getMob(), input)
 end
 
+--- Set the <i>Game</i>'s state.
+-- @param state The state to be assigned.<br/>Must be a valid member of <i>GameState</i>.
+function Game.setState(state)
+	Game.state = state
+end
+
+--- Announce something to connecting <i>Player</i>s.<br/>
+-- This is mostly temporary, but I'm leaving it in now for testing purposes.<br/>
+-- More reasonable implementation later.
+-- @param message The message to be announced.
+-- @param mode The mode of the message.<br/>Must be a valid member of <i>MessageMode</i>.
+-- @param minState The state a <i>Player</i> must be at to see the message (or "higher").
 function Game.announce(message, mode, minState)
 	for i,v in ipairs(Game.getPlayers()) do
 		if not minState or v:getState() >= minState then
@@ -175,114 +198,102 @@ function Game.announce(message, mode, minState)
 	end
 end
 
---[[
-	Check if the game is ready to be played.
-	@return true if the game's state is at GameState.READY.<br/>false otherwise.
-]]
+--- Check if the <i>Game</i> is ready to be played.
+-- return true if the game's state is at GameState.READY.<br/>false otherwise.
 function Game.isReady()
 	return Game.state == GameState.READY
 end
 
---[[
-	Set the game's state.
-	@param state The state to be assigned.<br/>Valid states can be found in GameState.lua
-]]
-function Game.setState(state)
-	Game.state = state
-end
-
---[[
-	Retreive the game's player list.
-	@return List of players.
-]]
-function Game.getPlayers()
-	return Game.players
-end
-
---[[
-	Retreive the game's name.
-	@return The name of the game.
-]]
+--- Retreive the <i>Game</i>'s name.
+-- @return The name of the <i>Game</i>.
 function Game.getName()
 	return Game.name
 end
 
---[[
-	Retreive the game's version.
-	@return The version of the game.
-]]
+--- Retreive the <i>Game</i>'s version.
+-- @return The version of the <i>Game</i>.
 function Game.getVersion()
 	return Game.version
 end
 
---[[
-	Retreive the game's state.
-	@return The game's state.<br/>Valid states can be found in GameState.lua
-]]
+--- Retreive the <i>Game</i>'s state.
+-- @return The <i>Game</i>'s state.<br/>Must be a valid member of <i>GameState</i>.
 function Game.getState()
 	return Game.state
 end
 
---[[
-	Get a unique player ID.
-	@return A unique player ID.
-]]
+--- Get a unique player ID.
+-- @return A unique player ID.
 function Game.nextPlayerID()
 	local id = Game.playerID
 	Game.playerID = Game.playerID+1
 	return id
 end
 
--- shortcut for Game.scheduler:queue
+
+--- Retreive the <i>Game</i>'s players list.
+-- @return <i>Player</i> list.
+function Game.getPlayers()
+	return Game.players
+end
+
+--- shortcut for Game.scheduler:queue
 function Game.queue(event)
 	Game.scheduler:queue(event)
 end
 
--- shortcut for Game.scheduler:deque
+--- shortcut for Game.scheduler:deque
 function Game.deque(event)
 	Game.scheduler:deque(event)
 end
 
--- logger shortcuts
+--- logger:log()/fileLogger:log() shortcut
 function Game.log(level, message)
 	Game.logger:log(level, message)
 	Game.fileLogger:log(level, message)
 end
 
+--- logger:debug()/fileLogger:debug() shortcut
 function Game.debug(message)
 	Game.logger:debug(message)
 	Game.fileLogger:debug(message)
 end
 
+--- logger:info()/fileLogger:info() shortcut
 function Game.info(message)
 	Game.logger:info(message)
 	Game.fileLogger:info(message)
 end
 
+--- logger:warn()/fileLogger:warn() shortcut
 function Game.warn(message)
 	Game.logger:warn(message)
 	Game.fileLogger:warn(message)
 end
 
+--- logger:error()/fileLogger:error() shortcut
 function Game.error(message)
 	Game.logger:error(message)
 	Game.fileLogger:error(message)
 end
 
+--- logger:fatal()/fileLogger:fatal() shortcut
 function Game.fatal(message)
 	Game.logger:fatal(message)
 	game.fileLogger:fatal(message)
 end
 
+--- Logs <i>Player</i> input.
+-- @param player The <i>Player</i> giving input.
+-- @param input The input the <i>Player</i> gave.
 function Game.logCommand(player, input)
 	Game.commandLogger:info(tostring(player) .. ": '" .. input .. "'")
 end
--- /logger shortcuts
 
---[[
-	This event acts as the middle ground for client connections, accepting
-	clients on behalf of the server, and informing the game about it.
-]]
+--- This <i>Event</i> acts as the middle ground for client connections, accepting clients on behalf of the server, and informing the game about it.<br/>
+-- Game.PollEvent and Game.AcceptEvent are mandatory events that must be part of the Game scheduler.
+-- @class table
+-- @name Game.AcceptEvent
 Game.AcceptEvent				= Event:clone()
 Game.AcceptEvent.shouldRepeat	= true
 Game.AcceptEvent.repeatMax		= 0
@@ -303,13 +314,11 @@ function Game.AcceptEvent:run()
 end
 
 
---[[
-	This event acts as the middle ground for client input, polling clients
-	from the server for input and informing the game about it.
-
-	Also is the starting point for destroying clients that have disconnected
-	and cannot be reached.
-]]
+--- This <i>Event</i> acts as the middle ground for client input, polling clients from the server for input and informing the game about it.<br/>
+-- Also the starting point for destroying clients that have disconnected and cannot be reached.<br/>
+-- Game.PollEvent and Game.AcceptEvent are mandatory events that must be part of the Game scheduler.
+-- @class table
+-- @name Game.PollEvent
 Game.PollEvent					= Event:clone()
 Game.PollEvent.shouldRepeat		= true
 Game.PollEvent.repeatMax		= 0
@@ -359,8 +368,6 @@ function Game.PollEvent:run()
 	end
 end
 
--- assigns a global of the same name
--- this is so we only have to include it once.
 _G.Game = Game
 
 return Game

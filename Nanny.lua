@@ -34,6 +34,8 @@ function Nanny.login(player)
 	player:setID(Game.nextPlayerID()) -- now that they're finally playing
 	Nanny.introduce(player)
 
+	Game.info(string.format("(%s)->%s has joined.", tostring(player), tostring(mob)))
+
 	-- move our mob to starting point
 	mob:moveToMap(Game.map)
 	mob:setXYZLoc(1,1,1)
@@ -46,6 +48,8 @@ end
 function Nanny.logout(player)
 	local mob = player:getMob()
 	Nanny.sendOff(player)
+
+	Game.info(string.format("(%s)->%s has left.", tostring(player), tostring(mob)))
 
 	-- remove their mob from the map
 	mob:moveToMap(nil)
@@ -69,7 +73,7 @@ end
 
 -- this occurs after the player is disconnected
 function Nanny.sendOff(player)
-	player:sendLine("\n!Goodbye!")
+	player:sendLine("Goodbye!")
 	Game.announce(string.format("%s has left!", tostring(player)), MessageMode.INFO, PlayerState.PLAYING)
 end	
 
@@ -98,19 +102,19 @@ end
 	@return The message.
 ]]
 function Nanny.getGreeting()
-	return [[milkmanjack@home ~>
-$ cd /projects/lama
+	local file = io.open("txt/GREETING", "r")
+	if file then
+		local greeting = file:read("*all")
+		file:close()
+		return greeting
+	end
 
-milkmanjack@home ~/projects/lama>
-$ lua
-Lua 5.1.4  Copyright (C) 1994-2008 Lua.org, PUC-Rio
-> dofile("Game.lua")
-> =Game.version
-0.0a
-> =Game.name
-lama
-> Game.open()
-...]]
+	return [[Moon MUD
+    by Jack
+
+Developed in
+    Lua 5.2]]
+
 end
 
 _G.Nanny = Nanny

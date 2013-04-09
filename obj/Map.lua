@@ -126,6 +126,10 @@ function Map:getLayers()
 	return self.layers
 end
 
+function Map:getTiles()
+	return self.tiles
+end
+
 function Map:getTile(x,y,z)
 	if x < 1 or x > self.width or
 		y < 1 or y > self.height or

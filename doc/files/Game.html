@@ -1,0 +1,1027 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"
+   "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html>
+<head>
+    <title>Reference</title>
+    <link rel="stylesheet" href="../luadoc.css" type="text/css" />
+	<!--meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/-->
+</head>
+
+<body>
+<div id="container">
+
+<div id="product">
+	<div id="product_logo"></div>
+	<div id="product_name"><big><b></b></big></div>
+	<div id="product_description"></div>
+</div> <!-- id="product" -->
+
+<div id="main">
+
+<div id="navigation">
+
+
+<h1>LuaDoc</h1>
+<ul>
+	
+	<li><a href="../index.html">Index</a></li>
+	
+</ul>
+
+
+<!-- Module list -->
+
+<h1>Modules</h1>
+<ul>
+
+	<li>
+		<a href="../modules/Game.html">Game</a>
+	</li>
+
+</ul>
+
+
+
+<!-- File list -->
+
+<h1>Files</h1>
+<ul>
+
+	<li>
+		<a href="../files/Direction.html">Direction.lua</a>
+	</li>
+
+	<li><strong>Game.lua</strong></li>
+	
+	<li>
+		<a href="../files/GameState.html">GameState.lua</a>
+	</li>
+
+	<li>
+		<a href="../files/MessageMode.html">MessageMode.lua</a>
+	</li>
+
+	<li>
+		<a href="../files/Nanny.html">Nanny.lua</a>
+	</li>
+
+	<li>
+		<a href="../files/PlayerState.html">PlayerState.lua</a>
+	</li>
+
+	<li>
+		<a href="../files/Telnet.html">Telnet.lua</a>
+	</li>
+
+	<li>
+		<a href="../files/ext/table.html">ext/table.lua</a>
+	</li>
+
+	<li>
+		<a href="../files/main.html">main.lua</a>
+	</li>
+
+	<li>
+		<a href="../files/obj/Client.html">obj/Client.lua</a>
+	</li>
+
+	<li>
+		<a href="../files/obj/Cloneable.html">obj/Cloneable.lua</a>
+	</li>
+
+	<li>
+		<a href="../files/obj/CommandParser.html">obj/CommandParser.lua</a>
+	</li>
+
+	<li>
+		<a href="../files/obj/Event.html">obj/Event.lua</a>
+	</li>
+
+	<li>
+		<a href="../files/obj/Map.html">obj/Map.lua</a>
+	</li>
+
+	<li>
+		<a href="../files/obj/MapObject.html">obj/MapObject.lua</a>
+	</li>
+
+	<li>
+		<a href="../files/obj/MapTile.html">obj/MapTile.lua</a>
+	</li>
+
+	<li>
+		<a href="../files/obj/Mob.html">obj/Mob.lua</a>
+	</li>
+
+	<li>
+		<a href="../files/obj/Player.html">obj/Player.lua</a>
+	</li>
+
+	<li>
+		<a href="../files/obj/Scheduler.html">obj/Scheduler.lua</a>
+	</li>
+
+	<li>
+		<a href="../files/obj/Server.html">obj/Server.lua</a>
+	</li>
+
+</ul>
+
+
+
+
+
+
+</div> <!-- id="navigation" -->
+
+<div id="content">
+
+<h1>File <code>Game.lua</code></h1>
+
+
+<p>Package!</p>
+
+
+
+
+
+
+<h2>Functions</h2>
+<table class="function_list">
+
+	<tr>
+	<td class="name" nowrap><a href="#Game.announce">Game.announce</a>&nbsp;(message, mode, minState)</td>
+	<td class="summary">Announce something to connecting <i>Player</i>s.<br/> This is mostly temporary, but I'm leaving it in now for testing purposes.<br/> More reasonable implementation later.</td>
+	</tr>
+
+	<tr>
+	<td class="name" nowrap><a href="#Game.connectPlayer">Game.connectPlayer</a>&nbsp;(player)</td>
+	<td class="summary">Connects a <i>Player</i>.<br/> Calls <i>Game.onPlayerConnect(player)</i> before adding to players list.</td>
+	</tr>
+
+	<tr>
+	<td class="name" nowrap><a href="#Game.debug">Game.debug</a>&nbsp;(message)</td>
+	<td class="summary">logger:debug()/fileLogger:debug() shortcut </td>
+	</tr>
+
+	<tr>
+	<td class="name" nowrap><a href="#Game.deque">Game.deque</a>&nbsp;(event)</td>
+	<td class="summary">shortcut for Game.scheduler:deque </td>
+	</tr>
+
+	<tr>
+	<td class="name" nowrap><a href="#Game.disconnectPlayer">Game.disconnectPlayer</a>&nbsp;(player)</td>
+	<td class="summary">Disconnect a <i>Player</i>.<br/> Calls <i>Game.onPlayerDisconnect(player)</i> before removing from players list or destroying client.</td>
+	</tr>
+
+	<tr>
+	<td class="name" nowrap><a href="#Game.error">Game.error</a>&nbsp;(message)</td>
+	<td class="summary">logger:error()/fileLogger:error() shortcut </td>
+	</tr>
+
+	<tr>
+	<td class="name" nowrap><a href="#Game.fatal">Game.fatal</a>&nbsp;(message)</td>
+	<td class="summary">logger:fatal()/fileLogger:fatal() shortcut </td>
+	</tr>
+
+	<tr>
+	<td class="name" nowrap><a href="#Game.getName">Game.getName</a>&nbsp;()</td>
+	<td class="summary">Retreive the <i>Game</i>'s name.</td>
+	</tr>
+
+	<tr>
+	<td class="name" nowrap><a href="#Game.getPlayers">Game.getPlayers</a>&nbsp;()</td>
+	<td class="summary">Retreive the <i>Game</i>'s players list.</td>
+	</tr>
+
+	<tr>
+	<td class="name" nowrap><a href="#Game.getState">Game.getState</a>&nbsp;()</td>
+	<td class="summary">Retreive the <i>Game</i>'s state.</td>
+	</tr>
+
+	<tr>
+	<td class="name" nowrap><a href="#Game.getVersion">Game.getVersion</a>&nbsp;()</td>
+	<td class="summary">Retreive the <i>Game</i>'s version.</td>
+	</tr>
+
+	<tr>
+	<td class="name" nowrap><a href="#Game.info">Game.info</a>&nbsp;(message)</td>
+	<td class="summary">logger:info()/fileLogger:info() shortcut </td>
+	</tr>
+
+	<tr>
+	<td class="name" nowrap><a href="#Game.log">Game.log</a>&nbsp;(level, message)</td>
+	<td class="summary">logger:log()/fileLogger:log() shortcut </td>
+	</tr>
+
+	<tr>
+	<td class="name" nowrap><a href="#Game.logCommand">Game.logCommand</a>&nbsp;(player, input)</td>
+	<td class="summary">Logs <i>Player</i> input.</td>
+	</tr>
+
+	<tr>
+	<td class="name" nowrap><a href="#Game.nextPlayerID">Game.nextPlayerID</a>&nbsp;()</td>
+	<td class="summary">Get a unique player ID.</td>
+	</tr>
+
+	<tr>
+	<td class="name" nowrap><a href="#Game.onPlayerConnect">Game.onPlayerConnect</a>&nbsp;(player)</td>
+	<td class="summary">Specifies further actions for a connecting <i>Player</i>.</td>
+	</tr>
+
+	<tr>
+	<td class="name" nowrap><a href="#Game.onPlayerDisconnect">Game.onPlayerDisconnect</a>&nbsp;(player)</td>
+	<td class="summary">Specifies further actions for a disconnecting <i>Player</i>.</td>
+	</tr>
+
+	<tr>
+	<td class="name" nowrap><a href="#Game.onPlayerInput">Game.onPlayerInput</a>&nbsp;(player, input)</td>
+	<td class="summary">Determine what to do with input given by a <i>Player</i>.</td>
+	</tr>
+
+	<tr>
+	<td class="name" nowrap><a href="#Game.open">Game.open</a>&nbsp;(port)</td>
+	<td class="summary">Open the game for play.</td>
+	</tr>
+
+	<tr>
+	<td class="name" nowrap><a href="#Game.queue">Game.queue</a>&nbsp;(event)</td>
+	<td class="summary">shortcut for Game.scheduler:queue </td>
+	</tr>
+
+	<tr>
+	<td class="name" nowrap><a href="#Game.setState">Game.setState</a>&nbsp;(state)</td>
+	<td class="summary">Set the <i>Game</i>'s state.</td>
+	</tr>
+
+	<tr>
+	<td class="name" nowrap><a href="#Game.shutdown">Game.shutdown</a>&nbsp;()</td>
+	<td class="summary">Shutdown the game.</td>
+	</tr>
+
+	<tr>
+	<td class="name" nowrap><a href="#Game.update">Game.update</a>&nbsp;()</td>
+	<td class="summary">Updates the game as necessary.</td>
+	</tr>
+
+	<tr>
+	<td class="name" nowrap><a href="#Game.warn">Game.warn</a>&nbsp;(message)</td>
+	<td class="summary">logger:warn()/fileLogger:warn() shortcut </td>
+	</tr>
+
+</table>
+
+
+
+
+<h2>Tables</h2>
+<table class="table_list">
+
+	<tr>
+	<td class="name" nowrap><a href="#Game">Game</a></td>
+	<td class="summary">The Game package! </td>
+	</tr>
+
+	<tr>
+	<td class="name" nowrap><a href="#Game.AcceptEvent">Game.AcceptEvent</a></td>
+	<td class="summary">This <i>Event</i> acts as the middle ground for client connections, accepting clients on behalf of the server, and informing the game about it.<br/> Game.PollEvent and Game.AcceptEvent are mandatory events that must be part of the Game scheduler.</td>
+	</tr>
+
+	<tr>
+	<td class="name" nowrap><a href="#Game.PollEvent">Game.PollEvent</a></td>
+	<td class="summary">This <i>Event</i> acts as the middle ground for client input, polling clients from the server for input and informing the game about it.<br/> Also the starting point for destroying clients that have disconnected and cannot be reached.<br/> Game.PollEvent and Game.AcceptEvent are mandatory events that must be part of the Game scheduler.</td>
+	</tr>
+
+	<tr>
+	<td class="name" nowrap><a href="#Game.players">Game.players</a></td>
+	<td class="summary">Contains all <i>Player</i>s connected to the game.</td>
+	</tr>
+
+</table>
+
+
+
+<br/>
+<br/>
+
+
+
+
+<h2><a name="functions"></a>Functions</h2>
+<dl class="function">
+
+
+
+<dt><a name="Game.announce"></a><strong>Game.announce</strong>&nbsp;(message, mode, minState)</dt>
+<dd>
+Announce something to connecting <i>Player</i>s.<br/> This is mostly temporary, but I'm leaving it in now for testing purposes.<br/> More reasonable implementation later.
+
+
+<h3>Parameters:</h3>
+<ul>
+	
+	<li>
+	  <code><em>message</em></code>: The message to be announced.
+	</li>
+	
+	<li>
+	  <code><em>mode</em></code>: The mode of the message.<br/>Must be a valid member of <i>MessageMode</i>.
+	</li>
+	
+	<li>
+	  <code><em>minState</em></code>: The state a <i>Player</i> must be at to see the message (or "higher").
+	</li>
+	
+</ul>
+
+
+
+
+
+
+
+
+</dd>
+
+
+
+
+<dt><a name="Game.connectPlayer"></a><strong>Game.connectPlayer</strong>&nbsp;(player)</dt>
+<dd>
+Connects a <i>Player</i>.<br/> Calls <i>Game.onPlayerConnect(player)</i> before adding to players list.
+
+
+<h3>Parameters:</h3>
+<ul>
+	
+	<li>
+	  <code><em>player</em></code>: The <i>Player</i> to be connected.
+	</li>
+	
+</ul>
+
+
+
+
+
+
+
+
+</dd>
+
+
+
+
+<dt><a name="Game.debug"></a><strong>Game.debug</strong>&nbsp;(message)</dt>
+<dd>
+logger:debug()/fileLogger:debug() shortcut
+
+
+<h3>Parameters:</h3>
+<ul>
+	
+	<li>
+	  <code><em>message</em></code>: 
+	</li>
+	
+</ul>
+
+
+
+
+
+
+
+
+</dd>
+
+
+
+
+<dt><a name="Game.deque"></a><strong>Game.deque</strong>&nbsp;(event)</dt>
+<dd>
+shortcut for Game.scheduler:deque
+
+
+<h3>Parameters:</h3>
+<ul>
+	
+	<li>
+	  <code><em>event</em></code>: 
+	</li>
+	
+</ul>
+
+
+
+
+
+
+
+
+</dd>
+
+
+
+
+<dt><a name="Game.disconnectPlayer"></a><strong>Game.disconnectPlayer</strong>&nbsp;(player)</dt>
+<dd>
+Disconnect a <i>Player</i>.<br/> Calls <i>Game.onPlayerDisconnect(player)</i> before removing from players list or destroying client.
+
+
+<h3>Parameters:</h3>
+<ul>
+	
+	<li>
+	  <code><em>player</em></code>: The <i>Player</i> to be disconnected.
+	</li>
+	
+</ul>
+
+
+
+
+
+
+
+
+</dd>
+
+
+
+
+<dt><a name="Game.error"></a><strong>Game.error</strong>&nbsp;(message)</dt>
+<dd>
+logger:error()/fileLogger:error() shortcut
+
+
+<h3>Parameters:</h3>
+<ul>
+	
+	<li>
+	  <code><em>message</em></code>: 
+	</li>
+	
+</ul>
+
+
+
+
+
+
+
+
+</dd>
+
+
+
+
+<dt><a name="Game.fatal"></a><strong>Game.fatal</strong>&nbsp;(message)</dt>
+<dd>
+logger:fatal()/fileLogger:fatal() shortcut
+
+
+<h3>Parameters:</h3>
+<ul>
+	
+	<li>
+	  <code><em>message</em></code>: 
+	</li>
+	
+</ul>
+
+
+
+
+
+
+
+
+</dd>
+
+
+
+
+<dt><a name="Game.getName"></a><strong>Game.getName</strong>&nbsp;()</dt>
+<dd>
+Retreive the <i>Game</i>'s name.
+
+
+
+
+
+
+
+<h3>Return value:</h3>
+<ul>The name of the <i>Game</i>.</ul>
+
+
+
+</dd>
+
+
+
+
+<dt><a name="Game.getPlayers"></a><strong>Game.getPlayers</strong>&nbsp;()</dt>
+<dd>
+Retreive the <i>Game</i>'s players list.
+
+
+
+
+
+
+
+<h3>Return value:</h3>
+<ul><i>Player</i> list.</ul>
+
+
+
+</dd>
+
+
+
+
+<dt><a name="Game.getState"></a><strong>Game.getState</strong>&nbsp;()</dt>
+<dd>
+Retreive the <i>Game</i>'s state.
+
+
+
+
+
+
+
+<h3>Return value:</h3>
+<ul>The <i>Game</i>'s state.<br/>Must be a valid member of <i>GameState</i>.</ul>
+
+
+
+</dd>
+
+
+
+
+<dt><a name="Game.getVersion"></a><strong>Game.getVersion</strong>&nbsp;()</dt>
+<dd>
+Retreive the <i>Game</i>'s version.
+
+
+
+
+
+
+
+<h3>Return value:</h3>
+<ul>The version of the <i>Game</i>.</ul>
+
+
+
+</dd>
+
+
+
+
+<dt><a name="Game.info"></a><strong>Game.info</strong>&nbsp;(message)</dt>
+<dd>
+logger:info()/fileLogger:info() shortcut
+
+
+<h3>Parameters:</h3>
+<ul>
+	
+	<li>
+	  <code><em>message</em></code>: 
+	</li>
+	
+</ul>
+
+
+
+
+
+
+
+
+</dd>
+
+
+
+
+<dt><a name="Game.log"></a><strong>Game.log</strong>&nbsp;(level, message)</dt>
+<dd>
+logger:log()/fileLogger:log() shortcut
+
+
+<h3>Parameters:</h3>
+<ul>
+	
+	<li>
+	  <code><em>level</em></code>: 
+	</li>
+	
+	<li>
+	  <code><em>message</em></code>: 
+	</li>
+	
+</ul>
+
+
+
+
+
+
+
+
+</dd>
+
+
+
+
+<dt><a name="Game.logCommand"></a><strong>Game.logCommand</strong>&nbsp;(player, input)</dt>
+<dd>
+Logs <i>Player</i> input.
+
+
+<h3>Parameters:</h3>
+<ul>
+	
+	<li>
+	  <code><em>player</em></code>: The <i>Player</i> giving input.
+	</li>
+	
+	<li>
+	  <code><em>input</em></code>: The input the <i>Player</i> gave.
+	</li>
+	
+</ul>
+
+
+
+
+
+
+
+
+</dd>
+
+
+
+
+<dt><a name="Game.nextPlayerID"></a><strong>Game.nextPlayerID</strong>&nbsp;()</dt>
+<dd>
+Get a unique player ID.
+
+
+
+
+
+
+
+<h3>Return value:</h3>
+<ul>A unique player ID.</ul>
+
+
+
+</dd>
+
+
+
+
+<dt><a name="Game.onPlayerConnect"></a><strong>Game.onPlayerConnect</strong>&nbsp;(player)</dt>
+<dd>
+Specifies further actions for a connecting <i>Player</i>.
+
+
+<h3>Parameters:</h3>
+<ul>
+	
+	<li>
+	  <code><em>player</em></code>: The <i>Player</i> connecting.
+	</li>
+	
+</ul>
+
+
+
+
+
+
+
+
+</dd>
+
+
+
+
+<dt><a name="Game.onPlayerDisconnect"></a><strong>Game.onPlayerDisconnect</strong>&nbsp;(player)</dt>
+<dd>
+Specifies further actions for a disconnecting <i>Player</i>.
+
+
+<h3>Parameters:</h3>
+<ul>
+	
+	<li>
+	  <code><em>player</em></code>: The <i>Player</i> disconnecting.
+	</li>
+	
+</ul>
+
+
+
+
+
+
+
+
+</dd>
+
+
+
+
+<dt><a name="Game.onPlayerInput"></a><strong>Game.onPlayerInput</strong>&nbsp;(player, input)</dt>
+<dd>
+Determine what to do with input given by a <i>Player</i>.
+
+
+<h3>Parameters:</h3>
+<ul>
+	
+	<li>
+	  <code><em>player</em></code>: The <i>Player</i> providing the input.
+	</li>
+	
+	<li>
+	  <code><em>input</em></code>: The input to be processed.
+	</li>
+	
+</ul>
+
+
+
+
+
+
+
+
+</dd>
+
+
+
+
+<dt><a name="Game.open"></a><strong>Game.open</strong>&nbsp;(port)</dt>
+<dd>
+Open the game for play.
+
+
+<h3>Parameters:</h3>
+<ul>
+	
+	<li>
+	  <code><em>port</em></code>: The port to be hosted on. Defaults to Game.defaultPort{@link Game.defaultPort}.
+	</li>
+	
+</ul>
+
+
+
+
+
+
+<h3>Return value:</h3>
+<ul>true on success.<br/>false followed by an error otherwise.</ul>
+
+
+
+</dd>
+
+
+
+
+<dt><a name="Game.queue"></a><strong>Game.queue</strong>&nbsp;(event)</dt>
+<dd>
+shortcut for Game.scheduler:queue
+
+
+<h3>Parameters:</h3>
+<ul>
+	
+	<li>
+	  <code><em>event</em></code>: 
+	</li>
+	
+</ul>
+
+
+
+
+
+
+
+
+</dd>
+
+
+
+
+<dt><a name="Game.setState"></a><strong>Game.setState</strong>&nbsp;(state)</dt>
+<dd>
+Set the <i>Game</i>'s state.
+
+
+<h3>Parameters:</h3>
+<ul>
+	
+	<li>
+	  <code><em>state</em></code>: The state to be assigned.<br/>Must be a valid member of <i>GameState</i>.
+	</li>
+	
+</ul>
+
+
+
+
+
+
+
+
+</dd>
+
+
+
+
+<dt><a name="Game.shutdown"></a><strong>Game.shutdown</strong>&nbsp;()</dt>
+<dd>
+Shutdown the game.
+
+
+
+
+
+
+
+<h3>Return value:</h3>
+<ul><i>true</i> on success.<br/><i>false</i> followed by an error otherwise.</ul>
+
+
+
+</dd>
+
+
+
+
+<dt><a name="Game.update"></a><strong>Game.update</strong>&nbsp;()</dt>
+<dd>
+Updates the game as necessary. Things like updating the scheduler and such.
+
+
+
+
+
+
+
+
+
+</dd>
+
+
+
+
+<dt><a name="Game.warn"></a><strong>Game.warn</strong>&nbsp;(message)</dt>
+<dd>
+logger:warn()/fileLogger:warn() shortcut
+
+
+<h3>Parameters:</h3>
+<ul>
+	
+	<li>
+	  <code><em>message</em></code>: 
+	</li>
+	
+</ul>
+
+
+
+
+
+
+
+
+</dd>
+
+
+</dl>
+
+
+
+
+<h2><a name="tables"></a>Tables</h2>
+<dl class="table">
+
+<dt><a name="Game"></a><strong>Game</strong></dt>
+<dd>The Game package!<br /><br />
+
+
+<h3>Fields:</h3>
+<ul>
+	
+	<li>
+	  <code><em>name</em></code>: The name we would like to be called.
+	</li>
+	
+	<li>
+	  <code><em>version</em></code>: The version of this release.
+	</li>
+	
+	<li>
+	  <code><em>defaultPort</em></code>: The port we'll use if one isn't provided.
+	</li>
+	
+	<li>
+	  <code><em>state</em></code>: Our state. Always a member of the <i>GameState</i> table.
+	</li>
+	
+	<li>
+	  <code><em>playerID</em></code>: Unique ID to be assigned to the next new <i>Player</i>.
+	</li>
+	
+	<li>
+	  <code><em>players</em></code>: List of <i>Players</i> connected to us.
+	</li>
+	
+	<li>
+	  <code><em>server</em></code>: The <i>Server</i>, obviously.
+	</li>
+	
+	<li>
+	  <code><em>scheduler</em></code>: Unique <i>Scheduler</i> we're using.
+	</li>
+	
+	<li>
+	  <code><em>parser</em></code>: <i>CommandParser</i> we're using.
+	</li>
+	
+	<li>
+	  <code><em>map</em></code>: The <i>Map</i> we'll be using.
+	</li>
+	
+	<li>
+	  <code><em>logger</em></code>: <i>Logger</i> that prints to the standard output.
+	</li>
+	
+	<li>
+	  <code><em>fileLogger</em></code>: <i>Logger</i> that prints to the standard log file for this session.
+	</li>
+	
+	<li>
+	  <code><em>commandLogger</em></code>: <i>Logger</i> that prints all command input to the standard command log file for this session.
+	</li>
+	
+</ul>
+
+
+</dd>
+
+
+<dt><a name="Game.AcceptEvent"></a><strong>Game.AcceptEvent</strong></dt>
+<dd>This <i>Event</i> acts as the middle ground for client connections, accepting clients on behalf of the server, and informing the game about it.<br/> Game.PollEvent and Game.AcceptEvent are mandatory events that must be part of the Game scheduler.<br /><br />
+
+
+
+</dd>
+
+
+<dt><a name="Game.PollEvent"></a><strong>Game.PollEvent</strong></dt>
+<dd>This <i>Event</i> acts as the middle ground for client input, polling clients from the server for input and informing the game about it.<br/> Also the starting point for destroying clients that have disconnected and cannot be reached.<br/> Game.PollEvent and Game.AcceptEvent are mandatory events that must be part of the Game scheduler.<br /><br />
+
+
+
+</dd>
+
+
+<dt><a name="Game.players"></a><strong>Game.players</strong></dt>
+<dd>Contains all <i>Player</i>s connected to the game.<br /><br />
+
+
+
+</dd>
+
+
+</dl>
+
+
+
+
+</div> <!-- id="content" -->
+
+</div> <!-- id="main" -->
+
+<div id="about">
+	<p><a href="http://validator.w3.org/check?uri=referer"><img src="http://www.w3.org/Icons/valid-xhtml10" alt="Valid XHTML 1.0!" height="31" width="88" /></a></p>
+</div> <!-- id="about" -->
+
+</div> <!-- id="container" -->	
+</body>
+</html>

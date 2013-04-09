@@ -1,11 +1,19 @@
---[[	Author:	Milkmanjack
-		Date:	4/1/13
-		Player object holds data relevant to a playable character.
-]]
+--- Handles relationships between <i>Client</i>s and <i>Mob</i>s.
+-- @author milkmanjack
+module("Player", package.seeall)
 
 local Cloneable		= require("obj.Cloneable")
 local Client		= require("obj.Client")
 local Mob			= require("obj.Mob")
+
+--- The Player table.
+-- @class table
+-- @name Player
+-- @field id Our unique ID.
+-- @field state Our state. Always a member of the <i>PlayerState</i> table.
+-- @field client The <i>Client</i> we are associated with.
+-- @field mob The <i>Mob</i> we are associated with.
+-- @field messageMode Our message mode. Always a member of the <i>MessageMode</i> table.
 local Player		= Cloneable.clone()
 
 -- runtime data
@@ -15,30 +23,44 @@ Player.client		= nil -- the client attached to this player
 Player.mob			= nil -- the mob attached to this player
 Player.messageMode	= nil -- the current message mode
 
+--- Initialize the <i>Player</i> and associated it with the given <i>Client</i>.
+-- @param client <i>Client</i> to be associated with this <i>Player</i>.
 function Player:initialize(client)
 	self.client	= client
 end
 
+--- Returns the string-value of the <i>Player</i>.
+-- @return A string in the format of <tt>"player#&lt;id&gt;{@&lt;client remote address&gt;}"</tt>.
 function Player:toString()
-	return string.format("player#%d{%s}", self.id, self.mob and tostring(self.mob) or tostring(self.client) or "???")
+	return string.format("player#%d{@%s}", self.id, self.client:getAddress())
 end
 
+--- shortcut to <i>client:send(data,i,j)</i>.
 function Player:send(data, i, j)
 	return self.client:send(data,i,j)
 end
 
+--- Reset our messageMode to nil.
 function Player:clearMessageMode()
 	self.messageMode = nil
 end
 
+--- Set our message mode.
+-- @param mode The mode to assign. Always a member of the <i>MessageMode</i> table.
 function Player:setMessageMode(mode)
 	self.messageMode = mode
 end
 
-function Player:getMessageMode(mode)
+--- Get our message mode.
+-- @return Our message mode. Always a member of the <i>MessageMode</i> table.
+function Player:getMessageMode()
 	return self.messageMode
 end
 
+--- Sends a message to the <i>Player</i>.
+-- @param msg The message to send.
+-- @param mode The mode of the message. Always a member of the <i>MessageMode</i> table.
+-- @param autobreak If <i>true</i> (default), the message is followed by a linefeed. Always a member of the <i>MessageMode</i> table.
 function Player:sendMessage(msg, mode, autobreak)
 	if mode == nil then
 		mode = MessageMode.GENERAL
@@ -69,27 +91,35 @@ function Player:sendMessage(msg, mode, autobreak)
 	end
 end
 
--- shortcut to sendMessage() that provides the question message mode, and no linebreak that follows
+--- shortcut to <i>sendMessage()</i> that provides the <i>MessageMode.QUESTION</i> mode, followed by no linebreak.
 function Player:askQuestion(msg)
 	self:sendMessage(msg, MessageMode.QUESTION, false)
 end
 
+--- shortcut to <i>client:sendMessage(str)</i>.
 function Player:sendString(str)
 	return self.client:sendString(str)
 end
 
+--- shortcut to <i>client:sendLine(str)</i>.
 function Player:sendLine(str)
 	return self.client:sendLine(str)
 end
 
+--- Set our ID.
+-- @param id The ID to set.
 function Player:setID(id)
 	self.id = id
 end
 
+--- Set our state.
+-- @param state The state to set.
 function Player:setState(state)
 	self.state = state
 end
 
+--- Associate this <i>Player</i> with the given <i>Mob</i>.
+-- @param mob The mob to assign.
 function Player:setMob(mob)
 	if self.mob then
 		self.mob:unsetPlayer(self)
@@ -103,6 +133,7 @@ function Player:setMob(mob)
 	end
 end
 
+--- De-associate this <i>Player</i> from our current <i>Mob</i>.
 function Player:unsetMob()
 	local oldMob = self.mob
 	self.mob = nil
@@ -113,22 +144,31 @@ function Player:unsetMob()
 	end
 end
 
+--- De-associate this <i>Player</i> from our current <i>Client</i>.
 function Player:unsetClient()
 	self.client = nil
 end
 
+--- Gets our current ID.
+-- @return Our ID.
 function Player:getID()
 	return self.id
 end
 
+--- Gets our current ID.
+-- @return Our state. Always a member of the <i>PlayerState</i> table.
 function Player:getState()
 	return self.state
 end
 
+--- Gets our current <i>Client</i>.
+-- @return Our <i>Client</i>.
 function Player:getClient()
 	return self.client
 end
 
+--- Gets our current <i>Mob</i>.
+-- @return Our <i>Mob</i>.
 function Player:getMob()
 	return self.mob
 end
