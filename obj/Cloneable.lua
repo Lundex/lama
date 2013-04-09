@@ -1,7 +1,6 @@
---[[	Author:	Milkmanjack
-		Date:	3/5/13
-		Allows for pseudo-inheritance between objects.
-]]
+--- A pseudo-heritage framework for table inheritance.
+-- @author milkmanjack
+module("Cloneable", package.seeall)
 
 local Cloneable	= {}
 

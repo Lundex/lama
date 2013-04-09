@@ -35,7 +35,15 @@
 <ul>
 
 	<li>
+		<a href="../modules/Cloneable.html">Cloneable</a>
+	</li>
+
+	<li>
 		<a href="../modules/Game.html">Game</a>
+	</li>
+
+	<li>
+		<a href="../modules/Player.html">Player</a>
 	</li>
 
 </ul>
@@ -139,8 +147,16 @@
 <h1>File <code>Game.lua</code></h1>
 
 
-<p>Package!</p>
+<p>The bread and butter of the project.</p>
 
+
+<p><b>Author:</b>
+<table class="authors_list">
+
+	<tr><td class="name">milkmanjack</td></tr>
+
+</table>
+</p>
 
 
 
@@ -207,6 +223,11 @@
 	<tr>
 	<td class="name" nowrap><a href="#Game.info">Game.info</a>&nbsp;(message)</td>
 	<td class="summary">logger:info()/fileLogger:info() shortcut </td>
+	</tr>
+
+	<tr>
+	<td class="name" nowrap><a href="#Game.isReady">Game.isReady</a>&nbsp;()</td>
+	<td class="summary">Check if the <i>Game</i> is ready to be played.</td>
 	</tr>
 
 	<tr>
@@ -279,7 +300,7 @@
 
 	<tr>
 	<td class="name" nowrap><a href="#Game">Game</a></td>
-	<td class="summary">The Game package! </td>
+	<td class="summary">The Game table.</td>
 	</tr>
 
 	<tr>
@@ -608,6 +629,23 @@ logger:info()/fileLogger:info() shortcut
 
 
 
+<dt><a name="Game.isReady"></a><strong>Game.isReady</strong>&nbsp;()</dt>
+<dd>
+Check if the <i>Game</i> is ready to be played. return true if the game's state is at GameState.READY.<br/>false otherwise.
+
+
+
+
+
+
+
+
+
+</dd>
+
+
+
+
 <dt><a name="Game.log"></a><strong>Game.log</strong>&nbsp;(level, message)</dt>
 <dd>
 logger:log()/fileLogger:log() shortcut
@@ -921,7 +959,7 @@ logger:warn()/fileLogger:warn() shortcut
 <dl class="table">
 
 <dt><a name="Game"></a><strong>Game</strong></dt>
-<dd>The Game package!<br /><br />
+<dd>The Game table.<br /><br />
 
 
 <h3>Fields:</h3>
