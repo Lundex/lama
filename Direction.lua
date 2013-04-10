@@ -1,8 +1,18 @@
---[[	Author:	Milkmanjack
-		Date:	4/8/13
-		Package meant to give context for enum-styled members.
-]]
+--- Contains enum-styled values for directional movement.
+-- @author milkmanjack
+module("Directions", package.seeall)
 
+--- Table that contains enum-styled values for directional movement.
+-- @class table
+-- @name Direction
+-- @field NORTH North.
+-- @field SOUTH South.
+-- @field EAST East.
+-- @field WEST West.
+-- @field NORTHEAST Northeast.
+-- @field NORTHWEST Northwest.
+-- @field SOUTHEAST Southeast.
+-- @field SOUTHWEST Southwest.
 local Direction							= {}
 Direction.NORTH							= 0
 Direction.SOUTH							= 1
@@ -13,7 +23,17 @@ Direction.NORTHWEST						= 5
 Direction.SOUTHEAST						= 6
 Direction.SOUTHWEST						= 7
 
--- text representations of states
+--- Contains textual representations of Direction enums.
+-- @class table
+-- @name Direction.names
+-- @field Direction.NORTH "north"
+-- @field Direction.SOUTH "south"
+-- @field Direction.EAST "east"
+-- @field Direction.WEST "west"
+-- @field Direction.NORTHEAST "northeast"
+-- @field Direction.NORTHWEST "northwest"
+-- @field Direction.SOUTHEAST "southeast"
+-- @field DIRECTION.SOUTHWEST "southwest"
 Direction.names							= {}
 Direction.names[Direction.NORTH]		= "north"
 Direction.names[Direction.SOUTH]		= "south"
@@ -24,11 +44,16 @@ Direction.names[Direction.NORTHWEST]	= "northwest"
 Direction.names[Direction.SOUTHEAST]	= "southeast"
 Direction.names[Direction.SOUTHWEST]	= "southwest"
 
--- quick access
+--- Allows for quick reference Direction.names enums.
+-- @param state The direction to retrieve the name of.
+-- @return Name of the direction.
 function Direction.name(state)
 	return Direction.names[state]
 end
 
+--- Reverses the given direction.
+-- @param direction Direction to reverse.
+-- @return The reverse of the given direction.
 function Direction.reverse(direction)
 	if direction == Direction.NORTH then
 		return Direction.SOUTH

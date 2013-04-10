@@ -1,8 +1,18 @@
---[[	Author:	Milkmanjack
-		Date:	4/8/13
-		Package meant to give context for enum-styled members.
-]]
+--- Contains enum-styled values for Player.messageMode.
+-- @author milkmanjack
+module("MessageMode", package.seeall)
 
+--- Table that contains enum-styled values for Player.messageMode.
+-- @class table
+-- @name MessageMode
+-- @field GENERAL General messages.
+-- @field CHAT Character communication.
+-- @field ANNOUNCEMENT Critical game updates.
+-- @field INFO Informational updates that don't fit in other categories. e.g. spell fizzling.
+-- @field QUESTION Mode for questions. Questions generally don't end with a linebreak, so this might be useful in the future.
+-- @field MOVEMENT Movement updates.
+-- @field COMBAT Combat updates.
+-- @field FAILURE Error messages.
 local MessageMode							= {}
 MessageMode.GENERAL							= 0 -- miscellaneous messages
 MessageMode.CHAT							= 1 -- chatting
@@ -13,7 +23,17 @@ MessageMode.MOVEMENT						= 5 -- movement updates (people moving, you moving, in
 MessageMode.COMBAT							= 6 -- combat updates (attacking one another, dodging, using skills, etc...)
 MessageMode.FAILURE							= 7 -- a failure message!
 
--- text representations of states
+--- Contains textual representations of MessageMode enums.
+-- @class table
+-- @name MessageMode.names
+-- @field MessageMode.GENERAL "general"
+-- @field MessageMode.CHAT "chat"
+-- @field MessageMode.ANNOUNCEMENT "announcement"
+-- @field MessageMode.INFO "info"
+-- @field MessageMode.FAILURE "failure"
+-- @field MessageMode.QUESTION "question"
+-- @field MessageMode.MOVEMENT "movement"
+-- @field MessageMode.COMBAT "combat"
 MessageMode.names							= {}
 MessageMode.names[MessageMode.GENERAL]		= "general"
 MessageMode.names[MessageMode.CHAT]			= "chat"
@@ -24,7 +44,9 @@ MessageMode.names[MessageMode.QUESTION]		= "question"
 MessageMode.names[MessageMode.MOVEMENT]		= "movement"
 MessageMode.names[MessageMode.COMBAT]		= "combat"
 
--- quick access
+--- Allows for quick reference to MessageMode.names enums.
+-- @param state The state to retrieve the name of.
+-- @return Name of the state.
 function MessageMode.name(state)
 	return MessageMode.names[state]
 end

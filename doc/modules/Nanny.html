@@ -1,0 +1,501 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"
+   "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html>
+<head>
+    <title>Reference</title>
+    <link rel="stylesheet" href="../luadoc.css" type="text/css" />
+	<!--meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/-->
+</head>
+
+<body>
+<div id="container">
+
+<div id="product">
+	<div id="product_logo"></div>
+	<div id="product_name"><big><b></b></big></div>
+	<div id="product_description"></div>
+</div> <!-- id="product" -->
+
+<div id="main">
+
+<div id="navigation">
+
+
+<h1>LuaDoc</h1>
+<ul>
+	
+	<li><a href="../index.html">Index</a></li>
+	
+</ul>
+
+
+<!-- Module list -->
+
+<h1>Modules</h1>
+<ul>
+
+	<li>
+		<a href="../modules/Cloneable.html">Cloneable</a>
+	</li>
+
+	<li>
+		<a href="../modules/Directions.html">Directions</a>
+	</li>
+
+	<li>
+		<a href="../modules/Game.html">Game</a>
+	</li>
+
+	<li>
+		<a href="../modules/GameState.html">GameState</a>
+	</li>
+
+	<li>
+		<a href="../modules/MessageMode.html">MessageMode</a>
+	</li>
+
+	<li>
+		<a href="../modules/Mob.html">Mob</a>
+	</li>
+
+	<li><strong>Nanny</strong></li>
+	
+	<li>
+		<a href="../modules/Player.html">Player</a>
+	</li>
+
+	<li>
+		<a href="../modules/PlayerState.html">PlayerState</a>
+	</li>
+
+	<li>
+		<a href="../modules/Telnet.html">Telnet</a>
+	</li>
+
+	<li>
+		<a href="../modules/main.html">main</a>
+	</li>
+
+</ul>
+
+
+
+<!-- File list -->
+
+
+
+
+
+
+</div><!-- id="navigation" -->
+
+<div id="content">
+
+<h1>Module <code>Nanny</code></h1>
+
+<p>Contains necessary processes for processing the connection stages of a new player, as well as processing their input during these stages.</p>
+
+
+<p><b>Author:</b>
+<table class="authors_list">
+
+	<tr><td class="name">milkmanjack</td></tr>
+
+</table>
+</p>
+
+
+
+
+
+<h2>Functions</h2>
+<table class="function_list">
+
+	<tr>
+	<td class="name" nowrap><a href="#Nanny.MOTD">Nanny.MOTD</a>&nbsp;(player)</td>
+	<td class="summary">Send the MOTD to the player.</td>
+	</tr>
+
+	<tr>
+	<td class="name" nowrap><a href="#Nanny.askForName">Nanny.askForName</a>&nbsp;(player)</td>
+	<td class="summary">Asks for a name.</td>
+	</tr>
+
+	<tr>
+	<td class="name" nowrap><a href="#Nanny.getGreeting">Nanny.getGreeting</a>&nbsp;()</td>
+	<td class="summary">Get the greeting message.</td>
+	</tr>
+
+	<tr>
+	<td class="name" nowrap><a href="#Nanny.getMOTD">Nanny.getMOTD</a>&nbsp;()</td>
+	<td class="summary">Retreive the text to be used as the MOTD.</td>
+	</tr>
+
+	<tr>
+	<td class="name" nowrap><a href="#Nanny.greet">Nanny.greet</a>&nbsp;(player)</td>
+	<td class="summary">Greets a new player.</td>
+	</tr>
+
+	<tr>
+	<td class="name" nowrap><a href="#Nanny.introduce">Nanny.introduce</a>&nbsp;(player)</td>
+	<td class="summary">Introduce the player to the world.</td>
+	</tr>
+
+	<tr>
+	<td class="name" nowrap><a href="#Nanny.login">Nanny.login</a>&nbsp;(player)</td>
+	<td class="summary">Transitions from "logging in" to being "logged in." Assigns a player ID, introduces the player to the world, and so on.</td>
+	</tr>
+
+	<tr>
+	<td class="name" nowrap><a href="#Nanny.logout">Nanny.logout</a>&nbsp;(player)</td>
+	<td class="summary">Transitions from being "logged in" to being "logged out." Announces the player's exit, removes the mob from the map, and so on.</td>
+	</tr>
+
+	<tr>
+	<td class="name" nowrap><a href="#Nanny.messageNameLengthLimit">Nanny.messageNameLengthLimit</a>&nbsp;(player)</td>
+	<td class="summary">Tell the player the name length limits.</td>
+	</tr>
+
+	<tr>
+	<td class="name" nowrap><a href="#Nanny.process">Nanny.process</a>&nbsp;(player, input)</td>
+	<td class="summary">Processes input from a player.</td>
+	</tr>
+
+	<tr>
+	<td class="name" nowrap><a href="#Nanny.sendOff">Nanny.sendOff</a>&nbsp;(player)</td>
+	<td class="summary">Send the player off, announcing their departure.</td>
+	</tr>
+
+</table>
+
+
+
+<h2>Tables</h2>
+<table class="table_list">
+
+	<tr>
+	<td class="name" nowrap><a href="#Nanny">Nanny</a></td>
+	<td class="summary">Table that contains all the data for processing.</td>
+	</tr>
+
+</table>
+
+
+
+<br/>
+<br/>
+
+
+
+<h2><a name="functions"></a>Functions</h2>
+<dl class="function">
+
+
+
+<dt><a name="Nanny.MOTD"></a><strong>Nanny.MOTD</strong>&nbsp;(player)</dt>
+<dd>
+Send the MOTD to the player.
+
+
+<h3>Parameters:</h3>
+<ul>
+	
+	<li>
+	  <code><em>player</em></code>: Player to be MOTDed.
+	</li>
+	
+</ul>
+
+
+
+
+
+
+
+
+</dd>
+
+
+
+
+<dt><a name="Nanny.askForName"></a><strong>Nanny.askForName</strong>&nbsp;(player)</dt>
+<dd>
+Asks for a name.
+
+
+<h3>Parameters:</h3>
+<ul>
+	
+	<li>
+	  <code><em>player</em></code>: Player to ask.
+	</li>
+	
+</ul>
+
+
+
+
+
+
+
+
+</dd>
+
+
+
+
+<dt><a name="Nanny.getGreeting"></a><strong>Nanny.getGreeting</strong>&nbsp;()</dt>
+<dd>
+Get the greeting message. By default, refers to "txt/GREETING". If not found, returns generic credits.
+
+
+
+
+
+
+
+<h3>Return value:</h3>
+<ul>The message.</ul>
+
+
+
+</dd>
+
+
+
+
+<dt><a name="Nanny.getMOTD"></a><strong>Nanny.getMOTD</strong>&nbsp;()</dt>
+<dd>
+Retreive the text to be used as the MOTD.
+
+
+
+
+
+
+
+<h3>Return value:</h3>
+<ul>The MOTD!</ul>
+
+
+
+</dd>
+
+
+
+
+<dt><a name="Nanny.greet"></a><strong>Nanny.greet</strong>&nbsp;(player)</dt>
+<dd>
+Greets a new player.
+
+
+<h3>Parameters:</h3>
+<ul>
+	
+	<li>
+	  <code><em>player</em></code>: Player to be greeted.
+	</li>
+	
+</ul>
+
+
+
+
+
+
+
+
+</dd>
+
+
+
+
+<dt><a name="Nanny.introduce"></a><strong>Nanny.introduce</strong>&nbsp;(player)</dt>
+<dd>
+Introduce the player to the world.
+
+
+<h3>Parameters:</h3>
+<ul>
+	
+	<li>
+	  <code><em>player</em></code>: Player to introduce.
+	</li>
+	
+</ul>
+
+
+
+
+
+
+
+
+</dd>
+
+
+
+
+<dt><a name="Nanny.login"></a><strong>Nanny.login</strong>&nbsp;(player)</dt>
+<dd>
+Transitions from "logging in" to being "logged in." Assigns a player ID, introduces the player to the world, and so on.
+
+
+<h3>Parameters:</h3>
+<ul>
+	
+	<li>
+	  <code><em>player</em></code>: Player that is logging in.
+	</li>
+	
+</ul>
+
+
+
+
+
+
+
+
+</dd>
+
+
+
+
+<dt><a name="Nanny.logout"></a><strong>Nanny.logout</strong>&nbsp;(player)</dt>
+<dd>
+Transitions from being "logged in" to being "logged out." Announces the player's exit, removes the mob from the map, and so on.
+
+
+<h3>Parameters:</h3>
+<ul>
+	
+	<li>
+	  <code><em>player</em></code>: Player that is logging out.
+	</li>
+	
+</ul>
+
+
+
+
+
+
+
+
+</dd>
+
+
+
+
+<dt><a name="Nanny.messageNameLengthLimit"></a><strong>Nanny.messageNameLengthLimit</strong>&nbsp;(player)</dt>
+<dd>
+Tell the player the name length limits.
+
+
+<h3>Parameters:</h3>
+<ul>
+	
+	<li>
+	  <code><em>player</em></code>: Player to inform.
+	</li>
+	
+</ul>
+
+
+
+
+
+
+
+
+</dd>
+
+
+
+
+<dt><a name="Nanny.process"></a><strong>Nanny.process</strong>&nbsp;(player, input)</dt>
+<dd>
+Processes input from a player.
+
+
+<h3>Parameters:</h3>
+<ul>
+	
+	<li>
+	  <code><em>player</em></code>: The player to process.
+	</li>
+	
+	<li>
+	  <code><em>input</em></code>: The input to process.
+	</li>
+	
+</ul>
+
+
+
+
+
+
+
+
+</dd>
+
+
+
+
+<dt><a name="Nanny.sendOff"></a><strong>Nanny.sendOff</strong>&nbsp;(player)</dt>
+<dd>
+Send the player off, announcing their departure.
+
+
+<h3>Parameters:</h3>
+<ul>
+	
+	<li>
+	  <code><em>player</em></code>: Player that is departing.
+	</li>
+	
+</ul>
+
+
+
+
+
+
+
+
+</dd>
+
+
+</dl>
+
+
+
+
+<h2><a name="tables"></a>Tables</h2>
+<dl class="table">
+
+<dt><a name="Nanny"></a><strong>Nanny</strong></dt>
+<dd>Table that contains all the data for processing.<br /><br />
+
+
+
+</dd>
+
+
+</dl>
+
+
+
+</div> <!-- id="content" -->
+
+</div> <!-- id="main" -->
+
+<div id="about">
+	<p><a href="http://validator.w3.org/check?uri=referer"><img src="http://www.w3.org/Icons/valid-xhtml10" alt="Valid XHTML 1.0!" height="31" width="88" /></a></p>
+</div> <!-- id="about" -->
+
+</div> <!-- id="container" -->	
+</body>
+</html>

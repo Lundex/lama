@@ -1,16 +1,18 @@
---[[	Author:	Milkmanjack
-		Date:	4/4/13
-		Package that handles processing of new players.
-]]
+--- Contains necessary processes for processing the connection stages of a new player,
+-- as well as processing their input during these stages.
+-- @author milkmanjack
+module("Nanny", package.seeall)
 
 local Mob			= require("obj.Mob")
+
+--- Table that contains all the data for processing.
+-- @class table
+-- @name Nanny
 local Nanny			= {}
 
---[[
-	Processes input from a player.
-	@param player	The player to process.
-	@param input	The input to process.
-]]
+--- Processes input from a player.
+-- @param player The player to process.
+-- @param input The input to process.
 function Nanny.process(player, input)
 	if player:getState() == PlayerState.NAME then
 		if string.len(input) < 3 or string.len(input) > 12 then
@@ -29,6 +31,9 @@ function Nanny.process(player, input)
 	end
 end
 
+--- Transitions from "logging in" to being "logged in."
+-- Assigns a player ID, introduces the player to the world, and so on.
+-- @param player Player that is logging in.
 function Nanny.login(player)
 	local mob = player:getMob()
 	player:setID(Game.nextPlayerID()) -- now that they're finally playing
@@ -45,6 +50,9 @@ function Nanny.login(player)
 	player:setState(PlayerState.PLAYING) -- we're playing
 end
 
+--- Transitions from being "logged in" to being "logged out."
+-- Announces the player's exit, removes the mob from the map, and so on.
+-- @param player Player that is logging out.
 function Nanny.logout(player)
 	local mob = player:getMob()
 	Nanny.sendOff(player)
@@ -57,39 +65,47 @@ function Nanny.logout(player)
 	player:setState(PlayerState.DISCONNECTING) -- we are disconnecting
 end
 
+--- Asks for a name.
+-- @param player Player to ask.
 function Nanny.askForName(player)
 	player:askQuestion("What is your name? ")
 end
 
+--- Tell the player the name length limits.
+-- @param player Player to inform.
 function Nanny.messageNameLengthLimit(player)
 	player:sendMessage("Your name must be between 3 and 12 characters.", MessageMode.FAILURE)
 end
 
--- this occurs before the player is considered an active player
+--- Introduce the player to the world.
+-- @param player Player to introduce.
 function Nanny.introduce(player)
 	player:sendMessage(string.format("\nWelcome to %s, %s!", tostring(Game.getName()), tostring(player)), MessageMode.GENERAL)
 	Game.announce(string.format("%s has joined!", tostring(player)), MessageMode.INFO, PlayerState.PLAYING)
 end
 
--- this occurs after the player is disconnected
+--- Send the player off, announcing their departure.
+-- @param player Player that is departing.
 function Nanny.sendOff(player)
 	player:sendLine("Goodbye!")
 	Game.announce(string.format("%s has left!", tostring(player)), MessageMode.INFO, PlayerState.PLAYING)
 end	
 
+--- Send the MOTD to the player.
+-- @param player Player to be MOTDed.
 function Nanny.MOTD(player)
 	player:sendMessage("\n" .. Nanny.getMOTD(), MessageMode.GENERAL)
 	player:sendMessage("< PRESS ENTER >", MessageMode.GENERAL, false)
 end
 
+--- Retreive the text to be used as the MOTD.
+-- @return The MOTD!
 function Nanny.getMOTD()
 	return "\[THIS IS THE MESSAGE OF THE DAY\]"
 end
 
---[[
-	Greet the player.
-	@param player	The player to message.
-]]
+--- Greets a new player.
+-- @param player Player to be greeted.
 function Nanny.greet(player)
 	player:sendLine(Nanny.getGreeting())
 	player:setState(PlayerState.NAME)
@@ -97,10 +113,8 @@ function Nanny.greet(player)
 	Nanny.askForName(player)
 end
 
---[[
-	Get the greeting message.
-	@return The message.
-]]
+--- Get the greeting message. By default, refers to "txt/GREETING". If not found, returns generic credits.
+-- @return The message.
 function Nanny.getGreeting()
 	local file = io.open("txt/GREETING", "r")
 	if file then

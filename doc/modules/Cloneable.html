@@ -37,11 +37,43 @@
 	<li><strong>Cloneable</strong></li>
 	
 	<li>
+		<a href="../modules/Directions.html">Directions</a>
+	</li>
+
+	<li>
 		<a href="../modules/Game.html">Game</a>
 	</li>
 
 	<li>
+		<a href="../modules/GameState.html">GameState</a>
+	</li>
+
+	<li>
+		<a href="../modules/MessageMode.html">MessageMode</a>
+	</li>
+
+	<li>
+		<a href="../modules/Mob.html">Mob</a>
+	</li>
+
+	<li>
+		<a href="../modules/Nanny.html">Nanny</a>
+	</li>
+
+	<li>
 		<a href="../modules/Player.html">Player</a>
+	</li>
+
+	<li>
+		<a href="../modules/PlayerState.html">PlayerState</a>
+	</li>
+
+	<li>
+		<a href="../modules/Telnet.html">Telnet</a>
+	</li>
+
+	<li>
+		<a href="../modules/main.html">main</a>
 	</li>
 
 </ul>
@@ -76,7 +108,52 @@
 
 
 
+<h2>Functions</h2>
+<table class="function_list">
 
+	<tr>
+	<td class="name" nowrap><a href="#Cloneable.clone">Cloneable.clone</a>&nbsp;(parent)</td>
+	<td class="summary">Create a pure clone of a Cloneable.</td>
+	</tr>
+
+	<tr>
+	<td class="name" nowrap><a href="#Cloneable.getParent">Cloneable.getParent</a>&nbsp;(clone)</td>
+	<td class="summary">Get the direct parent of the given Cloneable.</td>
+	</tr>
+
+	<tr>
+	<td class="name" nowrap><a href="#Cloneable.isCloneOf">Cloneable.isCloneOf</a>&nbsp;(clone, ancestor)</td>
+	<td class="summary">Traverses a clone's parentage via their metatable's __index value.</td>
+	</tr>
+
+	<tr>
+	<td class="name" nowrap><a href="#Cloneable.new">Cloneable.new</a>&nbsp;(parent, ...)</td>
+	<td class="summary">Creates an instance-style clone of a Cloneable.</td>
+	</tr>
+
+	<tr>
+	<td class="name" nowrap><a href="#Cloneable:initialize">Cloneable:initialize</a>&nbsp;(...)</td>
+	<td class="summary">Constructor for instance-style clones.</td>
+	</tr>
+
+	<tr>
+	<td class="name" nowrap><a href="#Cloneable:toString">Cloneable:toString</a>&nbsp;()</td>
+	<td class="summary">Stringifier for Cloneables.</td>
+	</tr>
+
+</table>
+
+
+
+<h2>Tables</h2>
+<table class="table_list">
+
+	<tr>
+	<td class="name" nowrap><a href="#Cloneable">Cloneable</a></td>
+	<td class="summary">Table that provides psuedo-inheritance-type features for tables.<br/><br/> Inheritance is achieved by using the __index metatable method, which just transfers attempts to index nil fields to the parent.<br/> <ul><li><b>Cloneable.clone(parent)</b> provides an interface for making a <i>pure clone</i> that is set to refer to the given parent.</li> <li><b>Cloneable.new(parent, ...)</b> provides an interface for making an <i>instance-style clone</i>, which has the properties of a <i>pure clone</i>, but is initialized.</li></ul> In effect, <i>pure clones</i> are meant to act as a <b>class</b> of a sort, and <i>instance-style clones</i> are meant to act as <b>instances of a class</b>.</td>
+	</tr>
+
+</table>
 
 
 
@@ -85,8 +162,193 @@
 
 
 
+<h2><a name="functions"></a>Functions</h2>
+<dl class="function">
 
 
+
+<dt><a name="Cloneable.clone"></a><strong>Cloneable.clone</strong>&nbsp;(parent)</dt>
+<dd>
+Create a pure clone of a Cloneable.
+
+
+<h3>Parameters:</h3>
+<ul>
+	
+	<li>
+	  <code><em>parent</em></code>: The parent to clone. Defaults to Cloneable.
+	</li>
+	
+</ul>
+
+
+
+
+
+
+<h3>Return value:</h3>
+<ul>A pure clone of the parent.</ul>
+
+
+
+</dd>
+
+
+
+
+<dt><a name="Cloneable.getParent"></a><strong>Cloneable.getParent</strong>&nbsp;(clone)</dt>
+<dd>
+Get the direct parent of the given Cloneable.
+
+
+<h3>Parameters:</h3>
+<ul>
+	
+	<li>
+	  <code><em>clone</em></code>: The clone whose parent we want to check.
+	</li>
+	
+</ul>
+
+
+
+
+
+
+<h3>Return value:</h3>
+<ul>The parent!</ul>
+
+
+
+</dd>
+
+
+
+
+<dt><a name="Cloneable.isCloneOf"></a><strong>Cloneable.isCloneOf</strong>&nbsp;(clone, ancestor)</dt>
+<dd>
+Traverses a clone's parentage via their metatable's __index value. Determines whether or not this clone is a clone of another Cloneable.
+
+
+<h3>Parameters:</h3>
+<ul>
+	
+	<li>
+	  <code><em>clone</em></code>: The Cloneable to check.
+	</li>
+	
+	<li>
+	  <code><em>ancestor</em></code>: The Cloneable we might be a clone of.
+	</li>
+	
+</ul>
+
+
+
+
+
+
+<h3>Return value:</h3>
+<ul>true if given clone is a clone of given ancestor.<br/>false otherwise.</ul>
+
+
+
+</dd>
+
+
+
+
+<dt><a name="Cloneable.new"></a><strong>Cloneable.new</strong>&nbsp;(parent, ...)</dt>
+<dd>
+Creates an instance-style clone of a Cloneable. The clone is initialized, passing all arguments beyond the first to the clone's initialize() function.
+
+
+<h3>Parameters:</h3>
+<ul>
+	
+	<li>
+	  <code><em>parent</em></code>: The parent to clone. Defaults to Cloneable.
+	</li>
+	
+	<li>
+	  <code><em>...</em></code>: These arguments are passed to the clone's initialize() function.
+	</li>
+	
+</ul>
+
+
+
+
+
+
+<h3>Return value:</h3>
+<ul>An instance-style clone of the parent.</ul>
+
+
+
+</dd>
+
+
+
+
+<dt><a name="Cloneable:initialize"></a><strong>Cloneable:initialize</strong>&nbsp;(...)</dt>
+<dd>
+Constructor for instance-style clones.
+
+
+<h3>Parameters:</h3>
+<ul>
+	
+	<li>
+	  <code><em>...</em></code>: 
+	</li>
+	
+</ul>
+
+
+
+
+
+
+
+
+</dd>
+
+
+
+
+<dt><a name="Cloneable:toString"></a><strong>Cloneable:toString</strong>&nbsp;()</dt>
+<dd>
+Stringifier for Cloneables.
+
+
+
+
+
+
+
+
+
+</dd>
+
+
+</dl>
+
+
+
+
+<h2><a name="tables"></a>Tables</h2>
+<dl class="table">
+
+<dt><a name="Cloneable"></a><strong>Cloneable</strong></dt>
+<dd>Table that provides psuedo-inheritance-type features for tables.<br/><br/> Inheritance is achieved by using the __index metatable method, which just transfers attempts to index nil fields to the parent.<br/> <ul><li><b>Cloneable.clone(parent)</b> provides an interface for making a <i>pure clone</i> that is set to refer to the given parent.</li> <li><b>Cloneable.new(parent, ...)</b> provides an interface for making an <i>instance-style clone</i>, which has the properties of a <i>pure clone</i>, but is initialized.</li></ul> In effect, <i>pure clones</i> are meant to act as a <b>class</b> of a sort, and <i>instance-style clones</i> are meant to act as <b>instances of a class</b>.<br /><br />
+
+
+
+</dd>
+
+
+</dl>
 
 
 

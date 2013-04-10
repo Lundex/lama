@@ -1,0 +1,289 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"
+   "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html>
+<head>
+    <title>Reference</title>
+    <link rel="stylesheet" href="../luadoc.css" type="text/css" />
+	<!--meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/-->
+</head>
+
+<body>
+<div id="container">
+
+<div id="product">
+	<div id="product_logo"></div>
+	<div id="product_name"><big><b></b></big></div>
+	<div id="product_description"></div>
+</div> <!-- id="product" -->
+
+<div id="main">
+
+<div id="navigation">
+
+
+<h1>LuaDoc</h1>
+<ul>
+	
+	<li><a href="../index.html">Index</a></li>
+	
+</ul>
+
+
+<!-- Module list -->
+
+<h1>Modules</h1>
+<ul>
+
+	<li>
+		<a href="../modules/Cloneable.html">Cloneable</a>
+	</li>
+
+	<li>
+		<a href="../modules/Directions.html">Directions</a>
+	</li>
+
+	<li>
+		<a href="../modules/Game.html">Game</a>
+	</li>
+
+	<li>
+		<a href="../modules/GameState.html">GameState</a>
+	</li>
+
+	<li><strong>MessageMode</strong></li>
+	
+	<li>
+		<a href="../modules/Mob.html">Mob</a>
+	</li>
+
+	<li>
+		<a href="../modules/Nanny.html">Nanny</a>
+	</li>
+
+	<li>
+		<a href="../modules/Player.html">Player</a>
+	</li>
+
+	<li>
+		<a href="../modules/PlayerState.html">PlayerState</a>
+	</li>
+
+	<li>
+		<a href="../modules/Telnet.html">Telnet</a>
+	</li>
+
+	<li>
+		<a href="../modules/main.html">main</a>
+	</li>
+
+</ul>
+
+
+
+<!-- File list -->
+
+
+
+
+
+
+</div><!-- id="navigation" -->
+
+<div id="content">
+
+<h1>Module <code>MessageMode</code></h1>
+
+<p>Contains enum-styled values for Player.messageMode.</p>
+
+
+<p><b>Author:</b>
+<table class="authors_list">
+
+	<tr><td class="name">milkmanjack</td></tr>
+
+</table>
+</p>
+
+
+
+
+
+<h2>Functions</h2>
+<table class="function_list">
+
+	<tr>
+	<td class="name" nowrap><a href="#MessageMode.name">MessageMode.name</a>&nbsp;(state)</td>
+	<td class="summary">Allows for quick reference to MessageMode.names enums.</td>
+	</tr>
+
+</table>
+
+
+
+<h2>Tables</h2>
+<table class="table_list">
+
+	<tr>
+	<td class="name" nowrap><a href="#MessageMode">MessageMode</a></td>
+	<td class="summary">Table that contains enum-styled values for Player.messageMode.</td>
+	</tr>
+
+	<tr>
+	<td class="name" nowrap><a href="#MessageMode.names">MessageMode.names</a></td>
+	<td class="summary">Contains textual representations of MessageMode enums.</td>
+	</tr>
+
+</table>
+
+
+
+<br/>
+<br/>
+
+
+
+<h2><a name="functions"></a>Functions</h2>
+<dl class="function">
+
+
+
+<dt><a name="MessageMode.name"></a><strong>MessageMode.name</strong>&nbsp;(state)</dt>
+<dd>
+Allows for quick reference to MessageMode.names enums.
+
+
+<h3>Parameters:</h3>
+<ul>
+	
+	<li>
+	  <code><em>state</em></code>: The state to retrieve the name of.
+	</li>
+	
+</ul>
+
+
+
+
+
+
+<h3>Return value:</h3>
+<ul>Name of the state.</ul>
+
+
+
+</dd>
+
+
+</dl>
+
+
+
+
+<h2><a name="tables"></a>Tables</h2>
+<dl class="table">
+
+<dt><a name="MessageMode"></a><strong>MessageMode</strong></dt>
+<dd>Table that contains enum-styled values for Player.messageMode.<br /><br />
+
+
+<h3>Fields:</h3>
+<ul>
+	
+	<li>
+	  <code><em>GENERAL</em></code>: General messages.
+	</li>
+	
+	<li>
+	  <code><em>CHAT</em></code>: Character communication.
+	</li>
+	
+	<li>
+	  <code><em>ANNOUNCEMENT</em></code>: Critical game updates.
+	</li>
+	
+	<li>
+	  <code><em>INFO</em></code>: Informational updates that don't fit in other categories. e.g. spell fizzling.
+	</li>
+	
+	<li>
+	  <code><em>QUESTION</em></code>: Mode for questions. Questions generally don't end with a linebreak, so this might be useful in the future.
+	</li>
+	
+	<li>
+	  <code><em>MOVEMENT</em></code>: Movement updates.
+	</li>
+	
+	<li>
+	  <code><em>COMBAT</em></code>: Combat updates.
+	</li>
+	
+	<li>
+	  <code><em>FAILURE</em></code>: Error messages.
+	</li>
+	
+</ul>
+
+
+</dd>
+
+
+<dt><a name="MessageMode.names"></a><strong>MessageMode.names</strong></dt>
+<dd>Contains textual representations of MessageMode enums.<br /><br />
+
+
+<h3>Fields:</h3>
+<ul>
+	
+	<li>
+	  <code><em>MessageMode.GENERAL</em></code>: "general"
+	</li>
+	
+	<li>
+	  <code><em>MessageMode.CHAT</em></code>: "chat"
+	</li>
+	
+	<li>
+	  <code><em>MessageMode.ANNOUNCEMENT</em></code>: "announcement"
+	</li>
+	
+	<li>
+	  <code><em>MessageMode.INFO</em></code>: "info"
+	</li>
+	
+	<li>
+	  <code><em>MessageMode.FAILURE</em></code>: "failure"
+	</li>
+	
+	<li>
+	  <code><em>MessageMode.QUESTION</em></code>: "question"
+	</li>
+	
+	<li>
+	  <code><em>MessageMode.MOVEMENT</em></code>: "movement"
+	</li>
+	
+	<li>
+	  <code><em>MessageMode.COMBAT</em></code>: "combat"
+	</li>
+	
+</ul>
+
+
+</dd>
+
+
+</dl>
+
+
+
+</div> <!-- id="content" -->
+
+</div> <!-- id="main" -->
+
+<div id="about">
+	<p><a href="http://validator.w3.org/check?uri=referer"><img src="http://www.w3.org/Icons/valid-xhtml10" alt="Valid XHTML 1.0!" height="31" width="88" /></a></p>
+</div> <!-- id="about" -->
+
+</div> <!-- id="container" -->	
+</body>
+</html>

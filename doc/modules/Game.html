@@ -38,10 +38,42 @@
 		<a href="../modules/Cloneable.html">Cloneable</a>
 	</li>
 
+	<li>
+		<a href="../modules/Directions.html">Directions</a>
+	</li>
+
 	<li><strong>Game</strong></li>
 	
 	<li>
+		<a href="../modules/GameState.html">GameState</a>
+	</li>
+
+	<li>
+		<a href="../modules/MessageMode.html">MessageMode</a>
+	</li>
+
+	<li>
+		<a href="../modules/Mob.html">Mob</a>
+	</li>
+
+	<li>
+		<a href="../modules/Nanny.html">Nanny</a>
+	</li>
+
+	<li>
 		<a href="../modules/Player.html">Player</a>
+	</li>
+
+	<li>
+		<a href="../modules/PlayerState.html">PlayerState</a>
+	</li>
+
+	<li>
+		<a href="../modules/Telnet.html">Telnet</a>
+	</li>
+
+	<li>
+		<a href="../modules/main.html">main</a>
 	</li>
 
 </ul>
@@ -81,12 +113,12 @@
 
 	<tr>
 	<td class="name" nowrap><a href="#Game.announce">Game.announce</a>&nbsp;(message, mode, minState)</td>
-	<td class="summary">Announce something to connecting <i>Player</i>s.<br/> This is mostly temporary, but I'm leaving it in now for testing purposes.<br/> More reasonable implementation later.</td>
+	<td class="summary">Announce something to connecting Players.<br/> This is mostly temporary, but I'm leaving it in now for testing purposes.<br/> More reasonable implementation later.</td>
 	</tr>
 
 	<tr>
 	<td class="name" nowrap><a href="#Game.connectPlayer">Game.connectPlayer</a>&nbsp;(player)</td>
-	<td class="summary">Connects a <i>Player</i>.<br/> Calls <i>Game.onPlayerConnect(player)</i> before adding to players list.</td>
+	<td class="summary">Connects a Player.<br/> Calls Game.onPlayerConnect(player) before adding to players list.</td>
 	</tr>
 
 	<tr>
@@ -101,7 +133,7 @@
 
 	<tr>
 	<td class="name" nowrap><a href="#Game.disconnectPlayer">Game.disconnectPlayer</a>&nbsp;(player)</td>
-	<td class="summary">Disconnect a <i>Player</i>.<br/> Calls <i>Game.onPlayerDisconnect(player)</i> before removing from players list or destroying client.</td>
+	<td class="summary">Disconnect a Player.<br/> Calls Game.onPlayerDisconnect(player) before removing from players list or destroying client.</td>
 	</tr>
 
 	<tr>
@@ -116,22 +148,22 @@
 
 	<tr>
 	<td class="name" nowrap><a href="#Game.getName">Game.getName</a>&nbsp;()</td>
-	<td class="summary">Retreive the <i>Game</i>'s name.</td>
+	<td class="summary">Retreive the Game's name.</td>
 	</tr>
 
 	<tr>
 	<td class="name" nowrap><a href="#Game.getPlayers">Game.getPlayers</a>&nbsp;()</td>
-	<td class="summary">Retreive the <i>Game</i>'s players list.</td>
+	<td class="summary">Retreive the Game's players list.</td>
 	</tr>
 
 	<tr>
 	<td class="name" nowrap><a href="#Game.getState">Game.getState</a>&nbsp;()</td>
-	<td class="summary">Retreive the <i>Game</i>'s state.</td>
+	<td class="summary">Retreive the Game's state.</td>
 	</tr>
 
 	<tr>
 	<td class="name" nowrap><a href="#Game.getVersion">Game.getVersion</a>&nbsp;()</td>
-	<td class="summary">Retreive the <i>Game</i>'s version.</td>
+	<td class="summary">Retreive the Game's version.</td>
 	</tr>
 
 	<tr>
@@ -141,7 +173,7 @@
 
 	<tr>
 	<td class="name" nowrap><a href="#Game.isReady">Game.isReady</a>&nbsp;()</td>
-	<td class="summary">Check if the <i>Game</i> is ready to be played.</td>
+	<td class="summary">Check if the Game is ready to be played.</td>
 	</tr>
 
 	<tr>
@@ -151,7 +183,7 @@
 
 	<tr>
 	<td class="name" nowrap><a href="#Game.logCommand">Game.logCommand</a>&nbsp;(player, input)</td>
-	<td class="summary">Logs <i>Player</i> input.</td>
+	<td class="summary">Logs Player input.</td>
 	</tr>
 
 	<tr>
@@ -161,17 +193,17 @@
 
 	<tr>
 	<td class="name" nowrap><a href="#Game.onPlayerConnect">Game.onPlayerConnect</a>&nbsp;(player)</td>
-	<td class="summary">Specifies further actions for a connecting <i>Player</i>.</td>
+	<td class="summary">Specifies further actions for a connecting Player.</td>
 	</tr>
 
 	<tr>
 	<td class="name" nowrap><a href="#Game.onPlayerDisconnect">Game.onPlayerDisconnect</a>&nbsp;(player)</td>
-	<td class="summary">Specifies further actions for a disconnecting <i>Player</i>.</td>
+	<td class="summary">Specifies further actions for a disconnecting Player.</td>
 	</tr>
 
 	<tr>
 	<td class="name" nowrap><a href="#Game.onPlayerInput">Game.onPlayerInput</a>&nbsp;(player, input)</td>
-	<td class="summary">Determine what to do with input given by a <i>Player</i>.</td>
+	<td class="summary">Determine what to do with input given by a Player.</td>
 	</tr>
 
 	<tr>
@@ -186,7 +218,7 @@
 
 	<tr>
 	<td class="name" nowrap><a href="#Game.setState">Game.setState</a>&nbsp;(state)</td>
-	<td class="summary">Set the <i>Game</i>'s state.</td>
+	<td class="summary">Set the Game's state.</td>
 	</tr>
 
 	<tr>
@@ -218,17 +250,17 @@
 
 	<tr>
 	<td class="name" nowrap><a href="#Game.AcceptEvent">Game.AcceptEvent</a></td>
-	<td class="summary">This <i>Event</i> acts as the middle ground for client connections, accepting clients on behalf of the server, and informing the game about it.<br/> Game.PollEvent and Game.AcceptEvent are mandatory events that must be part of the Game scheduler.</td>
+	<td class="summary">This Event acts as the middle ground for client connections, accepting clients on behalf of the server, and informing the game about it.<br/> Game.PollEvent and Game.AcceptEvent are mandatory events that must be part of the Game scheduler.</td>
 	</tr>
 
 	<tr>
 	<td class="name" nowrap><a href="#Game.PollEvent">Game.PollEvent</a></td>
-	<td class="summary">This <i>Event</i> acts as the middle ground for client input, polling clients from the server for input and informing the game about it.<br/> Also the starting point for destroying clients that have disconnected and cannot be reached.<br/> Game.PollEvent and Game.AcceptEvent are mandatory events that must be part of the Game scheduler.</td>
+	<td class="summary">This Event acts as the middle ground for client input, polling clients from the server for input and informing the game about it.<br/> Also the starting point for destroying clients that have disconnected and cannot be reached.<br/> Game.PollEvent and Game.AcceptEvent are mandatory events that must be part of the Game scheduler.</td>
 	</tr>
 
 	<tr>
 	<td class="name" nowrap><a href="#Game.players">Game.players</a></td>
-	<td class="summary">Contains all <i>Player</i>s connected to the game.</td>
+	<td class="summary">Contains all Players connected to the game.</td>
 	</tr>
 
 </table>
@@ -247,7 +279,7 @@
 
 <dt><a name="Game.announce"></a><strong>Game.announce</strong>&nbsp;(message, mode, minState)</dt>
 <dd>
-Announce something to connecting <i>Player</i>s.<br/> This is mostly temporary, but I'm leaving it in now for testing purposes.<br/> More reasonable implementation later.
+Announce something to connecting Players.<br/> This is mostly temporary, but I'm leaving it in now for testing purposes.<br/> More reasonable implementation later.
 
 
 <h3>Parameters:</h3>
@@ -258,11 +290,11 @@ Announce something to connecting <i>Player</i>s.<br/> This is mostly temporary, 
 	</li>
 	
 	<li>
-	  <code><em>mode</em></code>: The mode of the message.<br/>Must be a valid member of <i>MessageMode</i>.
+	  <code><em>mode</em></code>: The mode of the message.<br/>Must be a valid member of MessageMode.
 	</li>
 	
 	<li>
-	  <code><em>minState</em></code>: The state a <i>Player</i> must be at to see the message (or "higher").
+	  <code><em>minState</em></code>: The state a Player must be at to see the message (or "higher").
 	</li>
 	
 </ul>
@@ -281,14 +313,14 @@ Announce something to connecting <i>Player</i>s.<br/> This is mostly temporary, 
 
 <dt><a name="Game.connectPlayer"></a><strong>Game.connectPlayer</strong>&nbsp;(player)</dt>
 <dd>
-Connects a <i>Player</i>.<br/> Calls <i>Game.onPlayerConnect(player)</i> before adding to players list.
+Connects a Player.<br/> Calls Game.onPlayerConnect(player) before adding to players list.
 
 
 <h3>Parameters:</h3>
 <ul>
 	
 	<li>
-	  <code><em>player</em></code>: The <i>Player</i> to be connected.
+	  <code><em>player</em></code>: The Player to be connected.
 	</li>
 	
 </ul>
@@ -359,14 +391,14 @@ shortcut for Game.scheduler:deque
 
 <dt><a name="Game.disconnectPlayer"></a><strong>Game.disconnectPlayer</strong>&nbsp;(player)</dt>
 <dd>
-Disconnect a <i>Player</i>.<br/> Calls <i>Game.onPlayerDisconnect(player)</i> before removing from players list or destroying client.
+Disconnect a Player.<br/> Calls Game.onPlayerDisconnect(player) before removing from players list or destroying client.
 
 
 <h3>Parameters:</h3>
 <ul>
 	
 	<li>
-	  <code><em>player</em></code>: The <i>Player</i> to be disconnected.
+	  <code><em>player</em></code>: The Player to be disconnected.
 	</li>
 	
 </ul>
@@ -437,7 +469,7 @@ logger:fatal()/fileLogger:fatal() shortcut
 
 <dt><a name="Game.getName"></a><strong>Game.getName</strong>&nbsp;()</dt>
 <dd>
-Retreive the <i>Game</i>'s name.
+Retreive the Game's name.
 
 
 
@@ -446,7 +478,7 @@ Retreive the <i>Game</i>'s name.
 
 
 <h3>Return value:</h3>
-<ul>The name of the <i>Game</i>.</ul>
+<ul>The name of the Game.</ul>
 
 
 
@@ -457,7 +489,7 @@ Retreive the <i>Game</i>'s name.
 
 <dt><a name="Game.getPlayers"></a><strong>Game.getPlayers</strong>&nbsp;()</dt>
 <dd>
-Retreive the <i>Game</i>'s players list.
+Retreive the Game's players list.
 
 
 
@@ -466,7 +498,7 @@ Retreive the <i>Game</i>'s players list.
 
 
 <h3>Return value:</h3>
-<ul><i>Player</i> list.</ul>
+<ul>Player list.</ul>
 
 
 
@@ -477,7 +509,7 @@ Retreive the <i>Game</i>'s players list.
 
 <dt><a name="Game.getState"></a><strong>Game.getState</strong>&nbsp;()</dt>
 <dd>
-Retreive the <i>Game</i>'s state.
+Retreive the Game's state.
 
 
 
@@ -486,7 +518,7 @@ Retreive the <i>Game</i>'s state.
 
 
 <h3>Return value:</h3>
-<ul>The <i>Game</i>'s state.<br/>Must be a valid member of <i>GameState</i>.</ul>
+<ul>The Game's state.<br/>Must be a valid member of GameState.</ul>
 
 
 
@@ -497,7 +529,7 @@ Retreive the <i>Game</i>'s state.
 
 <dt><a name="Game.getVersion"></a><strong>Game.getVersion</strong>&nbsp;()</dt>
 <dd>
-Retreive the <i>Game</i>'s version.
+Retreive the Game's version.
 
 
 
@@ -506,7 +538,7 @@ Retreive the <i>Game</i>'s version.
 
 
 <h3>Return value:</h3>
-<ul>The version of the <i>Game</i>.</ul>
+<ul>The version of the Game.</ul>
 
 
 
@@ -543,7 +575,7 @@ logger:info()/fileLogger:info() shortcut
 
 <dt><a name="Game.isReady"></a><strong>Game.isReady</strong>&nbsp;()</dt>
 <dd>
-Check if the <i>Game</i> is ready to be played. return true if the game's state is at GameState.READY.<br/>false otherwise.
+Check if the Game is ready to be played. return true if the game's state is at GameState.READY.<br/>false otherwise.
 
 
 
@@ -590,18 +622,18 @@ logger:log()/fileLogger:log() shortcut
 
 <dt><a name="Game.logCommand"></a><strong>Game.logCommand</strong>&nbsp;(player, input)</dt>
 <dd>
-Logs <i>Player</i> input.
+Logs Player input.
 
 
 <h3>Parameters:</h3>
 <ul>
 	
 	<li>
-	  <code><em>player</em></code>: The <i>Player</i> giving input.
+	  <code><em>player</em></code>: The Player giving input.
 	</li>
 	
 	<li>
-	  <code><em>input</em></code>: The input the <i>Player</i> gave.
+	  <code><em>input</em></code>: The input the Player gave.
 	</li>
 	
 </ul>
@@ -640,14 +672,14 @@ Get a unique player ID.
 
 <dt><a name="Game.onPlayerConnect"></a><strong>Game.onPlayerConnect</strong>&nbsp;(player)</dt>
 <dd>
-Specifies further actions for a connecting <i>Player</i>.
+Specifies further actions for a connecting Player.
 
 
 <h3>Parameters:</h3>
 <ul>
 	
 	<li>
-	  <code><em>player</em></code>: The <i>Player</i> connecting.
+	  <code><em>player</em></code>: The Player connecting.
 	</li>
 	
 </ul>
@@ -666,14 +698,14 @@ Specifies further actions for a connecting <i>Player</i>.
 
 <dt><a name="Game.onPlayerDisconnect"></a><strong>Game.onPlayerDisconnect</strong>&nbsp;(player)</dt>
 <dd>
-Specifies further actions for a disconnecting <i>Player</i>.
+Specifies further actions for a disconnecting Player.
 
 
 <h3>Parameters:</h3>
 <ul>
 	
 	<li>
-	  <code><em>player</em></code>: The <i>Player</i> disconnecting.
+	  <code><em>player</em></code>: The Player disconnecting.
 	</li>
 	
 </ul>
@@ -692,14 +724,14 @@ Specifies further actions for a disconnecting <i>Player</i>.
 
 <dt><a name="Game.onPlayerInput"></a><strong>Game.onPlayerInput</strong>&nbsp;(player, input)</dt>
 <dd>
-Determine what to do with input given by a <i>Player</i>.
+Determine what to do with input given by a Player.
 
 
 <h3>Parameters:</h3>
 <ul>
 	
 	<li>
-	  <code><em>player</em></code>: The <i>Player</i> providing the input.
+	  <code><em>player</em></code>: The Player providing the input.
 	</li>
 	
 	<li>
@@ -777,14 +809,14 @@ shortcut for Game.scheduler:queue
 
 <dt><a name="Game.setState"></a><strong>Game.setState</strong>&nbsp;(state)</dt>
 <dd>
-Set the <i>Game</i>'s state.
+Set the Game's state.
 
 
 <h3>Parameters:</h3>
 <ul>
 	
 	<li>
-	  <code><em>state</em></code>: The state to be assigned.<br/>Must be a valid member of <i>GameState</i>.
+	  <code><em>state</em></code>: The state to be assigned.<br/>Must be a valid member of GameState.
 	</li>
 	
 </ul>
@@ -812,7 +844,7 @@ Shutdown the game.
 
 
 <h3>Return value:</h3>
-<ul><i>true</i> on success.<br/><i>false</i> followed by an error otherwise.</ul>
+<ul>true on success.<br/>false followed by an error otherwise.</ul>
 
 
 
@@ -890,43 +922,43 @@ logger:warn()/fileLogger:warn() shortcut
 	</li>
 	
 	<li>
-	  <code><em>state</em></code>: Our state. Always a member of the <i>GameState</i> table.
+	  <code><em>state</em></code>: Our state. Always a member of the GameState table.
 	</li>
 	
 	<li>
-	  <code><em>playerID</em></code>: Unique ID to be assigned to the next new <i>Player</i>.
+	  <code><em>playerID</em></code>: Unique ID to be assigned to the next new Player.
 	</li>
 	
 	<li>
-	  <code><em>players</em></code>: List of <i>Players</i> connected to us.
+	  <code><em>players</em></code>: List of Players connected to us.
 	</li>
 	
 	<li>
-	  <code><em>server</em></code>: The <i>Server</i>, obviously.
+	  <code><em>server</em></code>: The Server, obviously.
 	</li>
 	
 	<li>
-	  <code><em>scheduler</em></code>: Unique <i>Scheduler</i> we're using.
+	  <code><em>scheduler</em></code>: Unique Scheduler we're using.
 	</li>
 	
 	<li>
-	  <code><em>parser</em></code>: <i>CommandParser</i> we're using.
+	  <code><em>parser</em></code>: CommandParser we're using.
 	</li>
 	
 	<li>
-	  <code><em>map</em></code>: The <i>Map</i> we'll be using.
+	  <code><em>map</em></code>: The Map we'll be using.
 	</li>
 	
 	<li>
-	  <code><em>logger</em></code>: <i>Logger</i> that prints to the standard output.
+	  <code><em>logger</em></code>: Logger that prints to the standard output.
 	</li>
 	
 	<li>
-	  <code><em>fileLogger</em></code>: <i>Logger</i> that prints to the standard log file for this session.
+	  <code><em>fileLogger</em></code>: Logger that prints to the standard log file for this session.
 	</li>
 	
 	<li>
-	  <code><em>commandLogger</em></code>: <i>Logger</i> that prints all command input to the standard command log file for this session.
+	  <code><em>commandLogger</em></code>: Logger that prints all command input to the standard command log file for this session.
 	</li>
 	
 </ul>
@@ -936,7 +968,7 @@ logger:warn()/fileLogger:warn() shortcut
 
 
 <dt><a name="Game.AcceptEvent"></a><strong>Game.AcceptEvent</strong></dt>
-<dd>This <i>Event</i> acts as the middle ground for client connections, accepting clients on behalf of the server, and informing the game about it.<br/> Game.PollEvent and Game.AcceptEvent are mandatory events that must be part of the Game scheduler.<br /><br />
+<dd>This Event acts as the middle ground for client connections, accepting clients on behalf of the server, and informing the game about it.<br/> Game.PollEvent and Game.AcceptEvent are mandatory events that must be part of the Game scheduler.<br /><br />
 
 
 
@@ -944,7 +976,7 @@ logger:warn()/fileLogger:warn() shortcut
 
 
 <dt><a name="Game.PollEvent"></a><strong>Game.PollEvent</strong></dt>
-<dd>This <i>Event</i> acts as the middle ground for client input, polling clients from the server for input and informing the game about it.<br/> Also the starting point for destroying clients that have disconnected and cannot be reached.<br/> Game.PollEvent and Game.AcceptEvent are mandatory events that must be part of the Game scheduler.<br /><br />
+<dd>This Event acts as the middle ground for client input, polling clients from the server for input and informing the game about it.<br/> Also the starting point for destroying clients that have disconnected and cannot be reached.<br/> Game.PollEvent and Game.AcceptEvent are mandatory events that must be part of the Game scheduler.<br /><br />
 
 
 
@@ -952,7 +984,7 @@ logger:warn()/fileLogger:warn() shortcut
 
 
 <dt><a name="Game.players"></a><strong>Game.players</strong></dt>
-<dd>Contains all <i>Player</i>s connected to the game.<br /><br />
+<dd>Contains all Players connected to the game.<br /><br />
 
 
 

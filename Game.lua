@@ -24,16 +24,16 @@ local CommandParser	= require("obj.CommandParser")
 -- @field name The name we would like to be called.
 -- @field version The version of this release.
 -- @field defaultPort The port we'll use if one isn't provided.
--- @field state Our state. Always a member of the <i>GameState</i> table.
--- @field playerID Unique ID to be assigned to the next new <i>Player</i>.
--- @field players List of <i>Players</i> connected to us.
--- @field server The <i>Server</i>, obviously.
--- @field scheduler Unique <i>Scheduler</i> we're using.
--- @field parser <i>CommandParser</i> we're using.
--- @field map The <i>Map</i> we'll be using.
--- @field logger <i>Logger</i> that prints to the standard output.
--- @field fileLogger <i>Logger</i> that prints to the standard log file for this session.
--- @field commandLogger <i>Logger</i> that prints all command input to the standard command log file for this session.
+-- @field state Our state. Always a member of the GameState table.
+-- @field playerID Unique ID to be assigned to the next new Player.
+-- @field players List of Players connected to us.
+-- @field server The Server, obviously.
+-- @field scheduler Unique Scheduler we're using.
+-- @field parser CommandParser we're using.
+-- @field map The Map we'll be using.
+-- @field logger Logger that prints to the standard output.
+-- @field fileLogger Logger that prints to the standard log file for this session.
+-- @field commandLogger Logger that prints all command input to the standard command log file for this session.
 local Game			= {}
 
 -- game data
@@ -45,7 +45,7 @@ Game.defaultPort	= 8000
 Game.state			= GameState.NEW
 
 Game.playerID		= 0
---- Contains all <i>Player</i>s connected to the game.
+--- Contains all Players connected to the game.
 -- @class table
 -- @name Game.players
 Game.players		= {}
@@ -92,7 +92,7 @@ function Game.open(port)
 end
 
 --- Shutdown the game.
--- @return <i>true</i> on success.<br/><i>false</i> followed by an error otherwise.
+-- @return true on success.<br/>false followed by an error otherwise.
 function Game.shutdown()
 	if not Game.isReady() then
 		return false, "Game not running"
@@ -116,16 +116,16 @@ function Game.update()
 	Game.scheduler:poll(os.clock())
 end
 
---- Connects a <i>Player</i>.<br/>
--- Calls <i>Game.onPlayerConnect(player)</i> before adding to players list.
--- @param player The <i>Player</i> to be connected.
+--- Connects a Player.<br/>
+-- Calls Game.onPlayerConnect(player) before adding to players list.
+-- @param player The Player to be connected.
 function Game.connectPlayer(player)
 	Game.onPlayerConnect(player)
 	table.insert(Game.players, player)
 end
 
---- Specifies further actions for a connecting <i>Player</i>.
--- @param player The <i>Player</i> connecting.
+--- Specifies further actions for a connecting Player.
+-- @param player The Player connecting.
 function Game.onPlayerConnect(player)
 	Game.info(string.format("Connected player %s!", tostring(player:getClient())))
 
@@ -133,17 +133,17 @@ function Game.onPlayerConnect(player)
 	Nanny.greet(player)
 end
 
---- Disconnect a <i>Player</i>.<br/>
--- Calls <i>Game.onPlayerDisconnect(player)</i> before removing from players list or destroying client.
--- @param player The <i>Player</i> to be disconnected.
+--- Disconnect a Player.<br/>
+-- Calls Game.onPlayerDisconnect(player) before removing from players list or destroying client.
+-- @param player The Player to be disconnected.
 function Game.disconnectPlayer(player)
 	Game.onPlayerDisconnect(player) -- disconnect the player
 	table.removeValue(Game.players, player) -- remove from players list (no longer recognized as a player)
 	Game.server:disconnectClient(player:getClient()) -- kill the client
 end
 
---- Specifies further actions for a disconnecting <i>Player</i>.
--- @param player The <i>Player</i> disconnecting.
+--- Specifies further actions for a disconnecting Player.
+-- @param player The Player disconnecting.
 function Game.onPlayerDisconnect(player)
 	Game.info(string.format("Disconnected player %s!", tostring(player:getClient())))
 	if player:getState() == PlayerState.PLAYING then
@@ -152,8 +152,8 @@ function Game.onPlayerDisconnect(player)
 end
 
 
---- Determine what to do with input given by a <i>Player</i>.
--- @param player The <i>Player</i> providing the input.
+--- Determine what to do with input given by a Player.
+-- @param player The Player providing the input.
 -- @param input The input to be processed.
 function Game.onPlayerInput(player, input)
 	Game.logCommand(player, input)
@@ -178,18 +178,18 @@ function Game.onPlayerInput(player, input)
 	Game.parser:parse(player, player:getMob(), input)
 end
 
---- Set the <i>Game</i>'s state.
--- @param state The state to be assigned.<br/>Must be a valid member of <i>GameState</i>.
+--- Set the Game's state.
+-- @param state The state to be assigned.<br/>Must be a valid member of GameState.
 function Game.setState(state)
 	Game.state = state
 end
 
---- Announce something to connecting <i>Player</i>s.<br/>
+--- Announce something to connecting Players.<br/>
 -- This is mostly temporary, but I'm leaving it in now for testing purposes.<br/>
 -- More reasonable implementation later.
 -- @param message The message to be announced.
--- @param mode The mode of the message.<br/>Must be a valid member of <i>MessageMode</i>.
--- @param minState The state a <i>Player</i> must be at to see the message (or "higher").
+-- @param mode The mode of the message.<br/>Must be a valid member of MessageMode.
+-- @param minState The state a Player must be at to see the message (or "higher").
 function Game.announce(message, mode, minState)
 	for i,v in ipairs(Game.getPlayers()) do
 		if not minState or v:getState() >= minState then
@@ -198,26 +198,26 @@ function Game.announce(message, mode, minState)
 	end
 end
 
---- Check if the <i>Game</i> is ready to be played.
+--- Check if the Game is ready to be played.
 -- return true if the game's state is at GameState.READY.<br/>false otherwise.
 function Game.isReady()
 	return Game.state == GameState.READY
 end
 
---- Retreive the <i>Game</i>'s name.
--- @return The name of the <i>Game</i>.
+--- Retreive the Game's name.
+-- @return The name of the Game.
 function Game.getName()
 	return Game.name
 end
 
---- Retreive the <i>Game</i>'s version.
--- @return The version of the <i>Game</i>.
+--- Retreive the Game's version.
+-- @return The version of the Game.
 function Game.getVersion()
 	return Game.version
 end
 
---- Retreive the <i>Game</i>'s state.
--- @return The <i>Game</i>'s state.<br/>Must be a valid member of <i>GameState</i>.
+--- Retreive the Game's state.
+-- @return The Game's state.<br/>Must be a valid member of GameState.
 function Game.getState()
 	return Game.state
 end
@@ -231,8 +231,8 @@ function Game.nextPlayerID()
 end
 
 
---- Retreive the <i>Game</i>'s players list.
--- @return <i>Player</i> list.
+--- Retreive the Game's players list.
+-- @return Player list.
 function Game.getPlayers()
 	return Game.players
 end
@@ -283,14 +283,14 @@ function Game.fatal(message)
 	game.fileLogger:fatal(message)
 end
 
---- Logs <i>Player</i> input.
--- @param player The <i>Player</i> giving input.
--- @param input The input the <i>Player</i> gave.
+--- Logs Player input.
+-- @param player The Player giving input.
+-- @param input The input the Player gave.
 function Game.logCommand(player, input)
 	Game.commandLogger:info(tostring(player) .. ": '" .. input .. "'")
 end
 
---- This <i>Event</i> acts as the middle ground for client connections, accepting clients on behalf of the server, and informing the game about it.<br/>
+--- This Event acts as the middle ground for client connections, accepting clients on behalf of the server, and informing the game about it.<br/>
 -- Game.PollEvent and Game.AcceptEvent are mandatory events that must be part of the Game scheduler.
 -- @class table
 -- @name Game.AcceptEvent
@@ -314,7 +314,7 @@ function Game.AcceptEvent:run()
 end
 
 
---- This <i>Event</i> acts as the middle ground for client input, polling clients from the server for input and informing the game about it.<br/>
+--- This Event acts as the middle ground for client input, polling clients from the server for input and informing the game about it.<br/>
 -- Also the starting point for destroying clients that have disconnected and cannot be reached.<br/>
 -- Game.PollEvent and Game.AcceptEvent are mandatory events that must be part of the Game scheduler.
 -- @class table

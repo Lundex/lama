@@ -39,11 +39,43 @@
 	</li>
 
 	<li>
+		<a href="../modules/Directions.html">Directions</a>
+	</li>
+
+	<li>
 		<a href="../modules/Game.html">Game</a>
+	</li>
+
+	<li>
+		<a href="../modules/GameState.html">GameState</a>
+	</li>
+
+	<li>
+		<a href="../modules/MessageMode.html">MessageMode</a>
+	</li>
+
+	<li>
+		<a href="../modules/Mob.html">Mob</a>
+	</li>
+
+	<li>
+		<a href="../modules/Nanny.html">Nanny</a>
 	</li>
 
 	<li><strong>Player</strong></li>
 	
+	<li>
+		<a href="../modules/PlayerState.html">PlayerState</a>
+	</li>
+
+	<li>
+		<a href="../modules/Telnet.html">Telnet</a>
+	</li>
+
+	<li>
+		<a href="../modules/main.html">main</a>
+	</li>
+
 </ul>
 
 
@@ -61,7 +93,7 @@
 
 <h1>Module <code>Player</code></h1>
 
-<p>Handles relationships between <i>Client</i>s and <i>Mob</i>s.</p>
+<p>Handles relationships between Clients and Mobs.</p>
 
 
 <p><b>Author:</b>
@@ -81,97 +113,97 @@
 
 	<tr>
 	<td class="name" nowrap><a href="#Player:askQuestion">Player:askQuestion</a>&nbsp;(msg)</td>
-	<td class="summary">shortcut to <i>sendMessage()</i> that provides the <i>MessageMode.QUESTION</i> mode, followed by no linebreak.</td>
+	<td class="summary">shortcut to sendMessage() that provides the MessageMode.QUESTION mode, followed by no linebreak.</td>
 	</tr>
 
 	<tr>
 	<td class="name" nowrap><a href="#Player:clearMessageMode">Player:clearMessageMode</a>&nbsp;()</td>
-	<td class="summary">Reset our messageMode to nil.</td>
+	<td class="summary">Reset messageMode to nil.</td>
 	</tr>
 
 	<tr>
 	<td class="name" nowrap><a href="#Player:getClient">Player:getClient</a>&nbsp;()</td>
-	<td class="summary">Gets our current <i>Client</i>.</td>
+	<td class="summary">Gets current Client.</td>
 	</tr>
 
 	<tr>
 	<td class="name" nowrap><a href="#Player:getID">Player:getID</a>&nbsp;()</td>
-	<td class="summary">Gets our current ID.</td>
+	<td class="summary">Gets current ID.</td>
 	</tr>
 
 	<tr>
 	<td class="name" nowrap><a href="#Player:getMessageMode">Player:getMessageMode</a>&nbsp;()</td>
-	<td class="summary">Get our message mode.</td>
+	<td class="summary">Get message mode.</td>
 	</tr>
 
 	<tr>
 	<td class="name" nowrap><a href="#Player:getMob">Player:getMob</a>&nbsp;()</td>
-	<td class="summary">Gets our current <i>Mob</i>.</td>
+	<td class="summary">Gets current Mob.</td>
 	</tr>
 
 	<tr>
 	<td class="name" nowrap><a href="#Player:getState">Player:getState</a>&nbsp;()</td>
-	<td class="summary">Gets our current ID.</td>
+	<td class="summary">Gets current state.</td>
 	</tr>
 
 	<tr>
 	<td class="name" nowrap><a href="#Player:initialize">Player:initialize</a>&nbsp;(client)</td>
-	<td class="summary">Initialize the <i>Player</i> and associated it with the given <i>Client</i>.</td>
+	<td class="summary">Initialize the Player and associated it with the given Client.</td>
 	</tr>
 
 	<tr>
 	<td class="name" nowrap><a href="#Player:send">Player:send</a>&nbsp;(data, i, j)</td>
-	<td class="summary">shortcut to <i>client:send(data,i,j)</i>.</td>
+	<td class="summary">shortcut to client:send(data,i,j).</td>
 	</tr>
 
 	<tr>
 	<td class="name" nowrap><a href="#Player:sendLine">Player:sendLine</a>&nbsp;(str)</td>
-	<td class="summary">shortcut to <i>client:sendLine(str)</i>.</td>
+	<td class="summary">shortcut to client:sendLine(str).</td>
 	</tr>
 
 	<tr>
 	<td class="name" nowrap><a href="#Player:sendMessage">Player:sendMessage</a>&nbsp;(msg, mode, autobreak)</td>
-	<td class="summary">Sends a message to the <i>Player</i>.</td>
+	<td class="summary">Sends a message to the Player.</td>
 	</tr>
 
 	<tr>
 	<td class="name" nowrap><a href="#Player:sendString">Player:sendString</a>&nbsp;(str)</td>
-	<td class="summary">shortcut to <i>client:sendMessage(str)</i>.</td>
+	<td class="summary">shortcut to client:sendMessage(str).</td>
 	</tr>
 
 	<tr>
 	<td class="name" nowrap><a href="#Player:setID">Player:setID</a>&nbsp;(id)</td>
-	<td class="summary">Set our ID.</td>
+	<td class="summary">Set ID.</td>
 	</tr>
 
 	<tr>
 	<td class="name" nowrap><a href="#Player:setMessageMode">Player:setMessageMode</a>&nbsp;(mode)</td>
-	<td class="summary">Set our message mode.</td>
+	<td class="summary">Set message mode.</td>
 	</tr>
 
 	<tr>
 	<td class="name" nowrap><a href="#Player:setMob">Player:setMob</a>&nbsp;(mob)</td>
-	<td class="summary">Associate this <i>Player</i> with the given <i>Mob</i>.</td>
+	<td class="summary">Associate this Player with the given Mob.</td>
 	</tr>
 
 	<tr>
 	<td class="name" nowrap><a href="#Player:setState">Player:setState</a>&nbsp;(state)</td>
-	<td class="summary">Set our state.</td>
+	<td class="summary">Set state.</td>
 	</tr>
 
 	<tr>
 	<td class="name" nowrap><a href="#Player:toString">Player:toString</a>&nbsp;()</td>
-	<td class="summary">Returns the string-value of the <i>Player</i>.</td>
+	<td class="summary">Returns the string-value of the Player.</td>
 	</tr>
 
 	<tr>
 	<td class="name" nowrap><a href="#Player:unsetClient">Player:unsetClient</a>&nbsp;()</td>
-	<td class="summary">De-associate this <i>Player</i> from our current <i>Client</i>.</td>
+	<td class="summary">De-associate this Player from current Client.</td>
 	</tr>
 
 	<tr>
 	<td class="name" nowrap><a href="#Player:unsetMob">Player:unsetMob</a>&nbsp;()</td>
-	<td class="summary">De-associate this <i>Player</i> from our current <i>Mob</i>.</td>
+	<td class="summary">De-associate this Player from current Mob.</td>
 	</tr>
 
 </table>
@@ -202,7 +234,7 @@
 
 <dt><a name="Player:askQuestion"></a><strong>Player:askQuestion</strong>&nbsp;(msg)</dt>
 <dd>
-shortcut to <i>sendMessage()</i> that provides the <i>MessageMode.QUESTION</i> mode, followed by no linebreak.
+shortcut to sendMessage() that provides the MessageMode.QUESTION mode, followed by no linebreak.
 
 
 <h3>Parameters:</h3>
@@ -228,7 +260,7 @@ shortcut to <i>sendMessage()</i> that provides the <i>MessageMode.QUESTION</i> m
 
 <dt><a name="Player:clearMessageMode"></a><strong>Player:clearMessageMode</strong>&nbsp;()</dt>
 <dd>
-Reset our messageMode to nil.
+Reset messageMode to nil.
 
 
 
@@ -245,7 +277,7 @@ Reset our messageMode to nil.
 
 <dt><a name="Player:getClient"></a><strong>Player:getClient</strong>&nbsp;()</dt>
 <dd>
-Gets our current <i>Client</i>.
+Gets current Client.
 
 
 
@@ -254,7 +286,7 @@ Gets our current <i>Client</i>.
 
 
 <h3>Return value:</h3>
-<ul>Our <i>Client</i>.</ul>
+<ul>Current Client.</ul>
 
 
 
@@ -265,7 +297,7 @@ Gets our current <i>Client</i>.
 
 <dt><a name="Player:getID"></a><strong>Player:getID</strong>&nbsp;()</dt>
 <dd>
-Gets our current ID.
+Gets current ID.
 
 
 
@@ -274,7 +306,7 @@ Gets our current ID.
 
 
 <h3>Return value:</h3>
-<ul>Our ID.</ul>
+<ul>Current ID.</ul>
 
 
 
@@ -285,7 +317,7 @@ Gets our current ID.
 
 <dt><a name="Player:getMessageMode"></a><strong>Player:getMessageMode</strong>&nbsp;()</dt>
 <dd>
-Get our message mode.
+Get message mode.
 
 
 
@@ -294,7 +326,7 @@ Get our message mode.
 
 
 <h3>Return value:</h3>
-<ul>Our message mode. Always a member of the <i>MessageMode</i> table.</ul>
+<ul>Current message mode. Always a member of the MessageMode table.</ul>
 
 
 
@@ -305,7 +337,7 @@ Get our message mode.
 
 <dt><a name="Player:getMob"></a><strong>Player:getMob</strong>&nbsp;()</dt>
 <dd>
-Gets our current <i>Mob</i>.
+Gets current Mob.
 
 
 
@@ -314,7 +346,7 @@ Gets our current <i>Mob</i>.
 
 
 <h3>Return value:</h3>
-<ul>Our <i>Mob</i>.</ul>
+<ul>Current Mob, if any.</ul>
 
 
 
@@ -325,7 +357,7 @@ Gets our current <i>Mob</i>.
 
 <dt><a name="Player:getState"></a><strong>Player:getState</strong>&nbsp;()</dt>
 <dd>
-Gets our current ID.
+Gets current state.
 
 
 
@@ -334,7 +366,7 @@ Gets our current ID.
 
 
 <h3>Return value:</h3>
-<ul>Our state. Always a member of the <i>PlayerState</i> table.</ul>
+<ul>Current state. Always a member of the PlayerState table.</ul>
 
 
 
@@ -345,14 +377,14 @@ Gets our current ID.
 
 <dt><a name="Player:initialize"></a><strong>Player:initialize</strong>&nbsp;(client)</dt>
 <dd>
-Initialize the <i>Player</i> and associated it with the given <i>Client</i>.
+Initialize the Player and associated it with the given Client.
 
 
 <h3>Parameters:</h3>
 <ul>
 	
 	<li>
-	  <code><em>client</em></code>: <i>Client</i> to be associated with this <i>Player</i>.
+	  <code><em>client</em></code>: Client to be associated with this Player.
 	</li>
 	
 </ul>
@@ -371,7 +403,7 @@ Initialize the <i>Player</i> and associated it with the given <i>Client</i>.
 
 <dt><a name="Player:send"></a><strong>Player:send</strong>&nbsp;(data, i, j)</dt>
 <dd>
-shortcut to <i>client:send(data,i,j)</i>.
+shortcut to client:send(data,i,j).
 
 
 <h3>Parameters:</h3>
@@ -405,7 +437,7 @@ shortcut to <i>client:send(data,i,j)</i>.
 
 <dt><a name="Player:sendLine"></a><strong>Player:sendLine</strong>&nbsp;(str)</dt>
 <dd>
-shortcut to <i>client:sendLine(str)</i>.
+shortcut to client:sendLine(str).
 
 
 <h3>Parameters:</h3>
@@ -431,7 +463,7 @@ shortcut to <i>client:sendLine(str)</i>.
 
 <dt><a name="Player:sendMessage"></a><strong>Player:sendMessage</strong>&nbsp;(msg, mode, autobreak)</dt>
 <dd>
-Sends a message to the <i>Player</i>.
+Sends a message to the Player.
 
 
 <h3>Parameters:</h3>
@@ -442,11 +474,11 @@ Sends a message to the <i>Player</i>.
 	</li>
 	
 	<li>
-	  <code><em>mode</em></code>: The mode of the message. Always a member of the <i>MessageMode</i> table.
+	  <code><em>mode</em></code>: The mode of the message. Always a member of the MessageMode table.
 	</li>
 	
 	<li>
-	  <code><em>autobreak</em></code>: If <i>true</i> (default), the message is followed by a linefeed. Always a member of the <i>MessageMode</i> table.
+	  <code><em>autobreak</em></code>: If true (default), the message is followed by a linefeed. Always a member of the MessageMode table.
 	</li>
 	
 </ul>
@@ -465,7 +497,7 @@ Sends a message to the <i>Player</i>.
 
 <dt><a name="Player:sendString"></a><strong>Player:sendString</strong>&nbsp;(str)</dt>
 <dd>
-shortcut to <i>client:sendMessage(str)</i>.
+shortcut to client:sendMessage(str).
 
 
 <h3>Parameters:</h3>
@@ -491,7 +523,7 @@ shortcut to <i>client:sendMessage(str)</i>.
 
 <dt><a name="Player:setID"></a><strong>Player:setID</strong>&nbsp;(id)</dt>
 <dd>
-Set our ID.
+Set ID.
 
 
 <h3>Parameters:</h3>
@@ -517,14 +549,14 @@ Set our ID.
 
 <dt><a name="Player:setMessageMode"></a><strong>Player:setMessageMode</strong>&nbsp;(mode)</dt>
 <dd>
-Set our message mode.
+Set message mode.
 
 
 <h3>Parameters:</h3>
 <ul>
 	
 	<li>
-	  <code><em>mode</em></code>: The mode to assign. Always a member of the <i>MessageMode</i> table.
+	  <code><em>mode</em></code>: The mode to assign. Always a member of the MessageMode table.
 	</li>
 	
 </ul>
@@ -543,7 +575,7 @@ Set our message mode.
 
 <dt><a name="Player:setMob"></a><strong>Player:setMob</strong>&nbsp;(mob)</dt>
 <dd>
-Associate this <i>Player</i> with the given <i>Mob</i>.
+Associate this Player with the given Mob.
 
 
 <h3>Parameters:</h3>
@@ -569,7 +601,7 @@ Associate this <i>Player</i> with the given <i>Mob</i>.
 
 <dt><a name="Player:setState"></a><strong>Player:setState</strong>&nbsp;(state)</dt>
 <dd>
-Set our state.
+Set state.
 
 
 <h3>Parameters:</h3>
@@ -595,7 +627,7 @@ Set our state.
 
 <dt><a name="Player:toString"></a><strong>Player:toString</strong>&nbsp;()</dt>
 <dd>
-Returns the string-value of the <i>Player</i>.
+Returns the string-value of the Player.
 
 
 
@@ -615,7 +647,7 @@ Returns the string-value of the <i>Player</i>.
 
 <dt><a name="Player:unsetClient"></a><strong>Player:unsetClient</strong>&nbsp;()</dt>
 <dd>
-De-associate this <i>Player</i> from our current <i>Client</i>.
+De-associate this Player from current Client.
 
 
 
@@ -632,7 +664,7 @@ De-associate this <i>Player</i> from our current <i>Client</i>.
 
 <dt><a name="Player:unsetMob"></a><strong>Player:unsetMob</strong>&nbsp;()</dt>
 <dd>
-De-associate this <i>Player</i> from our current <i>Mob</i>.
+De-associate this Player from current Mob.
 
 
 
@@ -665,19 +697,19 @@ De-associate this <i>Player</i> from our current <i>Mob</i>.
 	</li>
 	
 	<li>
-	  <code><em>state</em></code>: Our state. Always a member of the <i>PlayerState</i> table.
+	  <code><em>state</em></code>: Our state. Always a member of the PlayerState table.
 	</li>
 	
 	<li>
-	  <code><em>client</em></code>: The <i>Client</i> we are associated with.
+	  <code><em>client</em></code>: The Client we are associated with.
 	</li>
 	
 	<li>
-	  <code><em>mob</em></code>: The <i>Mob</i> we are associated with.
+	  <code><em>mob</em></code>: The Mob we are associated with.
 	</li>
 	
 	<li>
-	  <code><em>messageMode</em></code>: Our message mode. Always a member of the <i>MessageMode</i> table.
+	  <code><em>messageMode</em></code>: Our message mode. Always a member of the MessageMode table.
 	</li>
 	
 </ul>
