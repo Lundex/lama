@@ -58,7 +58,7 @@ Telnet.commands.names[Telnet.commands.EC]	= "EC"
 Telnet.commands.names[Telnet.commands.SE]	= "SE"
 
 --- Allows for quick reference to Telnet.commands.names enums.
--- @param state The command to retrieve the name of.
+-- @param command The command to retrieve the name of.
 -- @return Name of the command.
 function Telnet.commands.name(command)
 	return Telnet.commands.names[command] or string.format("(%s)", tostring(command))
