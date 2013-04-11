@@ -1,11 +1,12 @@
---- Contains necessary processes for processing the connection stages of a new player,
+--- Singleton that contains necessary processes for connecting new players,
 -- as well as processing their input during these stages.
 -- @author milkmanjack
 module("Nanny", package.seeall)
 
 local Mob			= require("obj.Mob")
 
---- Table that contains all the data for processing.
+--- Singleton that contains necessary processes for connecting new players,
+-- as well as processing their input during these stages.
 -- @class table
 -- @name Nanny
 local Nanny			= {}

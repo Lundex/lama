@@ -1,16 +1,16 @@
---- Handles relationships between Clients and Mobs.
+--- Cloneable that handles relationships between Clients and Mobs.
 -- @author milkmanjack
-module("Player", package.seeall)
+module("obj.Player", package.seeall)
 
 local Cloneable		= require("obj.Cloneable")
 local Client		= require("obj.Client")
 local Mob			= require("obj.Mob")
 
---- The Player table.
+--- Cloneable that handles relationships between Clients and Mobs.
 -- @class table
 -- @name Player
 -- @field id Our unique ID.
--- @field state Our state. Always a member of the PlayerState table.
+-- @field state Current state. Always a member of the PlayerState table.
 -- @field client The Client we are associated with.
 -- @field mob The Mob we are associated with.
 -- @field messageMode Our message mode. Always a member of the MessageMode table.
@@ -118,7 +118,9 @@ function Player:setState(state)
 	self.state = state
 end
 
---- Associate this Player with the given Mob.
+--- Associate this Player with the given Mob. A Player's Mob
+-- shares a mututal reference with the Player, so when the
+-- Player's Mob changes, so does the Mob's Player.
 -- @param mob The mob to assign.
 function Player:setMob(mob)
 	if self.mob then

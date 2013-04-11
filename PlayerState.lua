@@ -1,8 +1,8 @@
---- Contains enum-styled values for Player.state.
+--- Singleton that contains enum-styled values for Player.state.
 -- @author milkmanjack
 module("PlayerState", package.seeall)
 
---- Table that contains enum-styled values for Player.state.
+--- Singleton that contains enum-styled values for Player.state.
 -- @class table
 -- @name PlayerState
 -- @field NEW Player has just been connected.

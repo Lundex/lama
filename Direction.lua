@@ -1,8 +1,8 @@
---- Contains enum-styled values for directional movement.
+--- Singleton that contains enum-styled values for directional movement.
 -- @author milkmanjack
 module("Directions", package.seeall)
 
---- Table that contains enum-styled values for directional movement.
+--- Singleton that contains enum-styled values for directional movement.
 -- @class table
 -- @name Direction
 -- @field NORTH North.

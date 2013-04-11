@@ -35,10 +35,6 @@
 <ul>
 
 	<li>
-		<a href="../modules/Cloneable.html">Cloneable</a>
-	</li>
-
-	<li>
 		<a href="../modules/Directions.html">Directions</a>
 	</li>
 
@@ -53,15 +49,7 @@
 	</li>
 
 	<li>
-		<a href="../modules/Mob.html">Mob</a>
-	</li>
-
-	<li>
 		<a href="../modules/Nanny.html">Nanny</a>
-	</li>
-
-	<li>
-		<a href="../modules/Player.html">Player</a>
 	</li>
 
 	<li>
@@ -74,6 +62,38 @@
 
 	<li>
 		<a href="../modules/main.html">main</a>
+	</li>
+
+	<li>
+		<a href="../modules/obj.Client.html">obj.Client</a>
+	</li>
+
+	<li>
+		<a href="../modules/obj.Cloneable.html">obj.Cloneable</a>
+	</li>
+
+	<li>
+		<a href="../modules/obj.Event.html">obj.Event</a>
+	</li>
+
+	<li>
+		<a href="../modules/obj.Map.html">obj.Map</a>
+	</li>
+
+	<li>
+		<a href="../modules/obj.Mob.html">obj.Mob</a>
+	</li>
+
+	<li>
+		<a href="../modules/obj.Player.html">obj.Player</a>
+	</li>
+
+	<li>
+		<a href="../modules/obj.Scheduler.html">obj.Scheduler</a>
+	</li>
+
+	<li>
+		<a href="../modules/obj.Server.html">obj.Server</a>
 	</li>
 
 </ul>
@@ -93,7 +113,7 @@
 
 <h1>Module <code>Game</code></h1>
 
-<p>The bread and butter of the project.</p>
+<p>Singleton that provides the necessary operations for running the game.</p>
 
 
 <p><b>Author:</b>
@@ -245,7 +265,7 @@
 
 	<tr>
 	<td class="name" nowrap><a href="#Game">Game</a></td>
-	<td class="summary">The Game table.</td>
+	<td class="summary">Singleton that provides the necessary operations for running the game.</td>
 	</tr>
 
 	<tr>
@@ -903,7 +923,7 @@ logger:warn()/fileLogger:warn() shortcut
 <dl class="table">
 
 <dt><a name="Game"></a><strong>Game</strong></dt>
-<dd>The Game table.<br /><br />
+<dd>Singleton that provides the necessary operations for running the game.<br /><br />
 
 
 <h3>Fields:</h3>
@@ -934,11 +954,11 @@ logger:warn()/fileLogger:warn() shortcut
 	</li>
 	
 	<li>
-	  <code><em>server</em></code>: The Server, obviously.
+	  <code><em>server</em></code>: Server we're using.
 	</li>
 	
 	<li>
-	  <code><em>scheduler</em></code>: Unique Scheduler we're using.
+	  <code><em>scheduler</em></code>: Scheduler we're using.
 	</li>
 	
 	<li>

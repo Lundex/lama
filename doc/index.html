@@ -35,10 +35,6 @@
 <ul>
 
 	<li>
-		<a href="modules/Cloneable.html">Cloneable</a>
-	</li>
-
-	<li>
 		<a href="modules/Directions.html">Directions</a>
 	</li>
 
@@ -55,15 +51,7 @@
 	</li>
 
 	<li>
-		<a href="modules/Mob.html">Mob</a>
-	</li>
-
-	<li>
 		<a href="modules/Nanny.html">Nanny</a>
-	</li>
-
-	<li>
-		<a href="modules/Player.html">Player</a>
 	</li>
 
 	<li>
@@ -76,6 +64,38 @@
 
 	<li>
 		<a href="modules/main.html">main</a>
+	</li>
+
+	<li>
+		<a href="modules/obj.Client.html">obj.Client</a>
+	</li>
+
+	<li>
+		<a href="modules/obj.Cloneable.html">obj.Cloneable</a>
+	</li>
+
+	<li>
+		<a href="modules/obj.Event.html">obj.Event</a>
+	</li>
+
+	<li>
+		<a href="modules/obj.Map.html">obj.Map</a>
+	</li>
+
+	<li>
+		<a href="modules/obj.Mob.html">obj.Mob</a>
+	</li>
+
+	<li>
+		<a href="modules/obj.Player.html">obj.Player</a>
+	</li>
+
+	<li>
+		<a href="modules/obj.Scheduler.html">obj.Scheduler</a>
+	</li>
+
+	<li>
+		<a href="modules/obj.Server.html">obj.Server</a>
 	</li>
 
 </ul>
@@ -100,58 +120,83 @@
 <!--<tr><td colspan="2">Modules</td></tr>-->
 
 	<tr>
-		<td class="name"><a href="modules/Cloneable.html">Cloneable</a></td>
-		<td class="summary">A pseudo-heritage framework for table inheritance.</td>
-	</tr>
-
-	<tr>
 		<td class="name"><a href="modules/Directions.html">Directions</a></td>
-		<td class="summary">Contains enum-styled values for directional movement.</td>
+		<td class="summary">Singleton that contains enum-styled values for directional movement.</td>
 	</tr>
 
 	<tr>
 		<td class="name"><a href="modules/Game.html">Game</a></td>
-		<td class="summary">The bread and butter of the project.</td>
+		<td class="summary">Singleton that provides the necessary operations for running the game.</td>
 	</tr>
 
 	<tr>
 		<td class="name"><a href="modules/GameState.html">GameState</a></td>
-		<td class="summary">Contains enum-styled values for Game.state.</td>
+		<td class="summary">Singleton that contains enum-styled values for Game.state.</td>
 	</tr>
 
 	<tr>
 		<td class="name"><a href="modules/MessageMode.html">MessageMode</a></td>
-		<td class="summary">Contains enum-styled values for Player.messageMode.</td>
-	</tr>
-
-	<tr>
-		<td class="name"><a href="modules/Mob.html">Mob</a></td>
-		<td class="summary">Cloneable that holds data for mobile creatures.</td>
+		<td class="summary">Singleton that contains enum-styled values for Player.messageMode.</td>
 	</tr>
 
 	<tr>
 		<td class="name"><a href="modules/Nanny.html">Nanny</a></td>
-		<td class="summary">Contains necessary processes for processing the connection stages of a new player, as well as processing their input during these stages.</td>
-	</tr>
-
-	<tr>
-		<td class="name"><a href="modules/Player.html">Player</a></td>
-		<td class="summary">Handles relationships between Clients and Mobs.</td>
+		<td class="summary">Singleton that contains necessary processes for connecting new players, as well as processing their input during these stages.</td>
 	</tr>
 
 	<tr>
 		<td class="name"><a href="modules/PlayerState.html">PlayerState</a></td>
-		<td class="summary">Contains enum-styled values for Player.state.</td>
+		<td class="summary">Singleton that contains enum-styled values for Player.state.</td>
 	</tr>
 
 	<tr>
 		<td class="name"><a href="modules/Telnet.html">Telnet</a></td>
-		<td class="summary">Holds all telnet-specific data and operations.</td>
+		<td class="summary">Singleton that contains all telnet-specific data and operations.</td>
 	</tr>
 
 	<tr>
 		<td class="name"><a href="modules/main.html">main</a></td>
 		<td class="summary">Entry point for the game.</td>
+	</tr>
+
+	<tr>
+		<td class="name"><a href="modules/obj.Client.html">obj.Client</a></td>
+		<td class="summary">Cloneable that manages user I/O.</td>
+	</tr>
+
+	<tr>
+		<td class="name"><a href="modules/obj.Cloneable.html">obj.Cloneable</a></td>
+		<td class="summary">Table that provides psuedo-inheritance-type features for tables.</td>
+	</tr>
+
+	<tr>
+		<td class="name"><a href="modules/obj.Event.html">obj.Event</a></td>
+		<td class="summary">Cloneable that holds data about a fireable event, meant to be used with a Scheduler.</td>
+	</tr>
+
+	<tr>
+		<td class="name"><a href="modules/obj.Map.html">obj.Map</a></td>
+		<td class="summary">Cloneable that handles map data and processing.</td>
+	</tr>
+
+	<tr>
+		<td class="name"><a href="modules/obj.Mob.html">obj.Mob</a></td>
+		<td class="summary">Cloneable that holds data for mobile creatures.</td>
+	</tr>
+
+	<tr>
+		<td class="name"><a href="modules/obj.Player.html">obj.Player</a></td>
+		<td class="summary">Cloneable that handles relationships between Clients and Mobs.</td>
+	</tr>
+
+	<tr>
+		<td class="name"><a href="modules/obj.Scheduler.html">obj.Scheduler</a></td>
+		<td class="summary">Cloneable that processes fireable events.</td>
+	</tr>
+
+	<tr>
+		<td class="name"><a href="modules/obj.Server.html">obj.Server</a></td>
+		<td class="summary">Cloneable that listens on a port and connects new Clients.</td>
 	</tr>
 
 </table>

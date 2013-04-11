@@ -1,4 +1,4 @@
---- The bread and butter of the project.
+--- Singleton that provides the necessary operations for running the game.
 -- @author milkmanjack
 module("Game", package.seeall)
 
@@ -18,7 +18,7 @@ local Player		= require("obj.Player")
 local Map			= require("obj.Map")
 local CommandParser	= require("obj.CommandParser")
 
---- The Game table.
+--- Singleton that provides the necessary operations for running the game.
 -- @class table
 -- @name Game
 -- @field name The name we would like to be called.
@@ -27,8 +27,8 @@ local CommandParser	= require("obj.CommandParser")
 -- @field state Our state. Always a member of the GameState table.
 -- @field playerID Unique ID to be assigned to the next new Player.
 -- @field players List of Players connected to us.
--- @field server The Server, obviously.
--- @field scheduler Unique Scheduler we're using.
+-- @field server Server we're using.
+-- @field scheduler Scheduler we're using.
 -- @field parser CommandParser we're using.
 -- @field map The Map we'll be using.
 -- @field logger Logger that prints to the standard output.

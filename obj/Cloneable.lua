@@ -1,6 +1,6 @@
---- A pseudo-heritage framework for table inheritance.
+--- Table that provides psuedo-inheritance-type features for tables.
 -- @author milkmanjack
-module("Cloneable", package.seeall)
+module("obj.Cloneable", package.seeall)
 
 --- Table that provides psuedo-inheritance-type features for tables.<br/><br/>
 -- Inheritance is achieved by using the __index metatable method, which just transfers attempts to index nil fields to the parent.<br/>
@@ -70,6 +70,7 @@ function Cloneable:initialize(...)
 end
 
 --- Stringifier for Cloneables.
+-- @return A string to identify this Cloneable.
 function Cloneable:toString()
 	return "{cloneable}"
 end

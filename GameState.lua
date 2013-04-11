@@ -1,8 +1,8 @@
---- Contains enum-styled values for Game.state.
+--- Singleton that contains enum-styled values for Game.state.
 -- @author milkmanjack
 module("GameState", package.seeall)
 
---- Table that contains enum-styled values for Game.state.
+--- Singleton that contains enum-styled values for Game.state.
 -- @class table
 -- @name GameState
 -- @field NEW The Game is in its introductory stages.

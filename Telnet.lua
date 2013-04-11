@@ -1,8 +1,8 @@
---- Holds all telnet-specific data and operations.
+--- Singleton that contains all telnet-specific data and operations.
 -- @author milkmanjack
 module("Telnet", package.seeall)
 
---- Table that contains all the stuff.
+--- Singleton that contains all telnet-specific data and operations.
 -- @class table
 -- @name Telnet
 local Telnet  							= {}

@@ -1,6 +1,6 @@
 --- Cloneable that holds data for mobile creatures.
 -- @author milkmanjack
-module("Mob", package.seeall)
+module("obj.Mob", package.seeall)
 
 local MapObject	= require("obj.MapObject")
 
@@ -124,7 +124,9 @@ function Mob:showRoom()
 	self:sendMessage(msg, MessageMode.INFO)
 end
 
---- Associate a Player with this Mob.
+--- Associate this Mob with the given Player. A Mob's Player
+-- shares a mututal reference with the Mob, so when the
+-- Mob's Player changes, so does the Player's Mob.
 -- @param player The player to associate with.
 function Mob:setPlayer(player)
 	self.player = player

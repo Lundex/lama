@@ -1,0 +1,490 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"
+   "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html>
+<head>
+    <title>Reference</title>
+    <link rel="stylesheet" href="../luadoc.css" type="text/css" />
+	<!--meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/-->
+</head>
+
+<body>
+<div id="container">
+
+<div id="product">
+	<div id="product_logo"></div>
+	<div id="product_name"><big><b></b></big></div>
+	<div id="product_description"></div>
+</div> <!-- id="product" -->
+
+<div id="main">
+
+<div id="navigation">
+
+
+<h1>LuaDoc</h1>
+<ul>
+	
+	<li><a href="../index.html">Index</a></li>
+	
+</ul>
+
+
+<!-- Module list -->
+
+<h1>Modules</h1>
+<ul>
+
+	<li>
+		<a href="../modules/Client.html">Client</a>
+	</li>
+
+	<li>
+		<a href="../modules/Cloneable.html">Cloneable</a>
+	</li>
+
+	<li>
+		<a href="../modules/Directions.html">Directions</a>
+	</li>
+
+	<li>
+		<a href="../modules/Event.html">Event</a>
+	</li>
+
+	<li>
+		<a href="../modules/Game.html">Game</a>
+	</li>
+
+	<li>
+		<a href="../modules/GameState.html">GameState</a>
+	</li>
+
+	<li>
+		<a href="../modules/Map.html">Map</a>
+	</li>
+
+	<li>
+		<a href="../modules/MessageMode.html">MessageMode</a>
+	</li>
+
+	<li>
+		<a href="../modules/Mob.html">Mob</a>
+	</li>
+
+	<li>
+		<a href="../modules/Nanny.html">Nanny</a>
+	</li>
+
+	<li>
+		<a href="../modules/Player.html">Player</a>
+	</li>
+
+	<li>
+		<a href="../modules/PlayerState.html">PlayerState</a>
+	</li>
+
+	<li>
+		<a href="../modules/Scheduler.html">Scheduler</a>
+	</li>
+
+	<li><strong>Server</strong></li>
+	
+	<li>
+		<a href="../modules/Telnet.html">Telnet</a>
+	</li>
+
+	<li>
+		<a href="../modules/main.html">main</a>
+	</li>
+
+</ul>
+
+
+
+<!-- File list -->
+
+
+
+
+
+
+</div><!-- id="navigation" -->
+
+<div id="content">
+
+<h1>Module <code>Server</code></h1>
+
+<p>Cloneable that listens on a port and connects new Clients.</p>
+
+
+<p><b>Author:</b>
+<table class="authors_list">
+
+	<tr><td class="name">milkmanjack</td></tr>
+
+</table>
+</p>
+
+
+
+
+
+<h2>Functions</h2>
+<table class="function_list">
+
+	<tr>
+	<td class="name" nowrap><a href="#Server:accept">Server:accept</a>&nbsp;()</td>
+	<td class="summary">Attempt to accept a new Client.</td>
+	</tr>
+
+	<tr>
+	<td class="name" nowrap><a href="#Server:close">Server:close</a>&nbsp;()</td>
+	<td class="summary">Close the Server.</td>
+	</tr>
+
+	<tr>
+	<td class="name" nowrap><a href="#Server:connectClient">Server:connectClient</a>&nbsp;(client)</td>
+	<td class="summary">Start managing a Client.</td>
+	</tr>
+
+	<tr>
+	<td class="name" nowrap><a href="#Server:disconnectClient">Server:disconnectClient</a>&nbsp;(client)</td>
+	<td class="summary">Stop managing a Client.</td>
+	</tr>
+
+	<tr>
+	<td class="name" nowrap><a href="#Server:getClients">Server:getClients</a>&nbsp;()</td>
+	<td class="summary">Return the Server's list of Clients.</td>
+	</tr>
+
+	<tr>
+	<td class="name" nowrap><a href="#Server:host">Server:host</a>&nbsp;(port)</td>
+	<td class="summary">Host the server.</td>
+	</tr>
+
+	<tr>
+	<td class="name" nowrap><a href="#Server:initialize">Server:initialize</a>&nbsp;()</td>
+	<td class="summary">Creates a unique clients table per Server.</td>
+	</tr>
+
+	<tr>
+	<td class="name" nowrap><a href="#Server:initializeClientSocket">Server:initializeClientSocket</a>&nbsp;(socket)</td>
+	<td class="summary">Initialize the socket's settings for an incoming client.</td>
+	</tr>
+
+	<tr>
+	<td class="name" nowrap><a href="#Server:initializeServerSocket">Server:initializeServerSocket</a>&nbsp;(socket)</td>
+	<td class="summary">Initialize the socket's settings for this Server.</td>
+	</tr>
+
+	<tr>
+	<td class="name" nowrap><a href="#Server:isHosted">Server:isHosted</a>&nbsp;()</td>
+	<td class="summary">Check if the Server is hosted.</td>
+	</tr>
+
+</table>
+
+
+
+<h2>Tables</h2>
+<table class="table_list">
+
+	<tr>
+	<td class="name" nowrap><a href="#Server">Server</a></td>
+	<td class="summary">Cloneable that listens on a port and connects new Clients.</td>
+	</tr>
+
+	<tr>
+	<td class="name" nowrap><a href="#Server.clients">Server.clients</a></td>
+	<td class="summary">Contains all of the Clients a Server is listening to.</td>
+	</tr>
+
+</table>
+
+
+
+<br/>
+<br/>
+
+
+
+<h2><a name="functions"></a>Functions</h2>
+<dl class="function">
+
+
+
+<dt><a name="Server:accept"></a><strong>Server:accept</strong>&nbsp;()</dt>
+<dd>
+Attempt to accept a new Client.
+
+
+
+
+
+
+
+<h3>Return value:</h3>
+<ul>true if a Client is accepted.<br/>false otherwise.</ul>
+
+
+
+</dd>
+
+
+
+
+<dt><a name="Server:close"></a><strong>Server:close</strong>&nbsp;()</dt>
+<dd>
+Close the Server.
+
+
+
+
+
+
+
+<h3>Return value:</h3>
+<ul>true on success.<br/>false otherwise.</ul>
+
+
+
+</dd>
+
+
+
+
+<dt><a name="Server:connectClient"></a><strong>Server:connectClient</strong>&nbsp;(client)</dt>
+<dd>
+Start managing a Client.
+
+
+<h3>Parameters:</h3>
+<ul>
+	
+	<li>
+	  <code><em>client</em></code>: The Client to manage.
+	</li>
+	
+</ul>
+
+
+
+
+
+
+
+
+</dd>
+
+
+
+
+<dt><a name="Server:disconnectClient"></a><strong>Server:disconnectClient</strong>&nbsp;(client)</dt>
+<dd>
+Stop managing a Client.
+
+
+<h3>Parameters:</h3>
+<ul>
+	
+	<li>
+	  <code><em>client</em></code>: The Client to stop managing.
+	</li>
+	
+</ul>
+
+
+
+
+
+
+
+
+</dd>
+
+
+
+
+<dt><a name="Server:getClients"></a><strong>Server:getClients</strong>&nbsp;()</dt>
+<dd>
+Return the Server's list of Clients.
+
+
+
+
+
+
+
+<h3>Return value:</h3>
+<ul>The list of Clients.</ul>
+
+
+
+</dd>
+
+
+
+
+<dt><a name="Server:host"></a><strong>Server:host</strong>&nbsp;(port)</dt>
+<dd>
+Host the server.
+
+
+<h3>Parameters:</h3>
+<ul>
+	
+	<li>
+	  <code><em>port</em></code>: The port to host on.
+	</li>
+	
+</ul>
+
+
+
+
+
+
+<h3>Return value:</h3>
+<ul>true on success.<br/>false otherwise.</ul>
+
+
+
+</dd>
+
+
+
+
+<dt><a name="Server:initialize"></a><strong>Server:initialize</strong>&nbsp;()</dt>
+<dd>
+Creates a unique clients table per Server.
+
+
+
+
+
+
+
+
+
+</dd>
+
+
+
+
+<dt><a name="Server:initializeClientSocket"></a><strong>Server:initializeClientSocket</strong>&nbsp;(socket)</dt>
+<dd>
+Initialize the socket's settings for an incoming client.
+
+
+<h3>Parameters:</h3>
+<ul>
+	
+	<li>
+	  <code><em>socket</em></code>: The socket to initialize.
+	</li>
+	
+</ul>
+
+
+
+
+
+
+
+
+</dd>
+
+
+
+
+<dt><a name="Server:initializeServerSocket"></a><strong>Server:initializeServerSocket</strong>&nbsp;(socket)</dt>
+<dd>
+Initialize the socket's settings for this Server.
+
+
+<h3>Parameters:</h3>
+<ul>
+	
+	<li>
+	  <code><em>socket</em></code>: The socket to initialize.
+	</li>
+	
+</ul>
+
+
+
+
+
+
+
+
+</dd>
+
+
+
+
+<dt><a name="Server:isHosted"></a><strong>Server:isHosted</strong>&nbsp;()</dt>
+<dd>
+Check if the Server is hosted.
+
+
+
+
+
+
+
+<h3>Return value:</h3>
+<ul>true if it is being hosted.<br/>false otherwise.</ul>
+
+
+
+</dd>
+
+
+</dl>
+
+
+
+
+<h2><a name="tables"></a>Tables</h2>
+<dl class="table">
+
+<dt><a name="Server"></a><strong>Server</strong></dt>
+<dd>Cloneable that listens on a port and connects new Clients.<br /><br />
+
+
+<h3>Fields:</h3>
+<ul>
+	
+	<li>
+	  <code><em>socket</em></code>: The socket associated with this Server.
+	</li>
+	
+</ul>
+
+
+</dd>
+
+
+<dt><a name="Server.clients"></a><strong>Server.clients</strong></dt>
+<dd>Contains all of the Clients a Server is listening to.<br /><br />
+
+
+
+</dd>
+
+
+</dl>
+
+
+
+</div> <!-- id="content" -->
+
+</div> <!-- id="main" -->
+
+<div id="about">
+	<p><a href="http://validator.w3.org/check?uri=referer"><img src="http://www.w3.org/Icons/valid-xhtml10" alt="Valid XHTML 1.0!" height="31" width="88" /></a></p>
+</div> <!-- id="about" -->
+
+</div> <!-- id="container" -->	
+</body>
+</html>

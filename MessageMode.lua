@@ -1,8 +1,8 @@
---- Contains enum-styled values for Player.messageMode.
+--- Singleton that contains enum-styled values for Player.messageMode.
 -- @author milkmanjack
 module("MessageMode", package.seeall)
 
---- Table that contains enum-styled values for Player.messageMode.
+--- Singleton that contains enum-styled values for Player.messageMode.
 -- @class table
 -- @name MessageMode
 -- @field GENERAL General messages.
