@@ -1,13 +1,10 @@
---[[	Author:	Milkmanjack
-		Date:	3/30/12
-		Extends table library a bit.
-]]
+--- Extension of the table library.
+-- @author milkmanjack
+module("ext.table", package.seeall)
 
---[[
-	Provides a hard copy of a table.
-	@param t	The table to copy.
-	@return A copy of the given table.
-]]
+--- Provides a hard copy of a table, meaning all indexes within the table are copied.
+-- @param t Table to copy.
+-- @return A hard copy of the given table.
 function table.copy(t)
 	local c = {}
 	for i,v in pairs(t) do
@@ -17,25 +14,23 @@ function table.copy(t)
 	return c
 end
 
---[[
-	Provides a safe iterator over the members of the given table.
-	@return An iterator in the same vein as pairs()
-]]
+--- Provides a safe iterator in the same vein as pairs(t) over the members of the given table.
+-- @param t Table to be iterated over.
+-- @return An iterator in the same vein as pairs(t)
 function table.safePairs(t)
 	return pairs(table.copy(t))
 end
 
---[[
-	Provides a safe iterator over the members of the given table.
-	@return An iterator in the same vein as ipairs()
-]]
+--- Provides a safe iterator in the same vein as ipairs(t) over the members of the given table.
+-- @param t Table to be iterated over.
+-- @return An iterator in the same vein as ipairs(t)
 function table.safeIPairs(t)
 	return ipairs(table.copy(t))
 end
 
---[[
-	Shortcut to remove a value from a table (as opposed to by index).
-]]
+--- Removes a value from a table as opposed to an index.
+-- @param t Table to be modified.
+-- @param value Value to be removed.
 function table.removeValue(t, value)
 	for i,v in pairs(t) do
 		if v == value then
@@ -44,11 +39,12 @@ function table.removeValue(t, value)
 	end
 end
 
---[[
-	Converts the members of a table into a string, using tostring()
-	to convert the individual members, placing delimiters between
-	each member.
-]]
+--- Converts the members of a table into a string, using tostring()
+-- to convert the individual members, placing delimiters between
+-- each member.
+-- @param t Table to be converted.
+-- @param delimiter Delimiter placed between each value in the table.
+-- @return String form of the table.
 function table.tostring(t,delimiter)
 	delimiter	= delimiter or ","
 
