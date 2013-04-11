@@ -1,6 +1,5 @@
 --- Entry point for the game.
 -- @author milkmanjack
-module("main", package.seeall)
 
 require("Game")
 local _, err = Game.open()
