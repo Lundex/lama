@@ -40,14 +40,14 @@ function Mob:step(direction)
 
 		-- alert room to our entrance
 		for i,v in ipairs(newLoc:getContents()) do
-			v:sendMessage(string.format("%s has entered from the %s."), self:getName(), Direction.name(Direction.reverse(direction)), MessageMode.MOVEMENT)
+			v:sendMessage(string.format("%s has entered from the %s.", self:getName(), Direction.name(Direction.reverse(direction))), MessageMode.MOVEMENT)
 		end
 
 		self:move(newLoc)
 
 		-- alert previous room to our exit
 		for i,v in ipairs(oldLoc:getContents()) do
-			v:sendMessage(string.format("%s has left to the %s."), self:getName(), Direction.name(direction), MessageMode.MOVEMENT)
+			v:sendMessage(string.format("%s has left to the %s.", self:getName(), Direction.name(direction)), MessageMode.MOVEMENT)
 		end
 
 		return true
