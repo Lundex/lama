@@ -124,7 +124,7 @@ function Nanny.getGreeting()
 		return greeting
 	end
 
-	return [[Moon MUD
+	return [[lama (v0.0a)
     by Jack
 
 Developed in
