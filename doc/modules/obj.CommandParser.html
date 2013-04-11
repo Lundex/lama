@@ -34,8 +34,10 @@
 <h1>Modules</h1>
 <ul>
 
-	<li><strong>Directions</strong></li>
-	
+	<li>
+		<a href="../modules/Directions.html">Directions</a>
+	</li>
+
 	<li>
 		<a href="../modules/Game.html">Game</a>
 	</li>
@@ -72,10 +74,8 @@
 		<a href="../modules/obj.Cloneable.html">obj.Cloneable</a>
 	</li>
 
-	<li>
-		<a href="../modules/obj.CommandParser.html">obj.CommandParser</a>
-	</li>
-
+	<li><strong>obj.CommandParser</strong></li>
+	
 	<li>
 		<a href="../modules/obj.Event.html">obj.Event</a>
 	</li>
@@ -123,9 +123,9 @@
 
 <div id="content">
 
-<h1>Module <code>Directions</code></h1>
+<h1>Module <code>obj.CommandParser</code></h1>
 
-<p>Singleton that contains enum-styled values for directional movement.</p>
+<p>Cloneable that parses commands on behalf of a player.</p>
 
 
 <p><b>Author:</b>
@@ -144,13 +144,23 @@
 <table class="function_list">
 
 	<tr>
-	<td class="name" nowrap><a href="#Direction.name">Direction.name</a>&nbsp;(state)</td>
-	<td class="summary">Allows for quick reference Direction.names enums.</td>
+	<td class="name" nowrap><a href="#CommandParser:addCommand">CommandParser:addCommand</a>&nbsp;(command)</td>
+	<td class="summary">Adds a Command to the list of commands we recognize.</td>
 	</tr>
 
 	<tr>
-	<td class="name" nowrap><a href="#Direction.reverse">Direction.reverse</a>&nbsp;(direction)</td>
-	<td class="summary">Reverses the given direction.</td>
+	<td class="name" nowrap><a href="#CommandParser:initialize">CommandParser:initialize</a>&nbsp;()</td>
+	<td class="summary">Creates a unique commands table per CommandParser.</td>
+	</tr>
+
+	<tr>
+	<td class="name" nowrap><a href="#CommandParser:parse">CommandParser:parse</a>&nbsp;(player, mob, input)</td>
+	<td class="summary">Parses command input with a player as an assumed source.</td>
+	</tr>
+
+	<tr>
+	<td class="name" nowrap><a href="#CommandParser:removeCommand">CommandParser:removeCommand</a>&nbsp;(command)</td>
+	<td class="summary">Remove a Command from the list of commands we recognize.</td>
 	</tr>
 
 </table>
@@ -161,13 +171,13 @@
 <table class="table_list">
 
 	<tr>
-	<td class="name" nowrap><a href="#Direction">Direction</a></td>
-	<td class="summary">Singleton that contains enum-styled values for directional movement.</td>
+	<td class="name" nowrap><a href="#CommandParser">CommandParser</a></td>
+	<td class="summary">Cloneable that parses commands on behalf of a player.</td>
 	</tr>
 
 	<tr>
-	<td class="name" nowrap><a href="#Direction.names">Direction.names</a></td>
-	<td class="summary">Contains textual representations of Direction enums.</td>
+	<td class="name" nowrap><a href="#CommandParser.commands">CommandParser.commands</a></td>
+	<td class="summary">List of all commands we recognized.</td>
 	</tr>
 
 </table>
@@ -184,16 +194,16 @@
 
 
 
-<dt><a name="Direction.name"></a><strong>Direction.name</strong>&nbsp;(state)</dt>
+<dt><a name="CommandParser:addCommand"></a><strong>CommandParser:addCommand</strong>&nbsp;(command)</dt>
 <dd>
-Allows for quick reference Direction.names enums.
+Adds a Command to the list of commands we recognize.
 
 
 <h3>Parameters:</h3>
 <ul>
 	
 	<li>
-	  <code><em>state</em></code>: The direction to retrieve the name of.
+	  <code><em>command</em></code>: Command to be added.
 	</li>
 	
 </ul>
@@ -202,9 +212,6 @@ Allows for quick reference Direction.names enums.
 
 
 
-
-<h3>Return value:</h3>
-<ul>Name of the direction.</ul>
 
 
 
@@ -213,16 +220,41 @@ Allows for quick reference Direction.names enums.
 
 
 
-<dt><a name="Direction.reverse"></a><strong>Direction.reverse</strong>&nbsp;(direction)</dt>
+<dt><a name="CommandParser:initialize"></a><strong>CommandParser:initialize</strong>&nbsp;()</dt>
 <dd>
-Reverses the given direction.
+Creates a unique commands table per CommandParser.
+
+
+
+
+
+
+
+
+
+</dd>
+
+
+
+
+<dt><a name="CommandParser:parse"></a><strong>CommandParser:parse</strong>&nbsp;(player, mob, input)</dt>
+<dd>
+Parses command input with a player as an assumed source.
 
 
 <h3>Parameters:</h3>
 <ul>
 	
 	<li>
-	  <code><em>direction</em></code>: Direction to reverse.
+	  <code><em>player</em></code>: Player to be treated as the source of the input.
+	</li>
+	
+	<li>
+	  <code><em>mob</em></code>: Mob of the Player being treated as the source of the input.
+	</li>
+	
+	<li>
+	  <code><em>input</em></code>: 
 	</li>
 	
 </ul>
@@ -232,8 +264,31 @@ Reverses the given direction.
 
 
 
-<h3>Return value:</h3>
-<ul>The reverse of the given direction.</ul>
+
+
+</dd>
+
+
+
+
+<dt><a name="CommandParser:removeCommand"></a><strong>CommandParser:removeCommand</strong>&nbsp;(command)</dt>
+<dd>
+Remove a Command from the list of commands we recognize.
+
+
+<h3>Parameters:</h3>
+<ul>
+	
+	<li>
+	  <code><em>command</em></code>: Command to be removed.
+	</li>
+	
+</ul>
+
+
+
+
+
 
 
 
@@ -248,91 +303,17 @@ Reverses the given direction.
 <h2><a name="tables"></a>Tables</h2>
 <dl class="table">
 
-<dt><a name="Direction"></a><strong>Direction</strong></dt>
-<dd>Singleton that contains enum-styled values for directional movement.<br /><br />
+<dt><a name="CommandParser"></a><strong>CommandParser</strong></dt>
+<dd>Cloneable that parses commands on behalf of a player.<br /><br />
 
-
-<h3>Fields:</h3>
-<ul>
-	
-	<li>
-	  <code><em>NORTH</em></code>: North.
-	</li>
-	
-	<li>
-	  <code><em>SOUTH</em></code>: South.
-	</li>
-	
-	<li>
-	  <code><em>EAST</em></code>: East.
-	</li>
-	
-	<li>
-	  <code><em>WEST</em></code>: West.
-	</li>
-	
-	<li>
-	  <code><em>NORTHEAST</em></code>: Northeast.
-	</li>
-	
-	<li>
-	  <code><em>NORTHWEST</em></code>: Northwest.
-	</li>
-	
-	<li>
-	  <code><em>SOUTHEAST</em></code>: Southeast.
-	</li>
-	
-	<li>
-	  <code><em>SOUTHWEST</em></code>: Southwest.
-	</li>
-	
-</ul>
 
 
 </dd>
 
 
-<dt><a name="Direction.names"></a><strong>Direction.names</strong></dt>
-<dd>Contains textual representations of Direction enums.<br /><br />
+<dt><a name="CommandParser.commands"></a><strong>CommandParser.commands</strong></dt>
+<dd>List of all commands we recognized.<br /><br />
 
-
-<h3>Fields:</h3>
-<ul>
-	
-	<li>
-	  <code><em>Direction.NORTH</em></code>: "north"
-	</li>
-	
-	<li>
-	  <code><em>Direction.SOUTH</em></code>: "south"
-	</li>
-	
-	<li>
-	  <code><em>Direction.EAST</em></code>: "east"
-	</li>
-	
-	<li>
-	  <code><em>Direction.WEST</em></code>: "west"
-	</li>
-	
-	<li>
-	  <code><em>Direction.NORTHEAST</em></code>: "northeast"
-	</li>
-	
-	<li>
-	  <code><em>Direction.NORTHWEST</em></code>: "northwest"
-	</li>
-	
-	<li>
-	  <code><em>Direction.SOUTHEAST</em></code>: "southeast"
-	</li>
-	
-	<li>
-	  <code><em>DIRECTION.SOUTHWEST</em></code>: "southwest"
-	</li>
-	
-</ul>
 
 
 </dd>
