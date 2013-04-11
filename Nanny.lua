@@ -81,15 +81,15 @@ end
 --- Introduce the player to the world.
 -- @param player Player to introduce.
 function Nanny.introduce(player)
-	player:sendMessage(string.format("\nWelcome to %s, %s!", tostring(Game.getName()), tostring(player)), MessageMode.GENERAL)
-	Game.announce(string.format("%s has joined!", tostring(player)), MessageMode.INFO, PlayerState.PLAYING)
+	player:sendMessage(string.format("\nWelcome to %s, %s!", tostring(Game.getName()), tostring(player:getMob())), MessageMode.GENERAL)
+	Game.announce(string.format("%s has joined!", tostring(player:getMob())), MessageMode.INFO, PlayerState.PLAYING)
 end
 
 --- Send the player off, announcing their departure.
 -- @param player Player that is departing.
 function Nanny.sendOff(player)
 	player:sendLine("Goodbye!")
-	Game.announce(string.format("%s has left!", tostring(player)), MessageMode.INFO, PlayerState.PLAYING)
+	Game.announce(string.format("%s has left!", tostring(player:getMob())), MessageMode.INFO, PlayerState.PLAYING)
 end	
 
 --- Send the MOTD to the player.
