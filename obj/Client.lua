@@ -72,7 +72,7 @@ end
 --- Retreive the client's remote address.
 -- @return The client's remote address.
 function Client:getAddress()
-	return self.socket:getsockname()
+	return self.socket:getpeername()
 end
 
 return Client
