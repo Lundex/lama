@@ -180,7 +180,7 @@
 
 	<tr>
 	<td class="name" nowrap><a href="#Server:initializeClientSocket">Server:initializeClientSocket</a>&nbsp;(socket)</td>
-	<td class="summary">Initialize the socket's settings for an incoming client.</td>
+	<td class="summary">Initialize the socket's settings for an incoming Client.</td>
 	</tr>
 
 	<tr>
@@ -384,7 +384,7 @@ Creates a unique clients table per Server.
 
 <dt><a name="Server:initializeClientSocket"></a><strong>Server:initializeClientSocket</strong>&nbsp;(socket)</dt>
 <dd>
-Initialize the socket's settings for an incoming client.
+Initialize the socket's settings for an incoming Client. By default, the Client socket is made to act asynchroniously, with a 1/1000th second timeout for I/O operations.
 
 
 <h3>Parameters:</h3>
@@ -410,7 +410,7 @@ Initialize the socket's settings for an incoming client.
 
 <dt><a name="Server:initializeServerSocket"></a><strong>Server:initializeServerSocket</strong>&nbsp;(socket)</dt>
 <dd>
-Initialize the socket's settings for this Server.
+Initialize the socket's settings for this Server. By default, the Server socket is made to act asynchroniously, with a 1/1000th second timeout for I/O operations.
 
 
 <h3>Parameters:</h3>

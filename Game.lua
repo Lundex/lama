@@ -26,7 +26,6 @@ local CommandParser	= require("obj.CommandParser")
 -- @field defaultPort The port we'll use if one isn't provided.
 -- @field state Our state. Always a member of the GameState table.
 -- @field playerID Unique ID to be assigned to the next new Player.
--- @field players List of Players connected to us.
 -- @field server Server we're using.
 -- @field scheduler Scheduler we're using.
 -- @field parser CommandParser we're using.
@@ -38,7 +37,7 @@ local Game			= {}
 
 -- game data
 Game.name			= "lama"
-Game.version		= "0.0a"
+Game.version		= "0.5a"
 Game.defaultPort	= 8000
 
 -- runtime data
@@ -56,13 +55,8 @@ Game.parser			= CommandParser:new()
 Game.map			= Map:new()
 
 Game.logger			= logging.console()
-Game.logger:setLevel(logging.DEBUG)
-
 Game.fileLogger		= logging.file("logs/%s.log", "%m%d%y")
-Game.fileLogger:setLevel(logging.DEBUG)
-
 Game.commandLogger	= logging.file("logs/%s-commands.log", "%m%d%y")
-Game.commandLogger:setLevel(logging.DEBUG)
 
 --- Open the game for play.
 -- @param port The port to be hosted on. Defaults to Game.defaultPort{@link Game.defaultPort}.
@@ -237,47 +231,56 @@ function Game.getPlayers()
 	return Game.players
 end
 
---- shortcut for Game.scheduler:queue
+--- Shortcut for Game.scheduler:queue(event)
+-- @param event Event to queue.
 function Game.queue(event)
 	Game.scheduler:queue(event)
 end
 
---- shortcut for Game.scheduler:deque
+--- Shortcut for Game.scheduler:deque(event)
+-- @param event Event to deque.
 function Game.deque(event)
 	Game.scheduler:deque(event)
 end
 
---- logger:log()/fileLogger:log() shortcut
+--- Shortcut to Game.logger:log(level,message)
+-- @param level Level of this log.
+-- @param message Message to be logged.
 function Game.log(level, message)
 	Game.logger:log(level, message)
 	Game.fileLogger:log(level, message)
 end
 
---- logger:debug()/fileLogger:debug() shortcut
+--- Shortcut to Game.logger:debug(message)
+-- @param message Message to be logged as debug.
 function Game.debug(message)
 	Game.logger:debug(message)
 	Game.fileLogger:debug(message)
 end
 
---- logger:info()/fileLogger:info() shortcut
+--- Shortcut to Game.logger:info(message)
+-- @param message Message to be logged as info.
 function Game.info(message)
 	Game.logger:info(message)
 	Game.fileLogger:info(message)
 end
 
---- logger:warn()/fileLogger:warn() shortcut
+--- Shortcut to Game.logger:warn(message)
+-- @param message Message to be logged as warn.
 function Game.warn(message)
 	Game.logger:warn(message)
 	Game.fileLogger:warn(message)
 end
 
---- logger:error()/fileLogger:error() shortcut
+--- Shortcut to Game.logger:error(message)
+-- @param message Message to be logged as error.
 function Game.error(message)
 	Game.logger:error(message)
 	Game.fileLogger:error(message)
 end
 
---- logger:fatal()/fileLogger:fatal() shortcut
+--- Shortcut to Game.logger:fatal(message)
+-- @param message Message to be logged as fatal.
 function Game.fatal(message)
 	Game.logger:fatal(message)
 	game.fileLogger:fatal(message)

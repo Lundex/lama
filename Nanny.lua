@@ -40,7 +40,7 @@ function Nanny.login(player)
 	player:setID(Game.nextPlayerID()) -- now that they're finally playing
 	Nanny.introduce(player)
 
-	Game.info(string.format("(%s)->%s has joined.", tostring(player), tostring(mob)))
+	Game.info(string.format("%s->%s has joined.", tostring(player), tostring(mob)))
 
 	-- move our mob to starting point
 	mob:moveToMap(Game.map)
@@ -58,7 +58,7 @@ function Nanny.logout(player)
 	local mob = player:getMob()
 	Nanny.sendOff(player)
 
-	Game.info(string.format("(%s)->%s has left.", tostring(player), tostring(mob)))
+	Game.info(string.format("%s->%s has left.", tostring(player), tostring(mob)))
 
 	-- remove their mob from the map
 	mob:moveToMap(nil)
@@ -124,7 +124,7 @@ function Nanny.getGreeting()
 		return greeting
 	end
 
-	return [[lama (v0.0a)
+	return [[lama (v0.5a)
     by Jack
 
 Developed in

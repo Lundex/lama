@@ -25,7 +25,7 @@ end
 function Scheduler:poll(timestamp)
 	for i,v in table.safeIPairs(self.events) do
 		if v:isReady(timestamp) then
-			v:execute()
+			v:execute(timestamp)
 			if v:isDone() then
 				self:dequeue(v)
 			end

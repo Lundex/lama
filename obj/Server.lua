@@ -99,12 +99,16 @@ function Server:disconnectClient(client)
 end
 
 --- Initialize the socket's settings for this Server.
+-- By default, the Server socket is made to act asynchroniously,
+-- with a 1/1000th second timeout for I/O operations.
 -- @param socket The socket to initialize.
 function Server:initializeServerSocket(socket)
 	socket:settimeout(0.001)
 end
 
---- Initialize the socket's settings for an incoming client.
+--- Initialize the socket's settings for an incoming Client.
+-- By default, the Client socket is made to act asynchroniously,
+-- with a 1/1000th second timeout for I/O operations.
 -- @param socket The socket to initialize.
 function Server:initializeClientSocket(socket)
 	socket:settimeout(0.001)

@@ -155,12 +155,12 @@
 
 	<tr>
 	<td class="name" nowrap><a href="#Game.debug">Game.debug</a>&nbsp;(message)</td>
-	<td class="summary">logger:debug()/fileLogger:debug() shortcut </td>
+	<td class="summary">Shortcut to Game.logger:debug(message) </td>
 	</tr>
 
 	<tr>
 	<td class="name" nowrap><a href="#Game.deque">Game.deque</a>&nbsp;(event)</td>
-	<td class="summary">shortcut for Game.scheduler:deque </td>
+	<td class="summary">Shortcut for Game.scheduler:deque(event) </td>
 	</tr>
 
 	<tr>
@@ -170,12 +170,12 @@
 
 	<tr>
 	<td class="name" nowrap><a href="#Game.error">Game.error</a>&nbsp;(message)</td>
-	<td class="summary">logger:error()/fileLogger:error() shortcut </td>
+	<td class="summary">Shortcut to Game.logger:error(message) </td>
 	</tr>
 
 	<tr>
 	<td class="name" nowrap><a href="#Game.fatal">Game.fatal</a>&nbsp;(message)</td>
-	<td class="summary">logger:fatal()/fileLogger:fatal() shortcut </td>
+	<td class="summary">Shortcut to Game.logger:fatal(message) </td>
 	</tr>
 
 	<tr>
@@ -200,7 +200,7 @@
 
 	<tr>
 	<td class="name" nowrap><a href="#Game.info">Game.info</a>&nbsp;(message)</td>
-	<td class="summary">logger:info()/fileLogger:info() shortcut </td>
+	<td class="summary">Shortcut to Game.logger:info(message) </td>
 	</tr>
 
 	<tr>
@@ -210,7 +210,7 @@
 
 	<tr>
 	<td class="name" nowrap><a href="#Game.log">Game.log</a>&nbsp;(level, message)</td>
-	<td class="summary">logger:log()/fileLogger:log() shortcut </td>
+	<td class="summary">Shortcut to Game.logger:log(level,message) </td>
 	</tr>
 
 	<tr>
@@ -245,7 +245,7 @@
 
 	<tr>
 	<td class="name" nowrap><a href="#Game.queue">Game.queue</a>&nbsp;(event)</td>
-	<td class="summary">shortcut for Game.scheduler:queue </td>
+	<td class="summary">Shortcut for Game.scheduler:queue(event) </td>
 	</tr>
 
 	<tr>
@@ -265,7 +265,7 @@
 
 	<tr>
 	<td class="name" nowrap><a href="#Game.warn">Game.warn</a>&nbsp;(message)</td>
-	<td class="summary">logger:warn()/fileLogger:warn() shortcut </td>
+	<td class="summary">Shortcut to Game.logger:warn(message) </td>
 	</tr>
 
 </table>
@@ -371,14 +371,14 @@ Connects a Player.<br/> Calls Game.onPlayerConnect(player) before adding to play
 
 <dt><a name="Game.debug"></a><strong>Game.debug</strong>&nbsp;(message)</dt>
 <dd>
-logger:debug()/fileLogger:debug() shortcut
+Shortcut to Game.logger:debug(message)
 
 
 <h3>Parameters:</h3>
 <ul>
 	
 	<li>
-	  <code><em>message</em></code>: 
+	  <code><em>message</em></code>: Message to be logged as debug.
 	</li>
 	
 </ul>
@@ -397,14 +397,14 @@ logger:debug()/fileLogger:debug() shortcut
 
 <dt><a name="Game.deque"></a><strong>Game.deque</strong>&nbsp;(event)</dt>
 <dd>
-shortcut for Game.scheduler:deque
+Shortcut for Game.scheduler:deque(event)
 
 
 <h3>Parameters:</h3>
 <ul>
 	
 	<li>
-	  <code><em>event</em></code>: 
+	  <code><em>event</em></code>: Event to deque.
 	</li>
 	
 </ul>
@@ -449,14 +449,14 @@ Disconnect a Player.<br/> Calls Game.onPlayerDisconnect(player) before removing 
 
 <dt><a name="Game.error"></a><strong>Game.error</strong>&nbsp;(message)</dt>
 <dd>
-logger:error()/fileLogger:error() shortcut
+Shortcut to Game.logger:error(message)
 
 
 <h3>Parameters:</h3>
 <ul>
 	
 	<li>
-	  <code><em>message</em></code>: 
+	  <code><em>message</em></code>: Message to be logged as error.
 	</li>
 	
 </ul>
@@ -475,14 +475,14 @@ logger:error()/fileLogger:error() shortcut
 
 <dt><a name="Game.fatal"></a><strong>Game.fatal</strong>&nbsp;(message)</dt>
 <dd>
-logger:fatal()/fileLogger:fatal() shortcut
+Shortcut to Game.logger:fatal(message)
 
 
 <h3>Parameters:</h3>
 <ul>
 	
 	<li>
-	  <code><em>message</em></code>: 
+	  <code><em>message</em></code>: Message to be logged as fatal.
 	</li>
 	
 </ul>
@@ -581,14 +581,14 @@ Retreive the Game's version.
 
 <dt><a name="Game.info"></a><strong>Game.info</strong>&nbsp;(message)</dt>
 <dd>
-logger:info()/fileLogger:info() shortcut
+Shortcut to Game.logger:info(message)
 
 
 <h3>Parameters:</h3>
 <ul>
 	
 	<li>
-	  <code><em>message</em></code>: 
+	  <code><em>message</em></code>: Message to be logged as info.
 	</li>
 	
 </ul>
@@ -624,18 +624,18 @@ Check if the Game is ready to be played. return true if the game's state is at G
 
 <dt><a name="Game.log"></a><strong>Game.log</strong>&nbsp;(level, message)</dt>
 <dd>
-logger:log()/fileLogger:log() shortcut
+Shortcut to Game.logger:log(level,message)
 
 
 <h3>Parameters:</h3>
 <ul>
 	
 	<li>
-	  <code><em>level</em></code>: 
+	  <code><em>level</em></code>: Level of this log.
 	</li>
 	
 	<li>
-	  <code><em>message</em></code>: 
+	  <code><em>message</em></code>: Message to be logged.
 	</li>
 	
 </ul>
@@ -815,14 +815,14 @@ Open the game for play.
 
 <dt><a name="Game.queue"></a><strong>Game.queue</strong>&nbsp;(event)</dt>
 <dd>
-shortcut for Game.scheduler:queue
+Shortcut for Game.scheduler:queue(event)
 
 
 <h3>Parameters:</h3>
 <ul>
 	
 	<li>
-	  <code><em>event</em></code>: 
+	  <code><em>event</em></code>: Event to queue.
 	</li>
 	
 </ul>
@@ -904,14 +904,14 @@ Updates the game as necessary. Things like updating the scheduler and such.
 
 <dt><a name="Game.warn"></a><strong>Game.warn</strong>&nbsp;(message)</dt>
 <dd>
-logger:warn()/fileLogger:warn() shortcut
+Shortcut to Game.logger:warn(message)
 
 
 <h3>Parameters:</h3>
 <ul>
 	
 	<li>
-	  <code><em>message</em></code>: 
+	  <code><em>message</em></code>: Message to be logged as warn.
 	</li>
 	
 </ul>
@@ -959,10 +959,6 @@ logger:warn()/fileLogger:warn() shortcut
 	
 	<li>
 	  <code><em>playerID</em></code>: Unique ID to be assigned to the next new Player.
-	</li>
-	
-	<li>
-	  <code><em>players</em></code>: List of Players connected to us.
 	</li>
 	
 	<li>

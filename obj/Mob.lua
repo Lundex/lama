@@ -1,10 +1,10 @@
---- Cloneable that holds data for mobile creatures.
+--- Cloneable:MapObject that holds data for mobile creatures.
 -- @author milkmanjack
 module("obj.Mob", package.seeall)
 
 local MapObject	= require("obj.MapObject")
 
---- Cloneable that holds data for mobile creatures.
+--- Cloneable:MapObject that holds data for mobile creatures.
 -- @class table
 -- @name Mob
 -- @field name Name of the creature.

@@ -81,7 +81,8 @@ function Event:willRepeat()
 end
 
 --- The intended access point for running the event.
-function Event:execute()
+-- @param timestamp Timestamp to be treated as the firing-off point.
+function Event:execute(timestamp)
 	-- if it has not run yet, indicate it has
 	if not self:hasRun() then
 		self.didRun			= true
@@ -96,7 +97,7 @@ function Event:execute()
 
 	-- prepare for the next repeation, if necessary
 	if self:willRepeat() then
-		self.destination = self.destination + self.repeatInterval
+		self.destination = timestamp + self.repeatInterval
 	end
 end
 
