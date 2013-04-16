@@ -62,7 +62,7 @@ function Server:host(port)
 	end
 
 	self:initializeServerSocket(socket)
-	self.socket = socket
+	self:setSocket(socket)
 
 	return true
 end
@@ -79,6 +79,12 @@ function Server:close()
 	return true
 end
 
+--- Manually assign a socket.
+-- @param socket Socket to be assigned.
+function Server:setSocket(socket)
+	self.socket = socket
+end
+
 --- Attempt to accept a new Client.
 -- @return true if a Client is accepted.<br/>false otherwise.
 function Server:accept()
@@ -91,7 +97,6 @@ function Server:accept()
 		return false, err
 	end
 
-	self:initializeClientSocket(socket)
 	local client	= Client:new(socket)
 	self:connectClient(client)
 
@@ -102,6 +107,7 @@ end
 -- @param client The Client to manage.
 function Server:connectClient(client)
 	table.insert(self.clients, client)
+	self:initializeClientSocket(client:getSocket())
 end
 
 --- Stop managing a Client.
@@ -136,6 +142,12 @@ end
 -- @return true if it is being hosted.<br/>false otherwise.
 function Server:isHosted()
 	return (self.socket ~= nil and self.socket:getsockname() ~= nil)
+end
+
+-- Return the Server's socket.
+-- @return Server's socket.
+function Server:getSocket()
+	return self.socket
 end
 
 --- Return the Server's list of Clients.

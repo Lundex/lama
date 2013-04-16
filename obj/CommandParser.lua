@@ -43,7 +43,9 @@ end
 -- @param mob Mob of the Player being treated as the source of the input.
 function CommandParser:parse(player, mob, input)
 	-- some generic parsing cause I'm too lazy to implement real commands right now
-	if string.find("north", input) == 1 then
+	if input == "hotboot" then
+		Game.hotboot()
+	elseif string.find("north", input) == 1 then
 		if mob:step(Direction.NORTH) then
 			mob:showRoom()
 		else

@@ -35,7 +35,7 @@ Client.socket	= nil
 --- Associates a socket with the Client.
 -- @param socket The socket to be associated.
 function Client:initialize(socket)
-	self.socket	= socket
+	self:setSocket(socket)
 end
 
 --- Returns the string-value of the Client.
@@ -79,6 +79,12 @@ end
 --- Close the client's socket.
 function Client:close()
 	return self.socket:close()
+end
+
+--- Manually assign socket.
+-- @param socket Socket to assign.
+function Client:setSocket(socket)
+	self.socket = socket
 end
 
 --- Retreive the client's socket.

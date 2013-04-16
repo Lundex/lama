@@ -29,17 +29,20 @@ module("GameState", package.seeall)
 local GameState		= {}
 GameState.NEW		= 0
 GameState.READY		= 1
-GameState.SHUTDOWN	= 2
+GameState.HOTBOOT	= 2
+GameState.SHUTDOWN	= 3
 
 --- Contains textual representations of GameState enums.
 -- @class table
 -- @name GameState.names
 -- @field GameState.NEW "new"
 -- @field GameState.READY "ready"
+-- @field GameState.HOTBOOT "hotboot"
 -- @field GameState.SHUTDOWN "shutdown"
 GameState.names		= {}
 GameState.names[GameState.NEW]			= "new"
 GameState.names[GameState.READY]		= "ready"
+GameState.names[GameState.HOTBOOT]		= "hotboot"
 GameState.names[GameState.SHUTDOWN]		= "shutdown"
 
 --- Allows for quick reference to GameState.names enums.

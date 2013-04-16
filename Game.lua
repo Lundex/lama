@@ -33,6 +33,7 @@ local Event			= require("obj.Event")
 local Scheduler		= require("obj.Scheduler")
 local Server		= require("obj.Server")
 local Player		= require("obj.Player")
+local Mob			= require("obj.Mob")
 local Map			= require("obj.Map")
 local CommandParser	= require("obj.CommandParser")
 
@@ -67,10 +68,10 @@ Game.playerID		= 0
 -- @name Game.players
 Game.players		= {}
 
-Game.server			= Server:new()
-Game.scheduler		= Scheduler:new()
-Game.parser			= CommandParser:new()
-Game.map			= Map:new()
+Game.server			= nil
+Game.scheduler		= nil
+Game.parser			= nil
+Game.map			= nil
 
 Game.logger			= logging.console()
 Game.fileLogger		= logging.file("logs/%s.log", "%m%d%y")
@@ -78,24 +79,52 @@ Game.commandLogger	= logging.file("logs/%s-commands.log", "%m%d%y")
 
 --- Open the game for play.
 -- @param port The port to be hosted on. Defaults to Game.defaultPort{@link Game.defaultPort}.
+-- @param server Server to be used by the Game as opposed to setting up a new one. Used when hotbooting.
 -- @return true on success.<br/>false followed by an error otherwise.
-function Game.open(port)
-	port = port or Game.defaultPort
-	Game.info(string.format("Preparing to host game server on port %d...", port))
-	local _, err = Game.server:host(port or Game.defaultPort)
-	if not _ then
-		return false, err
+function Game.open(port, server)
+	if server then
+		Game.info("Reconnecting established server to game...")
+		Game.server = server
+	else
+		port = port or Game.defaultPort
+		Game.info(string.format("Preparing to host game server on port %d...", port))
+		Game.server = Server:new()
+		local _, err = Game.server:host(port)
+		if not _ then
+			return false, err
+		end
 	end
 
-	Game.info("Preparing scheduler...")
-	Game.queue(Game.AcceptEvent:new(os.clock()))
-	Game.queue(Game.PollEvent:new(os.clock()))
+	if not Game.scheduler then
+		Game.scheduler = Scheduler:new()
+		Game.info("Preparing scheduler...")
+		Game.queue(Game.AcceptEvent:new(os.clock()))
+		Game.queue(Game.PollEvent:new(os.clock()))
+	end
 
-	if not Game.map:getTiles() then
+	if not Game.map then
+		Game.map = Map:new()
 		Game.info("Generating map...")
 		Game.map:generate(100,100,1)
-	else
-		Game.info("Map already generated...")
+	end
+
+	-- load a parser
+	Game.parser			= CommandParser:new()
+
+	-- reconnect old players if this is a hotboot
+	if Game.state == GameState.HOTBOOT then
+		Game.info("Reconnecting old players...")
+		for i,v in ipairs(Game.server:getClients()) do
+			local player = Player:new(v)
+			player:setID(Game.nextPlayerID())
+			Game.connectPlayer(player, true)
+
+			-- load a mob for now
+			local mob = Mob:new()
+			mob:moveToMap(Game.map)
+			mob:setXYZLoc(1,1,1)
+			player:setMob(mob)
+		end
 	end
 
 	Game.setState(GameState.READY)
@@ -117,9 +146,18 @@ function Game.shutdown()
 
 	Game.setState(GameState.SHUTDOWN)
 	Game.server:close()
-	Game.scheduler:clear()
 
 	Game.info("Game is shutdown!")
+	return true
+end
+
+--- Hotboot the game.
+-- @return true on success.<br/>false followed by an error otherwise.
+function Game.hotboot()
+	Game.setState(GameState.HOTBOOT)
+	-- this Game and all of its data will be recycled during a hotboot, so don't worry too much
+
+	Game.info("*** Preparing for hotboot...")
 	return true
 end
 
@@ -131,34 +169,52 @@ end
 --- Connects a Player.<br/>
 -- Calls Game.onPlayerConnect(player) before adding to players list.
 -- @param player The Player to be connected.
-function Game.connectPlayer(player)
-	Game.onPlayerConnect(player)
+-- @param hotboot If true, player is reconnecting after hotboot.
+function Game.connectPlayer(player, hotboot)
+	Game.onPlayerConnect(player, hotboot)
 	table.insert(Game.players, player)
 end
 
 --- Specifies further actions for a connecting Player.
 -- @param player The Player connecting.
-function Game.onPlayerConnect(player)
-	Game.info(string.format("Connected player %s!", tostring(player:getClient())))
+-- @param hotboot If true, player is reconnecting after hotboot.
+function Game.onPlayerConnect(player, hotboot)
+	if hotboot then
+		Game.info(string.format("*** Reconnecting %s after hotboot.", tostring(player)))
+	else
+		Game.info(string.format("Connected %s!", tostring(player:getClient())))
+	end
 
-	-- I'll streamline this later
-	Nanny.greet(player)
+	Nanny.greet(player, hotboot)
 end
 
 --- Disconnect a Player.<br/>
 -- Calls Game.onPlayerDisconnect(player) before removing from players list or destroying client.
 -- @param player The Player to be disconnected.
-function Game.disconnectPlayer(player)
-	Game.onPlayerDisconnect(player) -- disconnect the player
+-- @param hotboot If true, indicate that the player's connection should be preserved.
+function Game.disconnectPlayer(player, hotboot)
+	Game.onPlayerDisconnect(player, hotboot) -- disconnect the player
 	table.removeValue(Game.players, player) -- remove from players list (no longer recognized as a player)
-	Game.server:disconnectClient(player:getClient()) -- kill the client
+
+	-- if they're not playing yet, then disconnect them.
+	-- otherwise, only disconnect if it's not a hotboot.
+	if player:getState() ~= PlayerState.PLAYING or not hotboot then
+		Game.server:disconnectClient(player:getClient()) -- kill the client
+	end
 end
 
 --- Specifies further actions for a disconnecting Player.
 -- @param player The Player disconnecting.
-function Game.onPlayerDisconnect(player)
-	Game.info(string.format("Disconnected player %s!", tostring(player:getClient())))
-	if player:getState() == PlayerState.PLAYING then
+-- @param hotboot If true, indicate that the player's connection is being preserved.
+function Game.onPlayerDisconnect(player, hotboot)
+	if hotboot then
+		Game.info(string.format("*** Preparing player %s for hotboot.", tostring(player)))
+		player:sendLine("\n*** HOTBOOT ***\n")
+	else
+		Game.info(string.format("Disconnected player %s!", tostring(player:getClient())))
+	end
+
+	if player:getState() == PlayerState.PLAYING and not hotboot then
 		Nanny.logout(player)
 	end
 end
@@ -173,12 +229,6 @@ function Game.onPlayerInput(player, input)
 	-- this assumes that there will be echoing at some stage
 	-- in the future, only do this if we know there will be echoing
 	player:clearMessageMode()
-
-	-- for testing purposes (and convenience).
-	if input == "quit" then
-		Game.disconnectPlayer(player)
-		return
-	end
 
 	-- in-between states
 	if player:getState() ~= PlayerState.PLAYING then

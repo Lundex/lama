@@ -36,8 +36,8 @@ local MapObject	= require("obj.MapObject")
 local Mob		= MapObject:clone()
 
 -- creature data
-Mob.name			= "creature"
-Mob.description		= "It's a creature."
+Mob.name			= "mob"
+Mob.description		= "It's a mob."
 
 Mob.level			= 1
 Mob.experience		= 0

@@ -69,6 +69,21 @@ function Nanny.login(player)
 	player:setState(PlayerState.PLAYING) -- we're playing
 end
 
+--- Greets a new player.
+-- @param player Player to be greeted.
+-- @param hotboot If true, greeting after a hotboot.
+function Nanny.greet(player, hotboot)
+	if hotboot then
+		player:sendLine("Welcome back!")
+		player:setState(PlayerState.PLAYING)
+	else
+		player:sendLine(Nanny.getGreeting())
+		player:setState(PlayerState.NAME)
+		player:sendLine()
+		Nanny.askForName(player)
+	end
+end
+
 --- Transitions from being "logged in" to being "logged out."
 -- Announces the player's exit, removes the mob from the map, and so on.
 -- @param player Player that is logging out.
@@ -121,15 +136,6 @@ end
 -- @return The MOTD!
 function Nanny.getMOTD()
 	return "\[THIS IS THE MESSAGE OF THE DAY\]"
-end
-
---- Greets a new player.
--- @param player Player to be greeted.
-function Nanny.greet(player)
-	player:sendLine(Nanny.getGreeting())
-	player:setState(PlayerState.NAME)
-	player:sendLine()
-	Nanny.askForName(player)
 end
 
 --- Get the greeting message. By default, refers to "txt/GREETING". If not found, returns generic credits.
