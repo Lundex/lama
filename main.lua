@@ -78,7 +78,7 @@ loadPackages()
 
 -- open the game for play
 local port = tonumber(... or nil) -- first command-line argument to main.lua will be the port to host on
-local _, err = Game.open(port)
+local _, err = Game.openOnPort(port)
 if not _ then
   Game.error("failed to open game: " .. err)
 	os.exit(0)
@@ -95,38 +95,43 @@ while Game.isReady() do
 
 		-- disconnect players
 		Game.info("*** Preserve old client sockets")
-		local clientSockets = {}
-		for i,v in table.safeIPairs(Game.getPlayers()) do
-			Game.disconnectPlayer(v, true)
-			table.insert(clientSockets, v:getClient():getSocket()) -- store sockets for later
-		end
+		local clientSockets = Game.server:getClientSockets()
 
 		Game.info("*** Preserve old server socket")
 		local serverSocket = Game.server:getSocket()
 
+		-- in the future, you should save player characters here as normal.
+		-- it's impossible to preserve mobs here, as there is too much
+		-- data we need to transfer, so instead to reload the player character
+		-- as normal.
+
 		-- reload packages
 		Game.info("*** Reload packages")
-		reloadPackages()
+		reloadPackages() -- once this calls, Game no longer refers to the old Game.
+		-- a new Game is loaded, along with a new everything else.
 
 		-- recreate Server with new Server object
 		local Server = require("obj.Server")
 		local Client = require("obj.Client")
-		local server = Server:new()
-		server:setSocket(serverSocket)
-		Game.info("*** Reconnect old clients to new server")
+
+		-- reuse server socket
+		Game.info("*** Recreate old server out of preserved socket.")
+		local server = Server:new(serverSocket)
+
+		-- we don't create new players here, because we're lacking Game data.
+		-- we want the Map to be loaded and all that good stuff before we 
+		Game.info("*** Recreate old clients, connect them to server")
 		for i,v in ipairs(clientSockets) do
-			-- recreate Client with new Client object
-			local client = Client:new(v)
-			server:connectClient(client, true)
+			server:connectClient(Client:new(v), true)
 		end
 
 		-- update the new Game's state (we're hotbooting)
 		Game.info("*** Informing new Game of hotboot status.")
 		Game.setState(GameState.HOTBOOT)
 
-		-- reopen the Game on the given server
+		-- reopen the Game on the new server
 		Game.info("*** Opening Game with reconstituted Server")
-		Game.open(nil, server)
+		Game.openOnServer(server)
 	end
 end
 

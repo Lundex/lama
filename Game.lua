@@ -70,31 +70,42 @@ Game.players		= {}
 
 Game.server			= nil
 Game.scheduler		= nil
-Game.parser			= nil
 Game.map			= nil
+Game.parser			= nil
 
 Game.logger			= logging.console()
-Game.fileLogger		= logging.file("logs/%s.log", "%m%d%y")
-Game.commandLogger	= logging.file("logs/%s-commands.log", "%m%d%y")
+Game.fileLogger		= logging.file("log/%s.log", "%m%d%y")
+Game.commandLogger	= logging.file("log/%s-commands.log", "%m%d%y")
 
---- Open the game for play.
+--- Open the game for play on the given port.
 -- @param port The port to be hosted on. Defaults to Game.defaultPort{@link Game.defaultPort}.
--- @param server Server to be used by the Game as opposed to setting up a new one. Used when hotbooting.
 -- @return true on success.<br/>false followed by an error otherwise.
-function Game.open(port, server)
-	if server then
-		Game.info("Reconnecting established server to game...")
-		Game.server = server
-	else
-		port = port or Game.defaultPort
-		Game.info(string.format("Preparing to host game server on port %d...", port))
-		Game.server = Server:new()
-		local _, err = Game.server:host(port)
-		if not _ then
-			return false, err
-		end
+function Game.openOnPort(port)
+	port = port or Game.defaultPort
+	Game.info(string.format("Preparing to host game server on port %d...", port))
+	Game.server = Server:new()
+	local _, err = Game.server:host(port)
+	if not _ then
+		return false, err
 	end
 
+	Game.onOpen()
+	return true
+end
+
+--- Open the game for play on the given server.
+-- @param server Server to be used by the Game as opposed to setting up a new one. Used when hotbooting.
+-- @return true on success.<br/>false followed by an error otherwise.
+function Game.openOnServer(server)
+	Game.info("Preparing to host game on existing server.")
+	Game.server = server
+	Game.onOpen()
+	return true
+end
+
+-- Specifies further action after opening the game.
+function Game.onOpen()
+	-- load the scheduler
 	if not Game.scheduler then
 		Game.scheduler = Scheduler:new()
 		Game.info("Preparing scheduler...")
@@ -102,34 +113,25 @@ function Game.open(port, server)
 		Game.queue(Game.PollEvent:new(os.clock()))
 	end
 
+	-- load the map
 	if not Game.map then
 		Game.map = Map:new()
 		Game.info("Generating map...")
 		Game.map:generate(100,100,1)
 	end
 
-	-- load a parser
-	Game.parser			= CommandParser:new()
+	-- load the parser
+	if not Game.parser then
+		Game.parser = CommandParser:new()
+	end
 
-	-- reconnect old players if this is a hotboot
+	-- finalize hotboot
 	if Game.state == GameState.HOTBOOT then
-		Game.info("Reconnecting old players...")
-		for i,v in ipairs(Game.server:getClients()) do
-			local player = Player:new(v)
-			player:setID(Game.nextPlayerID())
-			Game.connectPlayer(player, true)
-
-			-- load a mob for now
-			local mob = Mob:new()
-			mob:moveToMap(Game.map)
-			mob:setXYZLoc(1,1,1)
-			player:setMob(mob)
-		end
+		Game.onHotboot()
 	end
 
 	Game.setState(GameState.READY)
 	Game.info("Game is ready for business...")
-	return true
 end
 
 --- Shutdown the game.
@@ -152,13 +154,36 @@ function Game.shutdown()
 end
 
 --- Hotboot the game.
+-- The Game and all of the pertinent data will be recycled during a hotboot, so don't worry too much.
+-- The main focus is on preserving the server socket, client sockets, and player mobs.
 -- @return true on success.<br/>false followed by an error otherwise.
 function Game.hotboot()
-	Game.setState(GameState.HOTBOOT)
-	-- this Game and all of its data will be recycled during a hotboot, so don't worry too much
-
 	Game.info("*** Preparing for hotboot...")
+	Game.setState(GameState.HOTBOOT)
 	return true
+end
+
+--- Specifies further action for a hotboot.
+-- By the time this calls, the server has been reestablished and
+-- clients have been reconnected to the server, but no players have
+-- been reconstituted yet. As such, we need to create players and
+-- reload their mobs.
+-- @return true on success.<br/>false followed by an error otherwise.
+function Game.onHotboot()
+	Game.info("Reconnecting old players...")
+	for i,v in ipairs(Game.server:getClients()) do
+		local player = Player:new(v)
+		player:setID(Game.nextPlayerID())
+		Game.connectPlayer(player, true)
+
+		-- creates a new mob for the player, for now.
+		-- future implementations should probably load the saved
+		-- version of the player's character.
+		local mob = Mob:new()
+		mob:moveToMap(Game.map)
+		mob:setXYZLoc(1,1,1)
+		player:setMob(mob)
+	end
 end
 
 --- Updates the game as necessary. Things like updating the scheduler and such.

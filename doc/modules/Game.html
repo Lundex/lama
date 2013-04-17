@@ -149,7 +149,7 @@
 	</tr>
 
 	<tr>
-	<td class="name" nowrap><a href="#Game.connectPlayer">Game.connectPlayer</a>&nbsp;(player)</td>
+	<td class="name" nowrap><a href="#Game.connectPlayer">Game.connectPlayer</a>&nbsp;(player, hotboot)</td>
 	<td class="summary">Connects a Player.<br/> Calls Game.onPlayerConnect(player) before adding to players list.</td>
 	</tr>
 
@@ -164,7 +164,7 @@
 	</tr>
 
 	<tr>
-	<td class="name" nowrap><a href="#Game.disconnectPlayer">Game.disconnectPlayer</a>&nbsp;(player)</td>
+	<td class="name" nowrap><a href="#Game.disconnectPlayer">Game.disconnectPlayer</a>&nbsp;(player, hotboot)</td>
 	<td class="summary">Disconnect a Player.<br/> Calls Game.onPlayerDisconnect(player) before removing from players list or destroying client.</td>
 	</tr>
 
@@ -199,6 +199,11 @@
 	</tr>
 
 	<tr>
+	<td class="name" nowrap><a href="#Game.hotboot">Game.hotboot</a>&nbsp;()</td>
+	<td class="summary">Hotboot the game.</td>
+	</tr>
+
+	<tr>
 	<td class="name" nowrap><a href="#Game.info">Game.info</a>&nbsp;(message)</td>
 	<td class="summary">Shortcut to Game.logger:info(message) </td>
 	</tr>
@@ -224,12 +229,17 @@
 	</tr>
 
 	<tr>
-	<td class="name" nowrap><a href="#Game.onPlayerConnect">Game.onPlayerConnect</a>&nbsp;(player)</td>
+	<td class="name" nowrap><a href="#Game.onHotboot">Game.onHotboot</a>&nbsp;()</td>
+	<td class="summary">Specifies further action for a hotboot.</td>
+	</tr>
+
+	<tr>
+	<td class="name" nowrap><a href="#Game.onPlayerConnect">Game.onPlayerConnect</a>&nbsp;(player, hotboot)</td>
 	<td class="summary">Specifies further actions for a connecting Player.</td>
 	</tr>
 
 	<tr>
-	<td class="name" nowrap><a href="#Game.onPlayerDisconnect">Game.onPlayerDisconnect</a>&nbsp;(player)</td>
+	<td class="name" nowrap><a href="#Game.onPlayerDisconnect">Game.onPlayerDisconnect</a>&nbsp;(player, hotboot)</td>
 	<td class="summary">Specifies further actions for a disconnecting Player.</td>
 	</tr>
 
@@ -239,8 +249,13 @@
 	</tr>
 
 	<tr>
-	<td class="name" nowrap><a href="#Game.open">Game.open</a>&nbsp;(port)</td>
-	<td class="summary">Open the game for play.</td>
+	<td class="name" nowrap><a href="#Game.openOnPort">Game.openOnPort</a>&nbsp;(port)</td>
+	<td class="summary">Open the game for play on the given port.</td>
+	</tr>
+
+	<tr>
+	<td class="name" nowrap><a href="#Game.openOnServer">Game.openOnServer</a>&nbsp;(server)</td>
+	<td class="summary">Open the game for play on the given server.</td>
 	</tr>
 
 	<tr>
@@ -343,7 +358,7 @@ Announce something to connecting Players.<br/> This is mostly temporary, but I'm
 
 
 
-<dt><a name="Game.connectPlayer"></a><strong>Game.connectPlayer</strong>&nbsp;(player)</dt>
+<dt><a name="Game.connectPlayer"></a><strong>Game.connectPlayer</strong>&nbsp;(player, hotboot)</dt>
 <dd>
 Connects a Player.<br/> Calls Game.onPlayerConnect(player) before adding to players list.
 
@@ -353,6 +368,10 @@ Connects a Player.<br/> Calls Game.onPlayerConnect(player) before adding to play
 	
 	<li>
 	  <code><em>player</em></code>: The Player to be connected.
+	</li>
+	
+	<li>
+	  <code><em>hotboot</em></code>: If true, player is reconnecting after hotboot.
 	</li>
 	
 </ul>
@@ -421,7 +440,7 @@ Shortcut for Game.scheduler:deque(event)
 
 
 
-<dt><a name="Game.disconnectPlayer"></a><strong>Game.disconnectPlayer</strong>&nbsp;(player)</dt>
+<dt><a name="Game.disconnectPlayer"></a><strong>Game.disconnectPlayer</strong>&nbsp;(player, hotboot)</dt>
 <dd>
 Disconnect a Player.<br/> Calls Game.onPlayerDisconnect(player) before removing from players list or destroying client.
 
@@ -431,6 +450,10 @@ Disconnect a Player.<br/> Calls Game.onPlayerDisconnect(player) before removing 
 	
 	<li>
 	  <code><em>player</em></code>: The Player to be disconnected.
+	</li>
+	
+	<li>
+	  <code><em>hotboot</em></code>: If true, indicate that the player's connection should be preserved.
 	</li>
 	
 </ul>
@@ -579,6 +602,26 @@ Retreive the Game's version.
 
 
 
+<dt><a name="Game.hotboot"></a><strong>Game.hotboot</strong>&nbsp;()</dt>
+<dd>
+Hotboot the game. The Game and all of the pertinent data will be recycled during a hotboot, so don't worry too much. The main focus is on preserving the server socket, client sockets, and player mobs.
+
+
+
+
+
+
+
+<h3>Return value:</h3>
+<ul>true on success.<br/>false followed by an error otherwise.</ul>
+
+
+
+</dd>
+
+
+
+
 <dt><a name="Game.info"></a><strong>Game.info</strong>&nbsp;(message)</dt>
 <dd>
 Shortcut to Game.logger:info(message)
@@ -702,7 +745,27 @@ Get a unique player ID.
 
 
 
-<dt><a name="Game.onPlayerConnect"></a><strong>Game.onPlayerConnect</strong>&nbsp;(player)</dt>
+<dt><a name="Game.onHotboot"></a><strong>Game.onHotboot</strong>&nbsp;()</dt>
+<dd>
+Specifies further action for a hotboot. By the time this calls, the server has been reestablished and clients have been reconnected to the server, but no players have been reconstituted yet. As such, we need to create players and reload their mobs.
+
+
+
+
+
+
+
+<h3>Return value:</h3>
+<ul>true on success.<br/>false followed by an error otherwise.</ul>
+
+
+
+</dd>
+
+
+
+
+<dt><a name="Game.onPlayerConnect"></a><strong>Game.onPlayerConnect</strong>&nbsp;(player, hotboot)</dt>
 <dd>
 Specifies further actions for a connecting Player.
 
@@ -712,6 +775,10 @@ Specifies further actions for a connecting Player.
 	
 	<li>
 	  <code><em>player</em></code>: The Player connecting.
+	</li>
+	
+	<li>
+	  <code><em>hotboot</em></code>: If true, player is reconnecting after hotboot.
 	</li>
 	
 </ul>
@@ -728,7 +795,7 @@ Specifies further actions for a connecting Player.
 
 
 
-<dt><a name="Game.onPlayerDisconnect"></a><strong>Game.onPlayerDisconnect</strong>&nbsp;(player)</dt>
+<dt><a name="Game.onPlayerDisconnect"></a><strong>Game.onPlayerDisconnect</strong>&nbsp;(player, hotboot)</dt>
 <dd>
 Specifies further actions for a disconnecting Player.
 
@@ -738,6 +805,10 @@ Specifies further actions for a disconnecting Player.
 	
 	<li>
 	  <code><em>player</em></code>: The Player disconnecting.
+	</li>
+	
+	<li>
+	  <code><em>hotboot</em></code>: If true, indicate that the player's connection is being preserved.
 	</li>
 	
 </ul>
@@ -784,9 +855,9 @@ Determine what to do with input given by a Player.
 
 
 
-<dt><a name="Game.open"></a><strong>Game.open</strong>&nbsp;(port)</dt>
+<dt><a name="Game.openOnPort"></a><strong>Game.openOnPort</strong>&nbsp;(port)</dt>
 <dd>
-Open the game for play.
+Open the game for play on the given port.
 
 
 <h3>Parameters:</h3>
@@ -794,6 +865,35 @@ Open the game for play.
 	
 	<li>
 	  <code><em>port</em></code>: The port to be hosted on. Defaults to Game.defaultPort{@link Game.defaultPort}.
+	</li>
+	
+</ul>
+
+
+
+
+
+
+<h3>Return value:</h3>
+<ul>true on success.<br/>false followed by an error otherwise.</ul>
+
+
+
+</dd>
+
+
+
+
+<dt><a name="Game.openOnServer"></a><strong>Game.openOnServer</strong>&nbsp;(server)</dt>
+<dd>
+Open the game for play on the given server.
+
+
+<h3>Parameters:</h3>
+<ul>
+	
+	<li>
+	  <code><em>server</em></code>: Server to be used by the Game as opposed to setting up a new one. Used when hotbooting.
 	</li>
 	
 </ul>

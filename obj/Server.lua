@@ -39,8 +39,12 @@ Server.socket		= nil
 Server.clients		= nil
 
 --- Creates a unique clients table per Server.
-function Server:initialize()
+function Server:initialize(socket)
 	self.clients = {}
+
+	if socket then
+		self:setSocket(socket)
+	end
 end
 
 --- Host the server.
@@ -77,12 +81,6 @@ function Server:close()
 	self.socket:close()
 	self.socket = nil
 	return true
-end
-
---- Manually assign a socket.
--- @param socket Socket to be assigned.
-function Server:setSocket(socket)
-	self.socket = socket
 end
 
 --- Attempt to accept a new Client.
@@ -138,6 +136,12 @@ function Server:initializeClientSocket(socket)
 	socket:settimeout(0.001)
 end
 
+--- Manually assign a socket.
+-- @param socket Socket to be assigned.
+function Server:setSocket(socket)
+	self.socket = socket
+end
+
 --- Check if the Server is hosted.
 -- @return true if it is being hosted.<br/>false otherwise.
 function Server:isHosted()
@@ -148,6 +152,17 @@ end
 -- @return Server's socket.
 function Server:getSocket()
 	return self.socket
+end
+
+--- Return the Server's list of connected Client's sockets.
+-- @return The list of connected Client's sockets.
+function Server:getClientSockets()
+	local sockets = {}
+	for i,v in ipairs(self.clients) do
+		table.insert(sockets, v:getSocket())
+	end
+
+	return sockets
 end
 
 --- Return the Server's list of Clients.

@@ -164,6 +164,11 @@
 	</tr>
 
 	<tr>
+	<td class="name" nowrap><a href="#Server:getClientSockets">Server:getClientSockets</a>&nbsp;()</td>
+	<td class="summary">Return the Server's list of connected Client's sockets.</td>
+	</tr>
+
+	<tr>
 	<td class="name" nowrap><a href="#Server:getClients">Server:getClients</a>&nbsp;()</td>
 	<td class="summary">Return the Server's list of Clients.</td>
 	</tr>
@@ -174,7 +179,7 @@
 	</tr>
 
 	<tr>
-	<td class="name" nowrap><a href="#Server:initialize">Server:initialize</a>&nbsp;()</td>
+	<td class="name" nowrap><a href="#Server:initialize">Server:initialize</a>&nbsp;(socket)</td>
 	<td class="summary">Creates a unique clients table per Server.</td>
 	</tr>
 
@@ -191,6 +196,11 @@
 	<tr>
 	<td class="name" nowrap><a href="#Server:isHosted">Server:isHosted</a>&nbsp;()</td>
 	<td class="summary">Check if the Server is hosted.</td>
+	</tr>
+
+	<tr>
+	<td class="name" nowrap><a href="#Server:setSocket">Server:setSocket</a>&nbsp;(socket)</td>
+	<td class="summary">Manually assign a socket.</td>
 	</tr>
 
 </table>
@@ -316,6 +326,26 @@ Stop managing a Client.
 
 
 
+<dt><a name="Server:getClientSockets"></a><strong>Server:getClientSockets</strong>&nbsp;()</dt>
+<dd>
+Return the Server's list of connected Client's sockets.
+
+
+
+
+
+
+
+<h3>Return value:</h3>
+<ul>The list of connected Client's sockets.</ul>
+
+
+
+</dd>
+
+
+
+
 <dt><a name="Server:getClients"></a><strong>Server:getClients</strong>&nbsp;()</dt>
 <dd>
 Return the Server's list of Clients.
@@ -365,10 +395,19 @@ Host the server.
 
 
 
-<dt><a name="Server:initialize"></a><strong>Server:initialize</strong>&nbsp;()</dt>
+<dt><a name="Server:initialize"></a><strong>Server:initialize</strong>&nbsp;(socket)</dt>
 <dd>
 Creates a unique clients table per Server.
 
+
+<h3>Parameters:</h3>
+<ul>
+	
+	<li>
+	  <code><em>socket</em></code>: 
+	</li>
+	
+</ul>
 
 
 
@@ -446,6 +485,32 @@ Check if the Server is hosted.
 
 <h3>Return value:</h3>
 <ul>true if it is being hosted.<br/>false otherwise.</ul>
+
+
+
+</dd>
+
+
+
+
+<dt><a name="Server:setSocket"></a><strong>Server:setSocket</strong>&nbsp;(socket)</dt>
+<dd>
+Manually assign a socket.
+
+
+<h3>Parameters:</h3>
+<ul>
+	
+	<li>
+	  <code><em>socket</em></code>: Socket to be assigned.
+	</li>
+	
+</ul>
+
+
+
+
+
 
 
 
