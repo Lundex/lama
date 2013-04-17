@@ -21,8 +21,6 @@
 module("obj.Player", package.seeall)
 
 local Cloneable		= require("obj.Cloneable")
-local Client		= require("obj.Client")
-local Mob			= require("obj.Mob")
 
 --- Cloneable that handles relationships between Clients and Mobs.
 -- @class table

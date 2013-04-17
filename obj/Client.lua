@@ -20,7 +20,6 @@
 -- @author milkmanjack
 module("obj.Client", package.seeall)
 
-local socket		= require("socket")
 local Cloneable		= require("obj.Cloneable")
 
 --- Cloneable that manages user I/O.
@@ -30,7 +29,7 @@ local Cloneable		= require("obj.Cloneable")
 local Client		= Cloneable.clone()
 
 -- runtime data
-Client.socket	= nil
+Client.socket		= nil
 
 --- Associates a socket with the Client.
 -- @param socket The socket to be associated.

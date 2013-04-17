@@ -21,7 +21,6 @@
 module("obj.MapTile", package.seeall)
 
 local MapObject	= require("obj.MapObject")
-local Mob		= require("obj.Mob")
 
 --- Cloneable:MapObject that represents the lowest-level MapObject location on a Map.
 -- @class table

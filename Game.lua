@@ -262,12 +262,6 @@ function Game.onPlayerInput(player, input)
 	Game.parser:parse(player, player:getMob(), input)
 end
 
---- Set the Game's state.
--- @param state The state to be assigned.<br/>Must be a valid member of GameState.
-function Game.setState(state)
-	Game.state = state
-end
-
 --- Announce something to connecting Players.<br/>
 -- This is mostly temporary, but I'm leaving it in now for testing purposes.<br/>
 -- More reasonable implementation later.
@@ -280,45 +274,6 @@ function Game.announce(message, mode, minState)
 			v:sendMessage(message, mode)
 		end
 	end
-end
-
---- Check if the Game is ready to be played.
--- return true if the game's state is at GameState.READY.<br/>false otherwise.
-function Game.isReady()
-	return Game.state == GameState.READY
-end
-
---- Retreive the Game's name.
--- @return The name of the Game.
-function Game.getName()
-	return Game.name
-end
-
---- Retreive the Game's version.
--- @return The version of the Game.
-function Game.getVersion()
-	return Game.version
-end
-
---- Retreive the Game's state.
--- @return The Game's state.<br/>Must be a valid member of GameState.
-function Game.getState()
-	return Game.state
-end
-
---- Get a unique player ID.
--- @return A unique player ID.
-function Game.nextPlayerID()
-	local id = Game.playerID
-	Game.playerID = Game.playerID+1
-	return id
-end
-
-
---- Retreive the Game's players list.
--- @return Player list.
-function Game.getPlayers()
-	return Game.players
 end
 
 --- Shortcut for Game.scheduler:queue(event)
@@ -381,6 +336,50 @@ end
 -- @param input The input the Player gave.
 function Game.logCommand(player, input)
 	Game.commandLogger:info(tostring(player) .. ": '" .. input .. "'")
+end
+
+--- Set the Game's state.
+-- @param state The state to be assigned.<br/>Must be a valid member of GameState.
+function Game.setState(state)
+	Game.state = state
+end
+
+--- Check if the Game is ready to be played.
+-- return true if the game's state is at GameState.READY.<br/>false otherwise.
+function Game.isReady()
+	return Game.state == GameState.READY
+end
+
+--- Retreive the Game's name.
+-- @return The name of the Game.
+function Game.getName()
+	return Game.name
+end
+
+--- Retreive the Game's version.
+-- @return The version of the Game.
+function Game.getVersion()
+	return Game.version
+end
+
+--- Retreive the Game's state.
+-- @return The Game's state.<br/>Must be a valid member of GameState.
+function Game.getState()
+	return Game.state
+end
+
+--- Get a unique player ID.
+-- @return A unique player ID.
+function Game.nextPlayerID()
+	local id = Game.playerID
+	Game.playerID = Game.playerID+1
+	return id
+end
+
+--- Retreive the Game's players list.
+-- @return Player list.
+function Game.getPlayers()
+	return Game.players
 end
 
 --- This Event acts as the middle ground for client connections, accepting clients on behalf of the server, and informing the game about it.<br/>

@@ -21,7 +21,6 @@
 module("obj.CommandParser", package.seeall)
 
 local Cloneable		= require("obj.Cloneable")
-local Mob			= require("obj.Mob")
 
 --- Cloneable that parses commands on behalf of a player.
 -- @class table
