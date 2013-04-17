@@ -77,6 +77,10 @@ Game.logger			= logging.console()
 Game.fileLogger		= logging.file("log/%s.log", "%m%d%y")
 Game.commandLogger	= logging.file("log/%s-commands.log", "%m%d%y")
 
+-- log everything!
+Game.fileLogger:setLevel(logging.DEBUG)
+Game.commandLogger:setLevel(logging.DEBUG)
+
 --- Open the game for play on the given port.
 -- @param port The port to be hosted on. Defaults to Game.defaultPort{@link Game.defaultPort}.
 -- @return true on success.<br/>false followed by an error otherwise.
@@ -216,30 +220,23 @@ end
 --- Disconnect a Player.<br/>
 -- Calls Game.onPlayerDisconnect(player) before removing from players list or destroying client.
 -- @param player The Player to be disconnected.
--- @param hotboot If true, indicate that the player's connection should be preserved.
-function Game.disconnectPlayer(player, hotboot)
-	Game.onPlayerDisconnect(player, hotboot) -- disconnect the player
+function Game.disconnectPlayer(player)
+	Game.onPlayerDisconnect(player) -- disconnect the player
 	table.removeValue(Game.players, player) -- remove from players list (no longer recognized as a player)
 
 	-- if they're not playing yet, then disconnect them.
 	-- otherwise, only disconnect if it's not a hotboot.
-	if player:getState() ~= PlayerState.PLAYING or not hotboot then
+	if player:getState() ~= PlayerState.PLAYING then
 		Game.server:disconnectClient(player:getClient()) -- kill the client
 	end
 end
 
 --- Specifies further actions for a disconnecting Player.
 -- @param player The Player disconnecting.
--- @param hotboot If true, indicate that the player's connection is being preserved.
-function Game.onPlayerDisconnect(player, hotboot)
-	if hotboot then
-		Game.info(string.format("*** Preparing player %s for hotboot.", tostring(player)))
-		player:sendLine("\n*** HOTBOOT ***\n")
-	else
-		Game.info(string.format("Disconnected player %s!", tostring(player:getClient())))
-	end
+function Game.onPlayerDisconnect(player)
+	Game.info(string.format("Disconnected %s!", tostring(player)))
 
-	if player:getState() == PlayerState.PLAYING and not hotboot then
+	if player:getState() == PlayerState.PLAYING then
 		Nanny.logout(player)
 	end
 end

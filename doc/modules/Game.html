@@ -164,7 +164,7 @@
 	</tr>
 
 	<tr>
-	<td class="name" nowrap><a href="#Game.disconnectPlayer">Game.disconnectPlayer</a>&nbsp;(player, hotboot)</td>
+	<td class="name" nowrap><a href="#Game.disconnectPlayer">Game.disconnectPlayer</a>&nbsp;(player)</td>
 	<td class="summary">Disconnect a Player.<br/> Calls Game.onPlayerDisconnect(player) before removing from players list or destroying client.</td>
 	</tr>
 
@@ -239,7 +239,7 @@
 	</tr>
 
 	<tr>
-	<td class="name" nowrap><a href="#Game.onPlayerDisconnect">Game.onPlayerDisconnect</a>&nbsp;(player, hotboot)</td>
+	<td class="name" nowrap><a href="#Game.onPlayerDisconnect">Game.onPlayerDisconnect</a>&nbsp;(player)</td>
 	<td class="summary">Specifies further actions for a disconnecting Player.</td>
 	</tr>
 
@@ -440,7 +440,7 @@ Shortcut for Game.scheduler:deque(event)
 
 
 
-<dt><a name="Game.disconnectPlayer"></a><strong>Game.disconnectPlayer</strong>&nbsp;(player, hotboot)</dt>
+<dt><a name="Game.disconnectPlayer"></a><strong>Game.disconnectPlayer</strong>&nbsp;(player)</dt>
 <dd>
 Disconnect a Player.<br/> Calls Game.onPlayerDisconnect(player) before removing from players list or destroying client.
 
@@ -450,10 +450,6 @@ Disconnect a Player.<br/> Calls Game.onPlayerDisconnect(player) before removing 
 	
 	<li>
 	  <code><em>player</em></code>: The Player to be disconnected.
-	</li>
-	
-	<li>
-	  <code><em>hotboot</em></code>: If true, indicate that the player's connection should be preserved.
 	</li>
 	
 </ul>
@@ -795,7 +791,7 @@ Specifies further actions for a connecting Player.
 
 
 
-<dt><a name="Game.onPlayerDisconnect"></a><strong>Game.onPlayerDisconnect</strong>&nbsp;(player, hotboot)</dt>
+<dt><a name="Game.onPlayerDisconnect"></a><strong>Game.onPlayerDisconnect</strong>&nbsp;(player)</dt>
 <dd>
 Specifies further actions for a disconnecting Player.
 
@@ -805,10 +801,6 @@ Specifies further actions for a disconnecting Player.
 	
 	<li>
 	  <code><em>player</em></code>: The Player disconnecting.
-	</li>
-	
-	<li>
-	  <code><em>hotboot</em></code>: If true, indicate that the player's connection is being preserved.
 	</li>
 	
 </ul>

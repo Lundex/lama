@@ -94,10 +94,19 @@ while Game.isReady() do
 		Game.info("*** Hotbooting game...")
 
 		-- disconnect players
-		Game.info("*** Preserve old client sockets")
+		Game.info("*** Preserving old client sockets")
 		local clientSockets = Game.server:getClientSockets()
+		for i,v in ipairs(Game.getPlayers()) do
+			if v:getState() == PlayerState.PLAYING then
+				Game.info(string.format("*** %s->%s preserved for hotboot.", tostring(v), v:getMob():getName()))
+			else
+				Game.info(string.format("*** %s preserved for hotboot.", tostring(v)))
+			end
 
-		Game.info("*** Preserve old server socket")
+			v:sendLine("\n*** HOTBOOT ***\n") -- inform them of the hotboot
+		end
+
+		Game.info("*** Preserving old server socket")
 		local serverSocket = Game.server:getSocket()
 
 		-- in the future, you should save player characters here as normal.

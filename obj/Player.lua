@@ -44,7 +44,7 @@ Player.messageMode	= nil -- the current message mode
 --- Initialize the Player and associated it with the given Client.
 -- @param client Client to be associated with this Player.
 function Player:initialize(client)
-	self.client	= client
+	self:setClient(client)
 end
 
 --- Returns the string-value of the Player.
@@ -162,6 +162,12 @@ function Player:unsetMob()
 	if oldMob:getPlayer() == self then
 		oldMob:unsetPlayer()
 	end
+end
+
+--- Associate this Player with the given Client.
+-- @param client Client to be associated.
+function Player:setClient(client)
+	self.client = client
 end
 
 --- De-associate this Player from current Client.
