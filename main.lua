@@ -19,6 +19,8 @@
 --- Entry point for the game.
 -- @author milkmanjack
 -- module("main", package.seeall)
+
+--- Loads all of the game packages.
 function loadPackages()
 	require("Game")
 	require("Nanny")
@@ -40,40 +42,42 @@ function loadPackages()
 	require("obj.Server")
 end
 
+--- Unloads all of the game packages.
 function unloadPackages()
-	package.loaded["Game"] = nil
-	_G.Game = nil
-	package.loaded["Nanny"] = nil
-	_G.Nanny = nil
-	package.loaded["Telnet"] = nil
-	_G.Telnet = nil
-	package.loaded["PlayerState"] = nil
-	_G.PlayerState = nil
-	package.loaded["GameState"] = nil
-	_G.GameState = nil
-	package.loaded["MessageMode"] = nil
-	_G.MessageMode = nil
-	package.loaded["Direction"] = nil
-	_G.Direction = nil
-	package.loaded["obj.Client"] = nil
-	package.loaded["obj.Cloneable"] = nil
-	package.loaded["obj.CommandParser"] = nil
-	package.loaded["obj.Event"] = nil
-	package.loaded["obj.Map"] = nil
-	package.loaded["obj.MapObject"] = nil
-	package.loaded["obj.MapTile"] = nil
-	package.loaded["obj.Mob"] = nil
-	package.loaded["obj.Player"] = nil
-	package.loaded["obj.Scheduler"] = nil
-	package.loaded["obj.Server"] = nil
+	package.loaded["Game"]				= nil
+	package.loaded["Nanny"]				= nil
+	package.loaded["Telnet"]			= nil
+	package.loaded["PlayerState"]		= nil
+	package.loaded["GameState"]			= nil
+	package.loaded["MessageMode"]		= nil
+	package.loaded["Direction"]			= nil
+	_G.Game								= nil -- unload globals
+	_G.Nanny							= nil
+	_G.Telnet							= nil
+	_G.PlayerState						= nil
+	_G.GameState						= nil
+	_G.MessageMode						= nil
+	_G.Direction						= nil
+	package.loaded["obj.Client"]		= nil
+	package.loaded["obj.Cloneable"]		= nil
+	package.loaded["obj.CommandParser"]	= nil
+	package.loaded["obj.Event"]			= nil
+	package.loaded["obj.Map"]			= nil
+	package.loaded["obj.MapObject"]		= nil
+	package.loaded["obj.MapTile"]		= nil
+	package.loaded["obj.Mob"]			= nil
+	package.loaded["obj.Player"]		= nil
+	package.loaded["obj.Scheduler"]		= nil
+	package.loaded["obj.Server"]		= nil
 end
 
+--- Reloads all of the game packages.
 function reloadPackages()
 	unloadPackages()
 	loadPackages()
 end
 
--- load all game packages
+-- load all game packages to start with
 loadPackages()
 
 -- open the game for play
