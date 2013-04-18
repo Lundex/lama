@@ -224,7 +224,7 @@ end
 --- Specifies further actions for a disconnecting Player.
 -- @param player The Player disconnecting.
 function Game.onPlayerDisconnect(player)
-	Game.info(string.format("Disconnected %s!", tostring(player)))
+	Game.info(string.format("Disconnected %s!", tostring(player:getClient())))
 
 	if player:getState() == PlayerState.PLAYING then
 		Nanny.logout(player)
