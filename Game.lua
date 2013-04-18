@@ -104,8 +104,8 @@ function Game.onOpen()
 	if not Game.scheduler then
 		Game.scheduler = Scheduler:new()
 		Game.info("Preparing scheduler...")
-		Game.queue(Game.AcceptEvent:new(os.clock()))
-		Game.queue(Game.PollEvent:new(os.clock()))
+		Game.queue(Game.AcceptEvent:new(Game.time()))
+		Game.queue(Game.PollEvent:new(Game.time()))
 	end
 
 	-- load the map
@@ -182,7 +182,7 @@ end
 
 --- Updates the game as necessary. Things like updating the scheduler and such.
 function Game.update()
-	Game.scheduler:poll(os.clock())
+	Game.scheduler:poll(Game.time())
 end
 
 --- Connects a Player.<br/>
@@ -332,6 +332,12 @@ end
 -- @param state The state to be assigned.<br/>Must be a valid member of GameState.
 function Game.setState(state)
 	Game.state = state
+end
+
+--- Returns a timestamp used for most Game operations.
+-- @return A timestamp reflecting the current time.
+function Game.time()
+	return socket.gettime()
 end
 
 --- Check if the Game is ready to be played.
