@@ -1,0 +1,11 @@
+	Changes in v0.6a-1 (4/18/2013)
+	-----------------
+	* Major bug fix; os.clock() was being used inappropriately as a timer from when the game started, which it can be used for, but isn't necessarily what it does.
+
+	* Added Game.time(), which can be accessed for a standard timestamp used for the scheduler and whatever else needs to use a timestamp.
+
+	* Changed the disconnect message to be more sensible. playerDisconnect() informs of the client leaving. Nanny.logout() informs of the player leaving. Nanny.logout, as such, is only called when the player was playing the game. 
+
+	* Got rid of useless return value on Game.onHotboot().
+
+	* Updated READMEs a bit to reflect the new package loader.
