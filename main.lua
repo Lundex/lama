@@ -20,9 +20,14 @@
 -- @author milkmanjack
 -- module("main", package.seeall)
 
+-- these are external packages that should be ever-present and don't need reloading.
+require("socket")
+require("logging")
+require("logging.file")
+require("logging.console")
+
 --- Loads all of the game packages.
 function loadPackages()
-	require("Game")
 	require("Nanny")
 	require("Telnet")
 	require("PlayerState")
@@ -40,10 +45,21 @@ function loadPackages()
 	require("obj.Player")
 	require("obj.Scheduler")
 	require("obj.Server")
+	require("Game") -- load this last
 end
 
 --- Unloads all of the game packages.
 function unloadPackages()
+	-- unload globals
+	_G.Game								= nil
+	_G.Nanny							= nil
+	_G.Telnet							= nil
+	_G.PlayerState						= nil
+	_G.GameState						= nil
+	_G.MessageMode						= nil
+	_G.Direction						= nil
+
+	-- unload packages
 	package.loaded["Game"]				= nil
 	package.loaded["Nanny"]				= nil
 	package.loaded["Telnet"]			= nil
@@ -51,13 +67,6 @@ function unloadPackages()
 	package.loaded["GameState"]			= nil
 	package.loaded["MessageMode"]		= nil
 	package.loaded["Direction"]			= nil
-	_G.Game								= nil -- unload globals
-	_G.Nanny							= nil
-	_G.Telnet							= nil
-	_G.PlayerState						= nil
-	_G.GameState						= nil
-	_G.MessageMode						= nil
-	_G.Direction						= nil
 	package.loaded["obj.Client"]		= nil
 	package.loaded["obj.Cloneable"]		= nil
 	package.loaded["obj.CommandParser"]	= nil

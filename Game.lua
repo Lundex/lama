@@ -20,15 +20,6 @@
 -- @author milkmanjack
 module("Game", package.seeall)
 
-require("logging")
-require("logging.file")
-require("logging.console")
-require("Nanny")
-require("Telnet")
-require("PlayerState")
-require("GameState")
-require("MessageMode")
-require("Direction")
 local Event			= require("obj.Event")
 local Scheduler		= require("obj.Scheduler")
 local Server		= require("obj.Server")
@@ -56,7 +47,7 @@ local Game			= {}
 
 -- game data
 Game.name			= "lama"
-Game.version		= "0.5a"
+Game.version		= "0.6a"
 Game.defaultPort	= 8000
 
 -- runtime data

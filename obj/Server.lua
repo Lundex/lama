@@ -20,7 +20,6 @@
 -- @author milkmanjack
 module("obj.Server", package.seeall)
 
-local socket	= require("socket")
 local Cloneable	= require("obj.Cloneable")
 local Client	= require("obj.Client")
 

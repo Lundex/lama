@@ -1,0 +1,22 @@
+	Changes in v0.6a (4/18/2013)
+	-----------------
+	* Hotbooting implemented.
+		NOTE: Due to the fact that lama is not a full game and lacks "character saving," hotbooting is a bit lacking. Preserving a mob is basically impossible, due to the nature of a hotboot (loading changes to the package), so I won't even try to do it here. Instead, a generic mob is loaded for them. There are just too many values that need to be preserved. Instead, once you implement some kind of player saving and loading, use that before and after the hotboot. Saving the player characters in the main.lua game loop, around where clients and servers are saved, and loading them in Game.onHotboot(), just after the players are recreated.
+
+		I suggest using some kind of temporary global table that associates a socket with a character name in the form of `__hotbootPlayers[socket] = "my character name"`. After the package reloading, once the players are reconstituted, just grab the associated character name for that player's socket and load the character for them. I may make an example of this later.
+
+	* Removed the singleton requires from Game.lua and left them in loadPackages() in main.lua.
+
+	* The standard external packages I always need before everything are loaded before the game packages, and are not reloaded during a hotboot, or for any other reason.
+
+	* Reorganized requires so that instead of requiring packages for clones that you interact with in another package, you only require packages for clones that you need direct access to the original, like when creating pure clones of them. Other times you might need access to the original is when using things like Cloneable.isCloneOf(), for determining if something is a clone of say, Event, or Mob.
+
+	* Gave Players a setClient() function for posterity's sake.
+
+	* Fixed log levels. They now report all messages.
+
+	* Changed order of package loading.
+
+	* Renamed "logs" directory to "log", as that was more consistent.
+
+	* Player:toString() is not a little more sensible. Since Players stand to connect clients and mobs, the stringified version is now "{#id}mob@client address".
