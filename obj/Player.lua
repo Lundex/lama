@@ -48,7 +48,7 @@ end
 --- Returns the string-value of the Player.
 -- @return A string in the format of <tt>"player#&lt;id&gt;{@&lt;client remote address&gt;}"</tt>.
 function Player:toString()
-	return string.format("player#%d{@%s}", self.id, self.client:getAddress())
+	return string.format("{P#%d}%s@%s", self.id, self.mob and self.mob:getName() or "no mob", self.client:getAddress())
 end
 
 --- shortcut to client:send(data,i,j).

@@ -102,7 +102,7 @@ while Game.isReady() do
 		local clientSockets = Game.server:getClientSockets()
 		for i,v in ipairs(Game.getPlayers()) do
 			if v:getState() == PlayerState.PLAYING then
-				Game.info(string.format("*** %s->%s preserved for hotboot.", tostring(v), v:getMob():getName()))
+				Game.info(string.format("*** %s preserved for hotboot.", tostring(v), v:getMob():getName()))
 			else
 				Game.info(string.format("*** %s preserved for hotboot.", tostring(v)))
 			end

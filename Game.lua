@@ -209,7 +209,7 @@ end
 -- @param hotboot If true, player is reconnecting after hotboot.
 function Game.onPlayerConnect(player, hotboot)
 	if hotboot then
-		Game.info(string.format("*** Reconnecting %s after hotboot.", tostring(player)))
+		Game.info(string.format("*** Reconnecting %s after hotboot.", tostring(player:getClient())))
 	else
 		Game.info(string.format("Connected %s!", tostring(player:getClient())))
 	end
