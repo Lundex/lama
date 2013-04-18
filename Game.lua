@@ -163,7 +163,6 @@ end
 -- clients have been reconnected to the server, but no players have
 -- been reconstituted yet. As such, we need to create players and
 -- reload their mobs.
--- @return true on success.<br/>false followed by an error otherwise.
 function Game.onHotboot()
 	Game.info("Reconnecting old players...")
 	for i,v in ipairs(Game.server:getClients()) do

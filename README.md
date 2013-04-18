@@ -1,7 +1,7 @@
 #Features and Explanations:#
  * The project is split into individual packages, with *singletons* defined in the source directory, and *classes* defined in the **obj/** directory.
 
- * When a *singleton* is loaded with **require()** or **dofile()**, it is stored in the global context in an entry of the same name as the file. For example, the *Game singleton*, found in **Game.lua**, is stored in *_G.Game*. (I **require()** all singletons in **Game.lua** to ensure access to this information for all processes.)
+ * When a *singleton* is loaded with **require()** or **dofile()**, it is stored in the global context in an entry of the same name as the file. For example, the *Game singleton*, found in **Game.lua**, is stored in *_G.Game*. (There is a package loading interface in main.lua, which happens to load all of these singletons on project startup.)
 
  * When a *class* is included, is returned by the **require()** call for use locally.
 
