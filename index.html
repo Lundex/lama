@@ -1,47 +1,44 @@
 <!DOCTYPE html>
 <html>
-
   <head>
-    <meta charset='utf-8' />
-    <meta http-equiv="X-UA-Compatible" content="chrome=1" />
-    <meta name="description" content="lama : A MUD kit made in Lua." />
+    <meta charset='utf-8'>
+    <meta http-equiv="X-UA-Compatible" content="chrome=1">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+    <link href='https://fonts.googleapis.com/css?family=Architects+Daughter' rel='stylesheet' type='text/css'>
+    <link rel="stylesheet" type="text/css" href="stylesheets/stylesheet.css" media="screen" />
+    <link rel="stylesheet" type="text/css" href="stylesheets/pygment_trac.css" media="screen" />
+    <link rel="stylesheet" type="text/css" href="stylesheets/print.css" media="print" />
 
-    <link rel="stylesheet" type="text/css" media="screen" href="stylesheets/stylesheet.css">
+    <!--[if lt IE 9]>
+    <script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script>
+    <![endif]-->
 
-    <title>lama</title>
+    <title>lama by milkmanjack</title>
   </head>
 
   <body>
+    <header>
+      <div class="inner">
+        <h1>lama</h1>
+        <h2>A MUD kit made in Lua.</h2>
+        <a href="https://github.com/milkmanjack/lama" class="button"><small>View project on</small>GitHub</a>
+      </div>
+    </header>
 
-    <!-- HEADER -->
-    <div id="header_wrap" class="outer">
-        <header class="inner">
-          <a id="forkme_banner" href="https://github.com/milkmanjack/lama">View on GitHub</a>
-
-          <h1 id="project_title">lama</h1>
-          <h2 id="project_tagline">A MUD kit made in Lua.</h2>
-
-            <section id="downloads">
-              <a class="zip_download_link" href="https://github.com/milkmanjack/lama/zipball/master">Download this project as a .zip file</a>
-              <a class="tar_download_link" href="https://github.com/milkmanjack/lama/tarball/master">Download this project as a tar.gz file</a>
-            </section>
-        </header>
-    </div>
-
-    <!-- MAIN CONTENT -->
-    <div id="main_content_wrap" class="outer">
-      <section id="main_content" class="inner">
-        <h1>Features and Explanations:</h1>
+    <div id="content-wrapper">
+      <div class="inner clearfix">
+        <section id="main-content">
+          <h1>Features and Explanations:</h1>
 
 <ul>
 <li><p>The project is split into individual packages, with <em>singletons</em> defined in the source directory, and <em>classes</em> defined in the <strong>obj/</strong> directory.</p></li>
-<li><p>When a <em>singleton</em> is loaded with <strong>require()</strong> or <strong>dofile()</strong>, it is stored in the global context in an entry of the same name as the file. For example, the <em>Game singleton</em>, found in <strong>Game.lua</strong>, is stored in <em>_G.Game</em>. (I <strong>require()</strong> all singletons in <strong>Game.lua</strong> to ensure access to this information for all processes.)</p></li>
+<li><p>When a <em>singleton</em> is loaded with <strong>require()</strong> or <strong>dofile()</strong>, it is stored in the global context in an entry of the same name as the file. For example, the <em>Game singleton</em>, found in <strong>Game.lua</strong>, is stored in <em>_G.Game</em>. (There is a package loading interface in main.lua, which happens to load all of these singletons on project startup.)</p></li>
 <li><p>When a <em>class</em> is included, is returned by the <strong>require()</strong> call for use locally.</p></li>
 <li><p>A special table, called <em>Cloneable</em> (stored in <strong>obj/Cloneable.lua</strong>), provides psuedo-inheritance across tables. If you check the documentation, a <em>Cloneable</em> has three fundamental functions. <strong>Cloneable.clone()</strong>, <strong>Cloneable.new()</strong>, and <strong>Cloneable.initialize()</strong>.</p></li>
 <li><p><strong>Cloneable.clone(parent)</strong> provides an interface to create a new table with its metatable index set to the given parent, which should generally be a <em>Cloneable</em>. We call this new table a <em>Cloneable</em>, as it is a clone of the parent, which should be a clone of <em>Cloneable</em>. In essence, it inherets the functions and attributes of every clone in the heirarchy all the way up to <em>Cloneable</em>. We call this a "pure" clone, and they generally act like classes in other languages.</p></li>
 <li><p><strong>Cloneable.new(parent, ...)</strong> acts like <strong>Cloneable.clone(parent)</strong> for the most part, but after creating the clone, calls its <strong>Cloneable.initialize(...)</strong> function. This essentially means this clone has been initialized for use in a practical environment. As such, we call this an "instance-style" clone, and they generally act like object instances in other languages.</p></li>
 <li><p><strong>Cloneable.initialize(...)</strong> merely performs operations that every instance of a clone should have performed. Usually this means assigning unique values, or preparing stock values.</p></li>
-<li><p>The <em>Game singleton</em> uses an event scheduler ( <strong>obj/Scheduler.lua</strong> ). The <em>Game</em>'s scheduler uses timestamps based on <strong>os.clock()</strong>. This can be changed as needed.</p></li>
+<li><p>The <em>Game singleton</em> uses an event scheduler (**obj/Scheduler.lua**). The <em>Game</em>'s scheduler uses timestamps based on <strong>os.clock()</strong>. This can be changed as needed.</p></li>
 <li><p>A <em>Map</em> class is included. In the current implementation, it's just a <em>Cloneable</em> that contains a 3 dimensional grid in the format of layer-&gt;column-&gt;row (or z-&gt;y-&gt;x), though most references to locations will take arguments in the order of row,column,layer (or x,y,z). By default, The Game generates a 100x100x1 Map and fills it with generic MapTile instances, mostly just for demonstration purposes.</p></li>
 </ul><hr><h1>Using lama:</h1>
 
@@ -62,18 +59,25 @@
 <li><a href="http://w3.impa.br/%7Ediego/software/luasocket/">LuaSocket</a></li>
 <li><a href="http://www.keplerproject.org/lualogging/">LuaLogging</a></li>
 </ul>
-      </section>
+        </section>
+
+        <aside id="sidebar">
+          <a href="https://github.com/milkmanjack/lama/zipball/master" class="button">
+            <small>Download</small>
+            .zip file
+          </a>
+          <a href="https://github.com/milkmanjack/lama/tarball/master" class="button">
+            <small>Download</small>
+            .tar.gz file
+          </a>
+
+          <p class="repo-owner"><a href="https://github.com/milkmanjack/lama"></a> is maintained by <a href="https://github.com/milkmanjack">milkmanjack</a>.</p>
+
+          <p>This page was generated by <a href="pages.github.com">GitHub Pages</a> using the Architect theme by <a href="http://twitter.com/jasonlong">Jason Long</a>.</p>
+        </aside>
+      </div>
     </div>
 
-    <!-- FOOTER  -->
-    <div id="footer_wrap" class="outer">
-      <footer class="inner">
-        <p class="copyright">lama maintained by <a href="https://github.com/milkmanjack">milkmanjack</a></p>
-        <p>Published with <a href="http://pages.github.com">GitHub Pages</a></p>
-      </footer>
-    </div>
-
-    
-
+  
   </body>
 </html>
