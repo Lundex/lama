@@ -18,7 +18,7 @@
 
 --- Entry point for the game.
 -- @author milkmanjack
--- module("main", package.seeall)
+module("main", package.seeall)
 
 -- these are external packages that should be ever-present and don't need reloading.
 require("socket")
@@ -34,18 +34,7 @@ function loadPackages()
 	require("GameState")
 	require("MessageMode")
 	require("Direction")
-	require("obj.Client")
-	require("obj.Cloneable")
-	require("obj.CommandParser")
-	require("obj.Event")
-	require("obj.Map")
-	require("obj.MapObject")
-	require("obj.MapTile")
-	require("obj.Mob")
-	require("obj.Player")
-	require("obj.Scheduler")
-	require("obj.Server")
-	require("Game") -- load this last
+	require("Game") -- make sure this is always loaded last.
 end
 
 --- Unloads all of the game packages.
@@ -90,7 +79,7 @@ end
 loadPackages()
 
 -- open the game for play
-local port = tonumber(... or nil) -- first command-line argument to main.lua will be the port to host on
+local port = tonumber(... or nil)
 local _, err = Game.openOnPort(port)
 if not _ then
   Game.error("failed to open game: " .. err)
@@ -99,50 +88,47 @@ end
 
 -- primary game loop
 while Game.isReady() do
-	Game.update() -- updates the game in increments.
-	socket.select(nil,nil,0.1) -- 1/10th second delay between cycles
+	Game.update()
+	socket.select(nil,nil,0.1)
 
 	-- hotboot handled in game loop.
 	if Game:getState() == GameState.HOTBOOT then
 		Game.info("*** Hotbooting game...")
 
 		-- disconnect players
-		Game.info("*** Preserving old client sockets")
+		Game.info("*** Preserving old client sockets.")
 		local clientSockets = Game.server:getClientSockets()
 		for i,v in ipairs(Game.getPlayers()) do
-			if v:getState() == PlayerState.PLAYING then
-				Game.info(string.format("*** %s preserved for hotboot.", tostring(v), v:getMob():getName()))
-			else
-				Game.info(string.format("*** %s preserved for hotboot.", tostring(v)))
-			end
-
+			Game.info(string.format("*** Preserving %s for hotboot.", tostring(v)))
 			v:sendLine("\n*** HOTBOOT ***\n") -- inform them of the hotboot
 		end
 
-		Game.info("*** Preserving old server socket")
+		Game.info("*** Preserving old server socket.")
 		local serverSocket = Game.server:getSocket()
 
 		-- in the future, you should save player characters here as normal.
 		-- it's impossible to preserve mobs here, as there is too much
-		-- data we need to transfer, so instead to reload the player character
-		-- as normal.
+		-- data we need to transfer, so instead save and reload the player
+		-- character as normal.
 
 		-- reload packages
-		Game.info("*** Reload packages")
-		reloadPackages() -- once this calls, Game no longer refers to the old Game.
-		-- a new Game is loaded, along with a new everything else.
+		Game.info("*** Reloading packages")
+		reloadPackages()
+		-- Game no longer refers to the old Game from here on.
+		-- A new Game has been loaded, along with a new everything else.
 
 		-- recreate Server with new Server object
 		local Server = require("obj.Server")
 		local Client = require("obj.Client")
 
 		-- reuse server socket
-		Game.info("*** Recreate old server out of preserved socket.")
+		Game.info("*** Recreating old Server out of preserved socket.")
 		local server = Server:new(serverSocket)
 
 		-- we don't create new players here, because we're lacking Game data.
 		-- we want the Map to be loaded and all that good stuff before we 
-		Game.info("*** Recreate old clients, connect them to server")
+		-- create the players.
+		Game.info("*** Recreating old Clients and connecting them to recreated Server.")
 		for i,v in ipairs(clientSockets) do
 			server:connectClient(Client:new(v), true)
 		end
@@ -152,7 +138,7 @@ while Game.isReady() do
 		Game.setState(GameState.HOTBOOT)
 
 		-- reopen the Game on the new server
-		Game.info("*** Opening Game with reconstituted Server")
+		Game.info("*** Opening Game with reconstituted Server.")
 		Game.openOnServer(server)
 	end
 end

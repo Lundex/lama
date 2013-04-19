@@ -47,7 +47,7 @@ local Game			= {}
 
 -- game data
 Game.name			= "lama"
-Game.version		= "0.6a"
+Game.version		= "0.6a-1"
 Game.defaultPort	= 8000
 
 -- runtime data
