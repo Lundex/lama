@@ -444,7 +444,7 @@ function Game.PollEvent:run()
 						Game.onPlayerInput(v, cmd)
 					end
 				else
-					Game.debug(string.format("bad input from %s: {%s}", tostring(v), partial))
+					Game.debug(string.format("bad input from %s: {%s}", tostring(v:getClient()), partial))
 				end
 			end
 
