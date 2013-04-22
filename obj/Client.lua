@@ -60,11 +60,12 @@ Client.options						= nil
 -- @class table
 -- @name Client.options.TTYPE
 -- @field type The type of terminal the client is using.
+--Client.options.TTYPE				= nil
 
 --- Associates a socket with the Client.
 -- @param socket The socket to be associated.
 function Client:initialize(socket)
-	-- initialize TTYPE options
+	-- initialize options
 	self.options				= {}
 	self.options.WILL			= {}
 	self.options.WONT			= {}
@@ -99,7 +100,6 @@ function Client:receive(pattern, prefix)
 	-- parse IAC messages at the client level before passing off to whoever wants to know
 	local found = string.find(partial, string.char(Telnet.commands.IAC))
 	while found ~= nil do
-		print(Telnet.commands.nameAll(partial))
 		local command = string.byte(partial, found+1)
 		local option = string.byte(partial, found+2)
 		local current = found+2
@@ -124,7 +124,10 @@ function Client:receive(pattern, prefix)
 			end
 		end
 
-		partial = string.format("%s%s", string.sub(partial, 1, found-1), string.sub(partial, current+1)) -- strip IAC message from input
+		-- string.format terminates on null char when displaying, which happens to be used in
+		-- TTYPE negotiation (Telnet.commands.IS == 0 == null terminator).
+		-- as such, use pure concatenation.
+		partial = string.sub(partial, 1, found-1) .. string.sub(partial, current+1) -- strip IAC message from input
 		found = string.find(partial, string.char(Telnet.commands.IAC))
 	end
 	return result, err, partial
@@ -223,14 +226,15 @@ end
 function Client:onIACNegotiation(negotiation)
 	-- TTYPE IS <type>
 	if string.find(negotiation, string.char(Telnet.commands.TTYPE, Telnet.commands.IS)) == 1 then
-		local version = string.sub(negotiation, 3)
-		self.options.TTYPE.version = version
-		Game.info(string.format("%s terminal type: '%s'", tostring(self), version))
+		local type = string.sub(negotiation, 3)
+		self.options.TTYPE.type = type
+		Game.info(string.format("%s terminal type: '%s'", tostring(self), type))
 	end
 end
 
 -- send an MSSP negotiation.
 function Client:MSSP(...)
+	print(...)
 	local packed = {...}
 	local formatted = string.char(Telnet.commands.IAC,
 									Telnet.commands.SB,
@@ -238,7 +242,8 @@ function Client:MSSP(...)
 	for i=1, #packed, 2 do
 		local op = packed[i]
 		local val = packed[i+1]
-		formatted = string.format("%s%c%s", formatted, string.char(op), val)
+		print(op, val)
+		formatted = string.format("%s%s%s", formatted, string.char(op), val)
 	end
 
 	formatted = string.format("%s%s",
@@ -287,8 +292,10 @@ function Client:getSocket()
 	return self.socket
 end
 
-function Client:getClientType()
-	if self.options.TTYPE.enabled == true and self.options.TTYPE.type == nil then
+--- Retreive the client's terminal type, if applicable.
+-- @return A string representing the type of terminal.
+function Client:getTerminalType()
+	if self:WILL(Telnet.commands.TTYPE) and self.options.TTYPE.type == nil then
 		return "forthcoming..."
 	end
 

@@ -62,7 +62,7 @@ Telnet.commands.TTYPE						= 24
 
 -- MSSP negotiation commands
 Telnet.commands.MSSP_VAL					= 2
-Telnet.commands.MSSP_VAR					= 1
+Telnet.commands.MSSP_VAR					= 1 -- I'll have to separate the different message types.
 
 -- environment options (I guess)
 Telnet.commands.SEND						= 1
@@ -85,6 +85,8 @@ Telnet.commands.IS							= 0
 -- @field Telnet.commands.MSSP "MSSP"
 -- @field Telnet.commands.MSDP "MSDP"
 -- @field Telnet.commands.TTYPE "TTYPE"
+-- @field Telnet.commands.MSSP_VAL "MSDP_VAL"
+-- @field Telnet.commands.MSSP_VAR "MSDP_VAR"
 -- @field Telnet.commands.SEND "SEND"
 -- @field Telnet.commands.IS "IS"
 Telnet.commands.names						= {}
@@ -103,6 +105,11 @@ Telnet.commands.names[Telnet.commands.SE]	= "SE"
 Telnet.commands.names[Telnet.commands.MSSP] = "MSSP"
 Telnet.commands.names[Telnet.commands.MSDP] = "MSDP"
 Telnet.commands.names[Telnet.commands.TTYPE] = "TTYPE"
+
+
+-- MSSP negotiation commands
+Telnet.commands.names[Telnet.commands.MSSP_VAL] = "MSDP_VAL"
+Telnet.commands.names[Telnet.commands.MSSP_VAR] = "MSDP_VAR"
 
 -- environment options
 Telnet.commands.names[Telnet.commands.SEND]	= "SEND"
