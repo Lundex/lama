@@ -29,12 +29,23 @@ local Cloneable		= require("obj.Cloneable")
 local Client		= Cloneable.clone()
 
 -- runtime data
-Client.socket		= nil
+Client.socket					= nil
+
+-- options enabled on the client, along with relevant data
+Client.options					= nil
 
 --- Associates a socket with the Client.
 -- @param socket The socket to be associated.
 function Client:initialize(socket)
+	-- initialize TTYPE options
+	self.options				= {}
+	self.options.TTYPE			= {}
+	self.options.TTYPE.enabled	= false
+	self.options.TTYPE.type		= nil
+
+	-- set sockets
 	self:setSocket(socket)
+	self:IACDo(Telnet.commands.TTYPE)
 end
 
 --- Returns the string-value of the Client.
@@ -51,7 +62,73 @@ end
 --- Pipe to socket's receive() function.
 -- @return If successful, returns the received pattern.<br/>In case of error, the method returns nil followed by an error message.
 function Client:receive(pattern, prefix)
-	return self.socket:receive(pattern, prefix)
+	local result, err, partial = self.socket:receive(pattern, prefix)
+
+	-- parse IAC messages at the client level before passing off to whoever wants to know
+	local found = string.find(partial, string.char(Telnet.commands.IAC))
+	while found ~= nil do
+		local command = string.byte(partial, found+1)
+		local option = string.byte(partial, found+2)
+		local current = found+2
+		if command == Telnet.commands.WILL then
+			current = current + 1
+			self:getIACWill(option)
+
+		elseif command == Telnet.commands.WONT then
+			current = current + 1
+			self:getIACWont(option)
+
+		elseif command == Telnet.commands.DO then
+			current = current + 1
+			self:getIACDo(option)
+
+		elseif command == Telnet.commands.DONT then
+			current = current + 1
+			self:getIACDont(option)
+
+		elseif command == Telnet.commands.SB then
+			-- check for subnegotiations that start with IAC SB and end with IAC SE
+			local nextIACSE = string.find(partial, string.char(Telnet.commands.IAC, Telnet.commands.SE), current)
+			if nextIACSE then
+				self:getIACNegotiation(string.sub(partial, current, nextIACSE-1))
+				current = nextIACSE+1
+			end
+		end
+
+		partial = string.format("%s%s", string.sub(partial, 1, found-1), string.sub(partial, current+1))
+		found = string.find(partial, string.char(Telnet.commands.IAC))
+	end
+
+	return result, err, partial
+end
+
+function Client:IACDo(op)
+	self:send(string.char(Telnet.commands.IAC, Telnet.commands.DO, op))
+end
+
+function Client:getIACNegotiation(negotiation)
+	-- TTYPE IS <type>
+	if string.find(negotiation, string.char(Telnet.commands.TTYPE, Telnet.commands.IS)) == 1 then
+		local version = string.sub(negotiation, 3)
+		self.options.TTYPE.version = version
+		Game.info(string.format("%s terminal type: '%s'", tostring(self), version))
+	end
+end
+
+function Client:getIACWill(op)
+	if op == Telnet.commands.TTYPE then
+		self.options.TTYPE.enabled = true
+		self:send(string.char(Telnet.commands.IAC, Telnet.commands.SB, Telnet.commands.TTYPE, Telnet.commands.SEND, Telnet.commands.IAC, Telnet.commands.SE))
+	end
+end
+
+function Client:getIACWont()
+end
+
+function Client:getIACDo()
+end
+
+function Client:getIACDont()
 end
 
 --- Pipe to socket's send() function.
@@ -90,6 +167,14 @@ end
 -- @return The Client's socket.</br>nil if no socket is attached.
 function Client:getSocket()
 	return self.socket
+end
+
+function Client:getClientType()
+	if self.options.TTYPE.enabled == true and self.options.TTYPE.type == nil then
+		return "forthcoming..."
+	end
+
+	return self.options.TTYPE.type
 end
 
 --- Retreive the client's remote address.

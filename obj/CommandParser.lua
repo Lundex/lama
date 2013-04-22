@@ -75,7 +75,7 @@ function CommandParser:parse(player, mob, input)
 	elseif string.find("who", input) == 1 then
 		local msg = "\[ Connected Players ]"
 		for i,v in ipairs(Game:getPlayers()) do
-			msg = string.format("%s\n-> %s", msg, v:getMob():getName())
+			msg = string.format("%s\n-> %s (client: %s)", msg, v:getMob():getName(), v:getClient():getClientType())
 		end
 
 		player:sendMessage(msg)

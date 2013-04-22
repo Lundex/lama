@@ -38,17 +38,27 @@ local Telnet  							= {}
 -- @field EL 248
 -- @field EC 247
 -- @field SE 240
+-- @field MSDP 69
+-- @field TTYPE 24
+-- @field IS 0
+-- @field SEND 1
 Telnet.commands								= {}
+Telnet.commands.IS							= 0
+Telnet.commands.SEND						= 1
 Telnet.commands.IAC							= 255
-Telnet.commands.DONT						= 254
-Telnet.commands.DO							= 253
-Telnet.commands.WONT						= 252
 Telnet.commands.WILL						= 251
+Telnet.commands.WONT						= 252
+Telnet.commands.DO							= 253
+Telnet.commands.DONT						= 254
 Telnet.commands.SB							= 250
 Telnet.commands.GA							= 249
 Telnet.commands.EL							= 248
 Telnet.commands.EC							= 247
 Telnet.commands.SE							= 240
+
+-- protocols
+Telnet.commands.MSDP						= 69
+Telnet.commands.TTYPE						= 24
 
 --- Contains textual representations of Telnet.commands enums.
 -- @class table
@@ -63,6 +73,7 @@ Telnet.commands.SE							= 240
 -- @field Telnet.commands.EL "EL"
 -- @field Telnet.commands.EC "EC"
 -- @field Telnet.commands.SE "SE"
+-- @field Telnet.commands.MSDP "MSDP"
 Telnet.commands.names						= {}
 Telnet.commands.names[Telnet.commands.IAC]	= "IAC"
 Telnet.commands.names[Telnet.commands.DONT]	= "DONT"
@@ -74,12 +85,27 @@ Telnet.commands.names[Telnet.commands.GA]	= "GA"
 Telnet.commands.names[Telnet.commands.EL]	= "EL"
 Telnet.commands.names[Telnet.commands.EC]	= "EC"
 Telnet.commands.names[Telnet.commands.SE]	= "SE"
+Telnet.commands.names[Telnet.commands.IS]	= "IS"
+Telnet.commands.names[Telnet.commands.SEND]	= "SEND"
+
+-- protocols
+Telnet.commands.names[Telnet.commands.MSDP] = "MSDP"
+Telnet.commands.names[Telnet.commands.TTYPE] = "TTYPE"
 
 --- Allows for quick reference to Telnet.commands.names enums.
 -- @param command The command to retrieve the name of.
 -- @return Name of the command.
 function Telnet.commands.name(command)
 	return Telnet.commands.names[command] or string.format("(%s)", tostring(command))
+end
+
+function Telnet.commands.stringify(command)
+	local msg
+	for i=1, string.len(command) do
+		msg = string.format("%s%s%s", msg or "", msg and "," or "", Telnet.commands.name(string.byte(command, i)))
+	end
+
+	return msg
 end
 
 _G.Telnet = Telnet
