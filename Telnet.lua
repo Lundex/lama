@@ -38,6 +38,7 @@ local Telnet  							= {}
 -- @field EL 248
 -- @field EC 247
 -- @field SE 240
+-- @field MSSP 70
 -- @field MSDP 69
 -- @field TTYPE 24
 -- @field IS 0
@@ -55,8 +56,13 @@ Telnet.commands.EC							= 247
 Telnet.commands.SE							= 240
 
 -- protocol options (I guess)
+Telnet.commands.MSSP						= 70
 Telnet.commands.MSDP						= 69
 Telnet.commands.TTYPE						= 24
+
+-- MSSP negotiation commands
+Telnet.commands.MSSP_VAL					= 2
+Telnet.commands.MSSP_VAR					= 1
 
 -- environment options (I guess)
 Telnet.commands.SEND						= 1
@@ -76,6 +82,7 @@ Telnet.commands.IS							= 0
 -- @field Telnet.commands.EL "EL"
 -- @field Telnet.commands.EC "EC"
 -- @field Telnet.commands.SE "SE"
+-- @field Telnet.commands.MSSP "MSSP"
 -- @field Telnet.commands.MSDP "MSDP"
 -- @field Telnet.commands.TTYPE "TTYPE"
 -- @field Telnet.commands.SEND "SEND"
@@ -93,6 +100,7 @@ Telnet.commands.names[Telnet.commands.EC]	= "EC"
 Telnet.commands.names[Telnet.commands.SE]	= "SE"
 
 -- protocols
+Telnet.commands.names[Telnet.commands.MSSP] = "MSSP"
 Telnet.commands.names[Telnet.commands.MSDP] = "MSDP"
 Telnet.commands.names[Telnet.commands.TTYPE] = "TTYPE"
 

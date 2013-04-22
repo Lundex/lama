@@ -20,26 +20,45 @@
 -- @author milkmanjack
 module("obj.Client", package.seeall)
 
-local Cloneable		= require("obj.Cloneable")
+local Cloneable						= require("obj.Cloneable")
 
 --- Cloneable that manages user I/O.
 -- @class table
 -- @name Client
 -- @field socket The socket associated with this Client.
-local Client		= Cloneable.clone()
+local Client						= Cloneable.clone()
 
 -- runtime data
-Client.socket					= nil
+Client.socket						= nil
 
 --- Contains all telnet protocol options on the client.
 -- @class table
 -- @name Client.options
-Client.options					= {}
+Client.options						= nil
+
+--- Contains all telnet WILL settings
+-- @class table
+-- @name Client.options.WILL
+--Client.options.WILL				= nil
+
+--- Contains all telnet WONT settings
+-- @class table
+-- @name Client.options.WONT
+--Client.options.WONT				= nil
+
+--- Contains all telnet DO settings
+-- @class table
+-- @name Client.options.DO
+--Client.options.DO					= nil
+
+--- Contains all telnet DONT settings
+-- @class table
+-- @name Client.options.DONT
+--Client.options.DONT				= nil
 
 --- Contains terminal type information.
 -- @class table
 -- @name Client.options.TTYPE
--- @field enabled Is TTYPE negotiation enabled?
 -- @field type The type of terminal the client is using.
 
 --- Associates a socket with the Client.
@@ -47,13 +66,17 @@ Client.options					= {}
 function Client:initialize(socket)
 	-- initialize TTYPE options
 	self.options				= {}
+	self.options.WILL			= {}
+	self.options.WONT			= {}
+	self.options.DO				= {}
+	self.options.DONT			= {}
 	self.options.TTYPE			= {}
-	self.options.TTYPE.enabled	= false
 	self.options.TTYPE.type		= nil
 
 	-- set sockets
 	self:setSocket(socket)
 	self:IACDo(Telnet.commands.TTYPE)
+	self:IACWill(Telnet.commands.MSSP)
 end
 
 --- Returns the string-value of the Client.
@@ -76,38 +99,34 @@ function Client:receive(pattern, prefix)
 	-- parse IAC messages at the client level before passing off to whoever wants to know
 	local found = string.find(partial, string.char(Telnet.commands.IAC))
 	while found ~= nil do
+		print(Telnet.commands.nameAll(partial))
 		local command = string.byte(partial, found+1)
 		local option = string.byte(partial, found+2)
 		local current = found+2
 		if command == Telnet.commands.WILL then
-			current = current + 1
-			self:getIACWill(option)
+			self:onIACWill(option)
 
 		elseif command == Telnet.commands.WONT then
-			current = current + 1
-			self:getIACWont(option)
+			self:onIACWont(option)
 
 		elseif command == Telnet.commands.DO then
-			current = current + 1
-			self:getIACDo(option)
+			self:onIACDo(option)
 
 		elseif command == Telnet.commands.DONT then
-			current = current + 1
-			self:getIACDont(option)
+			self:onIACDont(option)
 
 		elseif command == Telnet.commands.SB then
 			-- check for subnegotiations that start with IAC SB and end with IAC SE
 			local nextIACSE = string.find(partial, string.char(Telnet.commands.IAC, Telnet.commands.SE), current)
 			if nextIACSE then
-				self:getIACNegotiation(string.sub(partial, current, nextIACSE-1))
+				self:onIACNegotiation(string.sub(partial, current, nextIACSE-1))
 				current = nextIACSE+1
 			end
 		end
 
-		partial = string.format("%s%s", string.sub(partial, 1, found-1), string.sub(partial, current+1))
+		partial = string.format("%s%s", string.sub(partial, 1, found-1), string.sub(partial, current+1)) -- strip IAC message from input
 		found = string.find(partial, string.char(Telnet.commands.IAC))
 	end
-
 	return result, err, partial
 end
 
@@ -138,6 +157,11 @@ end
 --- What to do when receiving an IAC WILL option.
 -- @param op Option received.
 function Client:onIACWill(op)
+	-- if they will negotiate terminal type, ask for it right away
+	self.options.WILL[op] = true
+	self.options.WONT[op] = false
+
+	-- ask for the TTYPE if the client will do it.
 	if op == Telnet.commands.TTYPE then
 		self.options.TTYPE.enabled = true
 		self:send(string.char(Telnet.commands.IAC, Telnet.commands.SB, Telnet.commands.TTYPE, Telnet.commands.SEND, Telnet.commands.IAC, Telnet.commands.SE))
@@ -146,17 +170,52 @@ end
 
 --- What to do when receiving an IAC WONT option.
 -- @param op Option received.
-function Client:onIACWont()
+function Client:onIACWont(op)
+	self.options.WONT[op] = true
+	self.options.WILL[op] = false
 end
 
 --- What to do when receiving an IAC DO option.
 -- @param op Option received.
-function Client:onIACDo()
+function Client:onIACDo(op)
+	self.options.DO[op] = true
+	self.options.DONT[op] = false
+
+	-- start doing MSSP negotiations
+	if op == Telnet.commands.MSSP then
+		self:MSSP(Telnet.commands.MSSP_VAR, "NAME", Telnet.commands.MSSP_VAL, "lama v0.6a-1", Telnet.commands.MSSP_VAR, "UPTIME", Telnet.commands.MSSP_VAL, os.time())
+	end
 end
 
 --- What to do when receiving an IAC DONT option.
 -- @param op Option received.
-function Client:onIACDont()
+function Client:onIACDont(op)
+	self.options.DO[op] = false
+	self.options.DONT[op] = true
+end
+
+--- Check if we will negotiate the given option.
+-- @return true if option is currently negotiated.<br/>false otherwise.
+function Client:WILL(op)
+	return self.options.WILL[op] == true
+end
+
+--- Check if we will not negotiate the given option.
+-- @return true if option is currently not negotiated.<br/>false otherwise.
+function Client:WONT(op)
+	return self.options.WONT[op] == true
+end
+
+--- Check if the client expects us to negotiate this option.
+-- @return true if option is currently negotiated.<br/>false otherwise.
+function Client:DO(op)
+	return self.options.DO[op] == true
+end
+
+--- Check if the client expects us not to negotiate this option.
+-- @return true if option is currently not negotiated.<br/>false otherwise.
+function Client:DONT(op)
+	return self.options.DONT[op] == true
 end
 
 --- What to do when receiving an IAC SE negotiation.
@@ -168,6 +227,26 @@ function Client:onIACNegotiation(negotiation)
 		self.options.TTYPE.version = version
 		Game.info(string.format("%s terminal type: '%s'", tostring(self), version))
 	end
+end
+
+-- send an MSSP negotiation.
+function Client:MSSP(...)
+	local packed = {...}
+	local formatted = string.char(Telnet.commands.IAC,
+									Telnet.commands.SB,
+									Telnet.commands.MSSP)
+	for i=1, #packed, 2 do
+		local op = packed[i]
+		local val = packed[i+1]
+		formatted = string.format("%s%c%s", formatted, string.char(op), val)
+	end
+
+	formatted = string.format("%s%s",
+								formatted,
+								string.char(Telnet.commands.IAC, Telnet.commands.SE)
+							)
+
+	self:send(formatted)
 end
 
 --- Pipe to socket's send() function.
