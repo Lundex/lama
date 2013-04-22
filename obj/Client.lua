@@ -234,22 +234,15 @@ end
 
 -- send an MSSP negotiation.
 function Client:MSSP(...)
-	print(...)
 	local packed = {...}
-	local formatted = string.char(Telnet.commands.IAC,
-									Telnet.commands.SB,
-									Telnet.commands.MSSP)
+	local formatted = string.char(Telnet.commands.IAC, Telnet.commands.SB, Telnet.commands.MSSP)
 	for i=1, #packed, 2 do
 		local op = packed[i]
 		local val = packed[i+1]
-		print(op, val)
 		formatted = string.format("%s%s%s", formatted, string.char(op), val)
 	end
 
-	formatted = string.format("%s%s",
-								formatted,
-								string.char(Telnet.commands.IAC, Telnet.commands.SE)
-							)
+	formatted = string.format("%s%s", formatted, string.char(Telnet.commands.IAC, Telnet.commands.SE))
 
 	self:send(formatted)
 end
@@ -299,7 +292,7 @@ function Client:getTerminalType()
 		return "forthcoming..."
 	end
 
-	return self.options.TTYPE.type
+	return self.options.TTYPE.type or "unknown"
 end
 
 --- Retreive the client's remote address.
