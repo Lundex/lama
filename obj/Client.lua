@@ -76,8 +76,8 @@ function Client:initialize(socket)
 
 	-- set sockets
 	self:setSocket(socket)
-	self:IACDo(Telnet.commands.TTYPE)
-	self:IACWill(Telnet.commands.MSSP)
+	self:sendDo(Telnet.commands.TTYPE)
+	self:sendWill(Telnet.commands.MSSP)
 end
 
 --- Returns the string-value of the Client.
@@ -104,22 +104,22 @@ function Client:receive(pattern, prefix)
 		local option = string.byte(partial, found+2)
 		local current = found+2
 		if command == Telnet.commands.WILL then
-			self:onIACWill(option)
+			self:onWill(option)
 
 		elseif command == Telnet.commands.WONT then
-			self:onIACWont(option)
+			self:onWont(option)
 
 		elseif command == Telnet.commands.DO then
-			self:onIACDo(option)
+			self:onDo(option)
 
 		elseif command == Telnet.commands.DONT then
-			self:onIACDont(option)
+			self:onDont(option)
 
 		elseif command == Telnet.commands.SB then
 			-- check for subnegotiations that start with IAC SB and end with IAC SE
 			local nextIACSE = string.find(partial, string.char(Telnet.commands.IAC, Telnet.commands.SE), current)
 			if nextIACSE then
-				self:onIACNegotiation(string.sub(partial, current, nextIACSE-1))
+				self:onNegotiation(string.sub(partial, current, nextIACSE-1))
 				current = nextIACSE+1
 			end
 		end
@@ -135,31 +135,31 @@ end
 
 --- Send an IAC WILL message with the given option.
 -- @param op Option to tell the client you will do.
-function Client:IACWill(op)
+function Client:sendWill(op)
 	self:send(string.char(Telnet.commands.IAC, Telnet.commands.WILL, op))
 end
 
 --- Send an IAC WONT message with the given option.
 -- @param op Option to tell the you won't do.
-function Client:IACWont(op)
+function Client:sendWont(op)
 	self:send(string.char(Telnet.commands.IAC, Telnet.commands.WONT, op))
 end
 
 --- Send an IAC DO message with the given option.
 -- @param op Option to tell the client you'll do.
-function Client:IACDo(op)
+function Client:sendDo(op)
 	self:send(string.char(Telnet.commands.IAC, Telnet.commands.DO, op))
 end
 
 --- Send an IAC DONT message with the given option.
 -- @param op Option to tell the client you won't do.
-function Client:IACDont(op)
+function Client:sendDont(op)
 	self:send(string.char(Telnet.commands.IAC, Telnet.commands.DONT, op))
 end
 
 --- What to do when receiving an IAC WILL option.
 -- @param op Option received.
-function Client:onIACWill(op)
+function Client:onWill(op)
 	-- if they will negotiate terminal type, ask for it right away
 	self.options.WILL[op] = true
 	self.options.WONT[op] = false
@@ -173,14 +173,14 @@ end
 
 --- What to do when receiving an IAC WONT option.
 -- @param op Option received.
-function Client:onIACWont(op)
+function Client:onWont(op)
 	self.options.WONT[op] = true
 	self.options.WILL[op] = false
 end
 
 --- What to do when receiving an IAC DO option.
 -- @param op Option received.
-function Client:onIACDo(op)
+function Client:onDo(op)
 	self.options.DO[op] = true
 	self.options.DONT[op] = false
 
@@ -190,46 +190,46 @@ function Client:onIACDo(op)
 	end
 end
 
---- What to do when receiving an IAC DONT option.
--- @param op Option received.
-function Client:onIACDont(op)
-	self.options.DO[op] = false
-	self.options.DONT[op] = true
-end
-
---- Check if we will negotiate the given option.
--- @return true if option is currently negotiated.<br/>false otherwise.
-function Client:WILL(op)
-	return self.options.WILL[op] == true
-end
-
---- Check if we will not negotiate the given option.
--- @return true if option is currently not negotiated.<br/>false otherwise.
-function Client:WONT(op)
-	return self.options.WONT[op] == true
-end
-
---- Check if the client expects us to negotiate this option.
--- @return true if option is currently negotiated.<br/>false otherwise.
-function Client:DO(op)
-	return self.options.DO[op] == true
-end
-
---- Check if the client expects us not to negotiate this option.
--- @return true if option is currently not negotiated.<br/>false otherwise.
-function Client:DONT(op)
-	return self.options.DONT[op] == true
-end
-
 --- What to do when receiving an IAC SE negotiation.
 -- @param negotiation The entirety of the negotiation message.
-function Client:onIACNegotiation(negotiation)
+function Client:onNegotiation(negotiation)
 	-- TTYPE IS <type>
 	if string.find(negotiation, string.char(Telnet.commands.TTYPE, Telnet.commands.IS)) == 1 then
 		local type = string.sub(negotiation, 3)
 		self.options.TTYPE.type = type
 		Game.info(string.format("%s terminal type: '%s'", tostring(self), type))
 	end
+end
+
+--- What to do when receiving an IAC DONT option.
+-- @param op Option received.
+function Client:onDont(op)
+	self.options.DO[op] = false
+	self.options.DONT[op] = true
+end
+
+--- Check if we will negotiate the given option.
+-- @return true if option is currently negotiated.<br/>false otherwise.
+function Client:getWill(op)
+	return self.options.WILL[op] == true
+end
+
+--- Check if we will not negotiate the given option.
+-- @return true if option is currently not negotiated.<br/>false otherwise.
+function Client:getWont(op)
+	return self.options.WONT[op] == true
+end
+
+--- Check if the client expects us to negotiate this option.
+-- @return true if option is currently negotiated.<br/>false otherwise.
+function Client:getDo(op)
+	return self.options.DO[op] == true
+end
+
+--- Check if the client expects us not to negotiate this option.
+-- @return true if option is currently not negotiated.<br/>false otherwise.
+function Client:getDont(op)
+	return self.options.DONT[op] == true
 end
 
 -- send an MSSP negotiation.
@@ -288,7 +288,7 @@ end
 --- Retreive the client's terminal type, if applicable.
 -- @return A string representing the type of terminal.
 function Client:getTerminalType()
-	if self:WILL(Telnet.commands.TTYPE) and self.options.TTYPE.type == nil then
+	if self:getWill(Telnet.commands.TTYPE) and self.options.TTYPE.type == nil then
 		return "forthcoming..."
 	end
 
