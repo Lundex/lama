@@ -66,6 +66,10 @@
 		<a href="../modules/ext.table.html">ext.table</a>
 	</li>
 
+	<li>
+		<a href="../modules/main.html">main</a>
+	</li>
+
 	<li><strong>obj.Client</strong></li>
 	
 	<li>
@@ -144,6 +148,26 @@
 <table class="function_list">
 
 	<tr>
+	<td class="name" nowrap><a href="#Client:IACDo">Client:IACDo</a>&nbsp;(op)</td>
+	<td class="summary">Send an IAC DO message with the given option.</td>
+	</tr>
+
+	<tr>
+	<td class="name" nowrap><a href="#Client:IACDont">Client:IACDont</a>&nbsp;(op)</td>
+	<td class="summary">Send an IAC DONT message with the given option.</td>
+	</tr>
+
+	<tr>
+	<td class="name" nowrap><a href="#Client:IACWill">Client:IACWill</a>&nbsp;(op)</td>
+	<td class="summary">Send an IAC WILL message with the given option.</td>
+	</tr>
+
+	<tr>
+	<td class="name" nowrap><a href="#Client:IACWont">Client:IACWont</a>&nbsp;(op)</td>
+	<td class="summary">Send an IAC WONT message with the given option.</td>
+	</tr>
+
+	<tr>
 	<td class="name" nowrap><a href="#Client:close">Client:close</a>&nbsp;()</td>
 	<td class="summary">Close the client's socket.</td>
 	</tr>
@@ -161,6 +185,31 @@
 	<tr>
 	<td class="name" nowrap><a href="#Client:initialize">Client:initialize</a>&nbsp;(socket)</td>
 	<td class="summary">Associates a socket with the Client.</td>
+	</tr>
+
+	<tr>
+	<td class="name" nowrap><a href="#Client:onIACDo">Client:onIACDo</a>&nbsp;(op)</td>
+	<td class="summary">What to do when receiving an IAC DO option.</td>
+	</tr>
+
+	<tr>
+	<td class="name" nowrap><a href="#Client:onIACDont">Client:onIACDont</a>&nbsp;(op)</td>
+	<td class="summary">What to do when receiving an IAC DONT option.</td>
+	</tr>
+
+	<tr>
+	<td class="name" nowrap><a href="#Client:onIACNegotiation">Client:onIACNegotiation</a>&nbsp;(negotiation)</td>
+	<td class="summary">What to do when receiving an IAC SE negotiation.</td>
+	</tr>
+
+	<tr>
+	<td class="name" nowrap><a href="#Client:onIACWill">Client:onIACWill</a>&nbsp;(op)</td>
+	<td class="summary">What to do when receiving an IAC WILL option.</td>
+	</tr>
+
+	<tr>
+	<td class="name" nowrap><a href="#Client:onIACWont">Client:onIACWont</a>&nbsp;(op)</td>
+	<td class="summary">What to do when receiving an IAC WONT option.</td>
 	</tr>
 
 	<tr>
@@ -205,6 +254,16 @@
 	<td class="summary">Cloneable that manages user I/O.</td>
 	</tr>
 
+	<tr>
+	<td class="name" nowrap><a href="#Client.options">Client.options</a></td>
+	<td class="summary">Contains all telnet protocol options on the client.</td>
+	</tr>
+
+	<tr>
+	<td class="name" nowrap><a href="#Client.options.TTYPE">Client.options.TTYPE</a></td>
+	<td class="summary">Contains terminal type information.</td>
+	</tr>
+
 </table>
 
 
@@ -216,6 +275,110 @@
 
 <h2><a name="functions"></a>Functions</h2>
 <dl class="function">
+
+
+
+<dt><a name="Client:IACDo"></a><strong>Client:IACDo</strong>&nbsp;(op)</dt>
+<dd>
+Send an IAC DO message with the given option.
+
+
+<h3>Parameters:</h3>
+<ul>
+	
+	<li>
+	  <code><em>op</em></code>: Option to tell the client you'll do.
+	</li>
+	
+</ul>
+
+
+
+
+
+
+
+
+</dd>
+
+
+
+
+<dt><a name="Client:IACDont"></a><strong>Client:IACDont</strong>&nbsp;(op)</dt>
+<dd>
+Send an IAC DONT message with the given option.
+
+
+<h3>Parameters:</h3>
+<ul>
+	
+	<li>
+	  <code><em>op</em></code>: Option to tell the client you won't do.
+	</li>
+	
+</ul>
+
+
+
+
+
+
+
+
+</dd>
+
+
+
+
+<dt><a name="Client:IACWill"></a><strong>Client:IACWill</strong>&nbsp;(op)</dt>
+<dd>
+Send an IAC WILL message with the given option.
+
+
+<h3>Parameters:</h3>
+<ul>
+	
+	<li>
+	  <code><em>op</em></code>: Option to tell the client you will do.
+	</li>
+	
+</ul>
+
+
+
+
+
+
+
+
+</dd>
+
+
+
+
+<dt><a name="Client:IACWont"></a><strong>Client:IACWont</strong>&nbsp;(op)</dt>
+<dd>
+Send an IAC WONT message with the given option.
+
+
+<h3>Parameters:</h3>
+<ul>
+	
+	<li>
+	  <code><em>op</em></code>: Option to tell the you won't do.
+	</li>
+	
+</ul>
+
+
+
+
+
+
+
+
+</dd>
+
 
 
 
@@ -302,9 +465,139 @@ Associates a socket with the Client.
 
 
 
+<dt><a name="Client:onIACDo"></a><strong>Client:onIACDo</strong>&nbsp;(op)</dt>
+<dd>
+What to do when receiving an IAC DO option.
+
+
+<h3>Parameters:</h3>
+<ul>
+	
+	<li>
+	  <code><em>op</em></code>: Option received.
+	</li>
+	
+</ul>
+
+
+
+
+
+
+
+
+</dd>
+
+
+
+
+<dt><a name="Client:onIACDont"></a><strong>Client:onIACDont</strong>&nbsp;(op)</dt>
+<dd>
+What to do when receiving an IAC DONT option.
+
+
+<h3>Parameters:</h3>
+<ul>
+	
+	<li>
+	  <code><em>op</em></code>: Option received.
+	</li>
+	
+</ul>
+
+
+
+
+
+
+
+
+</dd>
+
+
+
+
+<dt><a name="Client:onIACNegotiation"></a><strong>Client:onIACNegotiation</strong>&nbsp;(negotiation)</dt>
+<dd>
+What to do when receiving an IAC SE negotiation.
+
+
+<h3>Parameters:</h3>
+<ul>
+	
+	<li>
+	  <code><em>negotiation</em></code>: The entirety of the negotiation message.
+	</li>
+	
+</ul>
+
+
+
+
+
+
+
+
+</dd>
+
+
+
+
+<dt><a name="Client:onIACWill"></a><strong>Client:onIACWill</strong>&nbsp;(op)</dt>
+<dd>
+What to do when receiving an IAC WILL option.
+
+
+<h3>Parameters:</h3>
+<ul>
+	
+	<li>
+	  <code><em>op</em></code>: Option received.
+	</li>
+	
+</ul>
+
+
+
+
+
+
+
+
+</dd>
+
+
+
+
+<dt><a name="Client:onIACWont"></a><strong>Client:onIACWont</strong>&nbsp;(op)</dt>
+<dd>
+What to do when receiving an IAC WONT option.
+
+
+<h3>Parameters:</h3>
+<ul>
+	
+	<li>
+	  <code><em>op</em></code>: Option received.
+	</li>
+	
+</ul>
+
+
+
+
+
+
+
+
+</dd>
+
+
+
+
 <dt><a name="Client:receive"></a><strong>Client:receive</strong>&nbsp;(pattern, prefix)</dt>
 <dd>
-Pipe to socket's receive() function.
+Pipe to socket's receive() function. Telnet protocol processing is handled before values are returned.
 
 
 <h3>Parameters:</h3>
@@ -467,7 +760,7 @@ Returns the string-value of the Client.
 
 
 <h3>Return value:</h3>
-<ul>A string in the format of <tt>"client@@&lt;client remote address&gt;"</tt>.</ul>
+<ul>A string in the format of <tt>"client@&lt;client remote address&gt;"</tt>.</ul>
 
 
 
@@ -491,6 +784,35 @@ Returns the string-value of the Client.
 	
 	<li>
 	  <code><em>socket</em></code>: The socket associated with this Client.
+	</li>
+	
+</ul>
+
+
+</dd>
+
+
+<dt><a name="Client.options"></a><strong>Client.options</strong></dt>
+<dd>Contains all telnet protocol options on the client.<br /><br />
+
+
+
+</dd>
+
+
+<dt><a name="Client.options.TTYPE"></a><strong>Client.options.TTYPE</strong></dt>
+<dd>Contains terminal type information.<br /><br />
+
+
+<h3>Fields:</h3>
+<ul>
+	
+	<li>
+	  <code><em>enabled</em></code>: Is TTYPE negotiation enabled?
+	</li>
+	
+	<li>
+	  <code><em>type</em></code>: The type of terminal the client is using.
 	</li>
 	
 </ul>

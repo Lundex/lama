@@ -31,8 +31,16 @@ local Client		= Cloneable.clone()
 -- runtime data
 Client.socket					= nil
 
--- options enabled on the client, along with relevant data
-Client.options					= nil
+--- Contains all telnet protocol options on the client.
+-- @class table
+-- @name Client.options
+Client.options					= {}
+
+--- Contains terminal type information.
+-- @class table
+-- @name Client.options.TTYPE
+-- @field enabled Is TTYPE negotiation enabled?
+-- @field type The type of terminal the client is using.
 
 --- Associates a socket with the Client.
 -- @param socket The socket to be associated.
@@ -49,7 +57,7 @@ function Client:initialize(socket)
 end
 
 --- Returns the string-value of the Client.
--- @return A string in the format of <tt>"client@@&lt;client remote address&gt;"</tt>.
+-- @return A string in the format of <tt>"client@&lt;client remote address&gt;"</tt>.
 function Client:toString()
 	if not self.socket then
 		return "client@nil"
@@ -60,6 +68,7 @@ function Client:toString()
 end
 
 --- Pipe to socket's receive() function.
+-- Telnet protocol processing is handled before values are returned.
 -- @return If successful, returns the received pattern.<br/>In case of error, the method returns nil followed by an error message.
 function Client:receive(pattern, prefix)
 	local result, err, partial = self.socket:receive(pattern, prefix)
@@ -102,33 +111,63 @@ function Client:receive(pattern, prefix)
 	return result, err, partial
 end
 
+--- Send an IAC WILL message with the given option.
+-- @param op Option to tell the client you will do.
+function Client:IACWill(op)
+	self:send(string.char(Telnet.commands.IAC, Telnet.commands.WILL, op))
+end
+
+--- Send an IAC WONT message with the given option.
+-- @param op Option to tell the you won't do.
+function Client:IACWont(op)
+	self:send(string.char(Telnet.commands.IAC, Telnet.commands.WONT, op))
+end
+
+--- Send an IAC DO message with the given option.
+-- @param op Option to tell the client you'll do.
 function Client:IACDo(op)
 	self:send(string.char(Telnet.commands.IAC, Telnet.commands.DO, op))
 end
 
-function Client:getIACNegotiation(negotiation)
-	-- TTYPE IS <type>
-	if string.find(negotiation, string.char(Telnet.commands.TTYPE, Telnet.commands.IS)) == 1 then
-		local version = string.sub(negotiation, 3)
-		self.options.TTYPE.version = version
-		Game.info(string.format("%s terminal type: '%s'", tostring(self), version))
-	end
+--- Send an IAC DONT message with the given option.
+-- @param op Option to tell the client you won't do.
+function Client:IACDont(op)
+	self:send(string.char(Telnet.commands.IAC, Telnet.commands.DONT, op))
 end
 
-function Client:getIACWill(op)
+--- What to do when receiving an IAC WILL option.
+-- @param op Option received.
+function Client:onIACWill(op)
 	if op == Telnet.commands.TTYPE then
 		self.options.TTYPE.enabled = true
 		self:send(string.char(Telnet.commands.IAC, Telnet.commands.SB, Telnet.commands.TTYPE, Telnet.commands.SEND, Telnet.commands.IAC, Telnet.commands.SE))
 	end
 end
 
-function Client:getIACWont()
+--- What to do when receiving an IAC WONT option.
+-- @param op Option received.
+function Client:onIACWont()
 end
 
-function Client:getIACDo()
+--- What to do when receiving an IAC DO option.
+-- @param op Option received.
+function Client:onIACDo()
 end
 
-function Client:getIACDont()
+--- What to do when receiving an IAC DONT option.
+-- @param op Option received.
+function Client:onIACDont()
+end
+
+--- What to do when receiving an IAC SE negotiation.
+-- @param negotiation The entirety of the negotiation message.
+function Client:onIACNegotiation(negotiation)
+	-- TTYPE IS <type>
+	if string.find(negotiation, string.char(Telnet.commands.TTYPE, Telnet.commands.IS)) == 1 then
+		local version = string.sub(negotiation, 3)
+		self.options.TTYPE.version = version
+		Game.info(string.format("%s terminal type: '%s'", tostring(self), version))
+	end
 end
 
 --- Pipe to socket's send() function.
