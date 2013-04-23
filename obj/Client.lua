@@ -89,7 +89,7 @@ function Client:initialize(socket)
 	-- set sockets
 	self:setSocket(socket)
 
-	-- start MCCP2
+	-- start MCCP2 negotiation
 	if config.MCCP2IsEnabled() then
 		self:sendWill(Telnet.commands.MCCP2)
 	end
@@ -165,6 +165,7 @@ function Client:receive(pattern, prefix)
 		nextLinebreak = string.find(input, "\n", nextLinebreak+1)
 	end
 
+	-- no linebreak sent? just throw it in the backlog.
 	if not lastLinebreak then
 		self.backlogInput = string.format("%s%s", self.backlogInput or "", input)
 		return nil, err

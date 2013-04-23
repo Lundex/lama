@@ -27,8 +27,8 @@ module("config", package.seeall)
 local config		= {}
 config.enableMCCP2	= false
 
---- Check if MCCP is enabled.
--- @return true of MCCP is enabled.<br/>false otherwise.
+--- Check if MCCP2 is enabled.
+-- @return true of MCCP2 is enabled.<br/>false otherwise.
 function config.MCCP2IsEnabled()
 	return config.enableMCCP2 == true
 end
