@@ -1,0 +1,21 @@
+	Changes in v0.7a (4/23/2013)
+	------DEV--------
+	* Added support for pure telnet clients (which send input instantly as it is entered).
+
+	* Added config.lua to source directory, which we'll use as a config file. config.lua is loaded before all other packages, and can reflect which packages are loaded in the future. Currently, it can enable or disable MCCP2 which brings me to...
+
+	* Added support for MCCP2. It currently uses lzlib (https://github.com/LuaDist/lzlib) which I have had no luck getting installed on my Windows machine. MCCP2 starts enabled, which requires lzlib, so you'll want to disable it if it's not installed.
+
+	* Fixed up the debug messages, added test command (sends a big message), and added MCCP2 indicator in who list.
+
+	* Fixed comments on telnet protocol functions so they aren't completely useless. Even I get confused about the DO/DONT/WILL/WONT negotiations.
+
+	* Added MSSP support. Right now it only sends the MUD name and uptime (which I now realize is not the right value).
+
+	* WARNING: I'll need to separate the telnet opts from the telnet commands, as they clearly have some collision here.
+
+	* Added support for telnet negotiations.
+
+	* No longer loads the object packages in loadPackages() -- these are loaded as needed by the individual packages as they are needed.
+
+	* Updated READMEs.

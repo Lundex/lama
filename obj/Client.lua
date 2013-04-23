@@ -247,7 +247,7 @@ function Client:onDo(op)
 
 	-- start doing MSSP negotiations
 	if op == Telnet.commands.MSSP then
-		self:MSSP(Telnet.commands.MSSP_VAR, "NAME", Telnet.commands.MSSP_VAL, "lama v0.6a-1", Telnet.commands.MSSP_VAR, "UPTIME", Telnet.commands.MSSP_VAL, os.time())
+		self:MSSP(Telnet.commands.MSSP_VAR, "NAME", Telnet.commands.MSSP_VAL, "lama", Telnet.commands.MSSP_VAR, "UPTIME", Telnet.commands.MSSP_VAL, os.time())
 	end
 end
 

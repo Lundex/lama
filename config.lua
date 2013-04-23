@@ -25,7 +25,7 @@ module("config", package.seeall)
 -- @name config
 -- @field enableMCCP2 Should MCCP2 be enabled?
 local config		= {}
-config.enableMCCP2	= false
+config.enableMCCP2	= true
 
 --- Check if MCCP2 is enabled.
 -- @return true of MCCP2 is enabled.<br/>false otherwise.
