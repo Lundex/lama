@@ -28,8 +28,9 @@ require("logging.file")
 require("logging.console")
 
 -- load zlib
+print("MCCP?", config.MCCP2IsEnabled())
 if config.MCCP2IsEnabled() then
-	zlib = require("zlib")
+	_G.zlib = require("zlib")
 end
 
 --- Loads all of the game packages.
