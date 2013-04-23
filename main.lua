@@ -20,11 +20,17 @@
 -- @author milkmanjack
 module("main", package.seeall)
 
--- these are external packages that should be ever-present and don't need reloading.
+-- these are packages that should be ever-present and don't need reloading.
+require("config") -- config is loaded separately, before everything else, and is not reloaded.
 require("socket")
 require("logging")
 require("logging.file")
 require("logging.console")
+
+-- load zlib
+if config.MCCP2IsEnabled() then
+	zlib = require("zlib")
+end
 
 --- Loads all of the game packages.
 function loadPackages()

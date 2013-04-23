@@ -61,6 +61,10 @@
 	<li><strong>Telnet</strong></li>
 	
 	<li>
+		<a href="../modules/config.html">config</a>
+	</li>
+
+	<li>
 		<a href="../modules/ext.table.html">ext.table</a>
 	</li>
 
@@ -152,6 +156,11 @@
 	<td class="summary">Allows for quick reference to Telnet.commands.names enums.</td>
 	</tr>
 
+	<tr>
+	<td class="name" nowrap><a href="#Telnet.commands.nameAll">Telnet.commands.nameAll</a>&nbsp;(command)</td>
+	<td class="summary">Returns a string with every Telnet command in the given command named, separated by commas.</td>
+	</tr>
+
 </table>
 
 
@@ -209,6 +218,35 @@ Allows for quick reference to Telnet.commands.names enums.
 
 <h3>Return value:</h3>
 <ul>Name of the command.</ul>
+
+
+
+</dd>
+
+
+
+
+<dt><a name="Telnet.commands.nameAll"></a><strong>Telnet.commands.nameAll</strong>&nbsp;(command)</dt>
+<dd>
+Returns a string with every Telnet command in the given command named, separated by commas.
+
+
+<h3>Parameters:</h3>
+<ul>
+	
+	<li>
+	  <code><em>command</em></code>: The command to name all of the options in.
+	</li>
+	
+</ul>
+
+
+
+
+
+
+<h3>Return value:</h3>
+<ul>Formatted string of all command option names.</ul>
 
 
 
@@ -276,6 +314,18 @@ Allows for quick reference to Telnet.commands.names enums.
 	
 	<li>
 	  <code><em>SE</em></code>: 240
+	</li>
+	
+	<li>
+	  <code><em>MCCP</em></code>: 85
+	</li>
+	
+	<li>
+	  <code><em>MCCP2</em></code>: 86
+	</li>
+	
+	<li>
+	  <code><em>MSSP</em></code>: 70
 	</li>
 	
 	<li>
@@ -348,11 +398,31 @@ Allows for quick reference to Telnet.commands.names enums.
 	</li>
 	
 	<li>
+	  <code><em>Telnet.commands.MCCP</em></code>: "MCCP"
+	</li>
+	
+	<li>
+	  <code><em>Telnet.commands.MCCP2</em></code>: "MCCP2"
+	</li>
+	
+	<li>
+	  <code><em>Telnet.commands.MSSP</em></code>: "MSSP"
+	</li>
+	
+	<li>
 	  <code><em>Telnet.commands.MSDP</em></code>: "MSDP"
 	</li>
 	
 	<li>
 	  <code><em>Telnet.commands.TTYPE</em></code>: "TTYPE"
+	</li>
+	
+	<li>
+	  <code><em>Telnet.commands.MSSP_VAL</em></code>: "MSDP_VAL"
+	</li>
+	
+	<li>
+	  <code><em>Telnet.commands.MSSP_VAR</em></code>: "MSDP_VAR"
 	</li>
 	
 	<li>

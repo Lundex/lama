@@ -42,8 +42,10 @@
 		<a href="../modules/Game.html">Game</a>
 	</li>
 
-	<li><strong>GameState</strong></li>
-	
+	<li>
+		<a href="../modules/GameState.html">GameState</a>
+	</li>
+
 	<li>
 		<a href="../modules/MessageMode.html">MessageMode</a>
 	</li>
@@ -60,10 +62,8 @@
 		<a href="../modules/Telnet.html">Telnet</a>
 	</li>
 
-	<li>
-		<a href="../modules/config.html">config</a>
-	</li>
-
+	<li><strong>config</strong></li>
+	
 	<li>
 		<a href="../modules/ext.table.html">ext.table</a>
 	</li>
@@ -131,9 +131,9 @@
 
 <div id="content">
 
-<h1>Module <code>GameState</code></h1>
+<h1>Module <code>config</code></h1>
 
-<p>Singleton that contains enum-styled values for Game.state.</p>
+<p>Configuration table for the Server.</p>
 
 
 <p><b>Author:</b>
@@ -152,8 +152,8 @@
 <table class="function_list">
 
 	<tr>
-	<td class="name" nowrap><a href="#GameState.name">GameState.name</a>&nbsp;(state)</td>
-	<td class="summary">Allows for quick reference to GameState.names enums.</td>
+	<td class="name" nowrap><a href="#config.MCCP2IsEnabled">config.MCCP2IsEnabled</a>&nbsp;()</td>
+	<td class="summary">Check if MCCP is enabled.</td>
 	</tr>
 
 </table>
@@ -164,13 +164,8 @@
 <table class="table_list">
 
 	<tr>
-	<td class="name" nowrap><a href="#GameState">GameState</a></td>
-	<td class="summary">Singleton that contains enum-styled values for Game.state.</td>
-	</tr>
-
-	<tr>
-	<td class="name" nowrap><a href="#GameState.names">GameState.names</a></td>
-	<td class="summary">Contains textual representations of GameState enums.</td>
+	<td class="name" nowrap><a href="#config">config</a></td>
+	<td class="summary">Configuration table for the Server.</td>
 	</tr>
 
 </table>
@@ -187,19 +182,10 @@
 
 
 
-<dt><a name="GameState.name"></a><strong>GameState.name</strong>&nbsp;(state)</dt>
+<dt><a name="config.MCCP2IsEnabled"></a><strong>config.MCCP2IsEnabled</strong>&nbsp;()</dt>
 <dd>
-Allows for quick reference to GameState.names enums.
+Check if MCCP is enabled.
 
-
-<h3>Parameters:</h3>
-<ul>
-	
-	<li>
-	  <code><em>state</em></code>: The state to retrieve the name of.
-	</li>
-	
-</ul>
 
 
 
@@ -207,7 +193,7 @@ Allows for quick reference to GameState.names enums.
 
 
 <h3>Return value:</h3>
-<ul>Name of the state.</ul>
+<ul>true of MCCP is enabled.<br/>false otherwise.</ul>
 
 
 
@@ -222,52 +208,15 @@ Allows for quick reference to GameState.names enums.
 <h2><a name="tables"></a>Tables</h2>
 <dl class="table">
 
-<dt><a name="GameState"></a><strong>GameState</strong></dt>
-<dd>Singleton that contains enum-styled values for Game.state.<br /><br />
+<dt><a name="config"></a><strong>config</strong></dt>
+<dd>Configuration table for the Server.<br /><br />
 
 
 <h3>Fields:</h3>
 <ul>
 	
 	<li>
-	  <code><em>NEW</em></code>: The Game is in its introductory stages.
-	</li>
-	
-	<li>
-	  <code><em>READY</em></code>: The Game is currently running, and ready for play.
-	</li>
-	
-	<li>
-	  <code><em>SHUTDOWN</em></code>: The Game is shutting down.
-	</li>
-	
-</ul>
-
-
-</dd>
-
-
-<dt><a name="GameState.names"></a><strong>GameState.names</strong></dt>
-<dd>Contains textual representations of GameState enums.<br /><br />
-
-
-<h3>Fields:</h3>
-<ul>
-	
-	<li>
-	  <code><em>GameState.NEW</em></code>: "new"
-	</li>
-	
-	<li>
-	  <code><em>GameState.READY</em></code>: "ready"
-	</li>
-	
-	<li>
-	  <code><em>GameState.HOTBOOT</em></code>: "hotboot"
-	</li>
-	
-	<li>
-	  <code><em>GameState.SHUTDOWN</em></code>: "shutdown"
+	  <code><em>enableMCCP2</em></code>: Should MCCP2 be enabled?
 	</li>
 	
 </ul>

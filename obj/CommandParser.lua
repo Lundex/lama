@@ -79,7 +79,11 @@ function CommandParser:parse(player, mob, input)
 	elseif string.find("who", input) == 1 then
 		local msg = "\[ Connected Players ]"
 		for i,v in ipairs(Game:getPlayers()) do
-			msg = string.format("%s\n-> %s (client: %s) (MCCP %s)", msg, v:getMob():getName(), v:getClient():getTerminalType(), (v:getClient():getDo(Telnet.commands.MCCP2) and "enabled") or "disabled")
+			local client = v:getClient()
+			local mob = v:getMob()
+			local TerminalType = client:getTerminalType()
+			local MCCPStatus = client:getDo(Telnet.commands.MCCP2) and "enabled" or "disabled"
+			msg = string.format("%s\n-> %s (terminal: %s) (MCCP %s)", msg, tostring(v), TerminalType, MCCPStatus)
 		end
 
 		player:sendMessage(msg)

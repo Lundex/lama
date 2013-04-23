@@ -423,35 +423,21 @@ function Game.PollEvent:run()
 
 	for i,v in table.safeIPairs(Game.players) do
 		local client = v:getClient()
-		local input, err, partial = client:receive("*a")
-		if not input then
-			if err == 'closed' then
-				Game.disconnectPlayer(v)
+		local input, err = client:receive("*a")
+		if err == 'closed' then
+			Game.disconnectPlayer(v)
 
-			-- actual processing starts here because we're using the *a pattern for receive()
-			-- this way we don't lose things like client negotiations
-			-- though we don't support them right now anyway
-			elseif partial ~= nil and string.len(partial) > 0 then
-				-- this is essentially an iterator that'll traverse an entire
-				-- input string if it spans multiple lines, sending each one to
-				-- Game.onPlayerInput().
-				-- it's kinda tacky.
-				local multiple = string.gmatch(partial, "(.-)[\r?][\n?]")
-				local first = multiple()
-				if first then
-					Game.onPlayerInput(v, first)
-					for cmd in multiple do
-						Game.onPlayerInput(v, cmd)
-					end
-				else
-					Game.debug(string.format("bad input from %s: {%s}", tostring(v:getClient()), partial))
+		elseif input and string.len(input) > 0 then
+			local multiple = string.gmatch(input, "(.-)\n")
+			local first = multiple()
+			if first then
+				Game.onPlayerInput(v, first)
+				for cmd in multiple do
+					Game.onPlayerInput(v, cmd)
 				end
+			else
+				Game.debug(string.format("bad input from %s: {%s}", tostring(v:getClient()), input))
 			end
-
-		-- this is where we'd start normal processing if we used the socket's *l receive pattern.
-		-- just here for posterity's sake right now.
-		else
-			Game.onPlayerInput(v, input)
 		end
 	end
 end

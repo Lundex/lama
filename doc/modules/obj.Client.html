@@ -63,6 +63,10 @@
 	</li>
 
 	<li>
+		<a href="../modules/config.html">config</a>
+	</li>
+
+	<li>
 		<a href="../modules/ext.table.html">ext.table</a>
 	</li>
 
@@ -148,26 +152,6 @@
 <table class="function_list">
 
 	<tr>
-	<td class="name" nowrap><a href="#Client:IACDo">Client:IACDo</a>&nbsp;(op)</td>
-	<td class="summary">Send an IAC DO message with the given option.</td>
-	</tr>
-
-	<tr>
-	<td class="name" nowrap><a href="#Client:IACDont">Client:IACDont</a>&nbsp;(op)</td>
-	<td class="summary">Send an IAC DONT message with the given option.</td>
-	</tr>
-
-	<tr>
-	<td class="name" nowrap><a href="#Client:IACWill">Client:IACWill</a>&nbsp;(op)</td>
-	<td class="summary">Send an IAC WILL message with the given option.</td>
-	</tr>
-
-	<tr>
-	<td class="name" nowrap><a href="#Client:IACWont">Client:IACWont</a>&nbsp;(op)</td>
-	<td class="summary">Send an IAC WONT message with the given option.</td>
-	</tr>
-
-	<tr>
 	<td class="name" nowrap><a href="#Client:close">Client:close</a>&nbsp;()</td>
 	<td class="summary">Close the client's socket.</td>
 	</tr>
@@ -178,8 +162,33 @@
 	</tr>
 
 	<tr>
+	<td class="name" nowrap><a href="#Client:getDo">Client:getDo</a>&nbsp;(op)</td>
+	<td class="summary">Check if the client expects us to negotiate this option.</td>
+	</tr>
+
+	<tr>
+	<td class="name" nowrap><a href="#Client:getDont">Client:getDont</a>&nbsp;(op)</td>
+	<td class="summary">Check if the client expects us not to negotiate this option.</td>
+	</tr>
+
+	<tr>
 	<td class="name" nowrap><a href="#Client:getSocket">Client:getSocket</a>&nbsp;()</td>
 	<td class="summary">Retreive the client's socket.</td>
+	</tr>
+
+	<tr>
+	<td class="name" nowrap><a href="#Client:getTerminalType">Client:getTerminalType</a>&nbsp;()</td>
+	<td class="summary">Retreive the client's terminal type, if applicable.</td>
+	</tr>
+
+	<tr>
+	<td class="name" nowrap><a href="#Client:getWill">Client:getWill</a>&nbsp;(op)</td>
+	<td class="summary">Check if we will negotiate the given option.</td>
+	</tr>
+
+	<tr>
+	<td class="name" nowrap><a href="#Client:getWont">Client:getWont</a>&nbsp;(op)</td>
+	<td class="summary">Check if we will not negotiate the given option.</td>
 	</tr>
 
 	<tr>
@@ -188,27 +197,27 @@
 	</tr>
 
 	<tr>
-	<td class="name" nowrap><a href="#Client:onIACDo">Client:onIACDo</a>&nbsp;(op)</td>
+	<td class="name" nowrap><a href="#Client:onDo">Client:onDo</a>&nbsp;(op)</td>
 	<td class="summary">What to do when receiving an IAC DO option.</td>
 	</tr>
 
 	<tr>
-	<td class="name" nowrap><a href="#Client:onIACDont">Client:onIACDont</a>&nbsp;(op)</td>
+	<td class="name" nowrap><a href="#Client:onDont">Client:onDont</a>&nbsp;(op)</td>
 	<td class="summary">What to do when receiving an IAC DONT option.</td>
 	</tr>
 
 	<tr>
-	<td class="name" nowrap><a href="#Client:onIACNegotiation">Client:onIACNegotiation</a>&nbsp;(negotiation)</td>
-	<td class="summary">What to do when receiving an IAC SE negotiation.</td>
+	<td class="name" nowrap><a href="#Client:onSubnegotiation">Client:onSubnegotiation</a>&nbsp;(negotiation)</td>
+	<td class="summary">What to do when receiving an IAC SE subnegotiation.</td>
 	</tr>
 
 	<tr>
-	<td class="name" nowrap><a href="#Client:onIACWill">Client:onIACWill</a>&nbsp;(op)</td>
+	<td class="name" nowrap><a href="#Client:onWill">Client:onWill</a>&nbsp;(op)</td>
 	<td class="summary">What to do when receiving an IAC WILL option.</td>
 	</tr>
 
 	<tr>
-	<td class="name" nowrap><a href="#Client:onIACWont">Client:onIACWont</a>&nbsp;(op)</td>
+	<td class="name" nowrap><a href="#Client:onWont">Client:onWont</a>&nbsp;(op)</td>
 	<td class="summary">What to do when receiving an IAC WONT option.</td>
 	</tr>
 
@@ -223,6 +232,16 @@
 	</tr>
 
 	<tr>
+	<td class="name" nowrap><a href="#Client:sendDo">Client:sendDo</a>&nbsp;(op)</td>
+	<td class="summary">Send an IAC DO message with the given option.</td>
+	</tr>
+
+	<tr>
+	<td class="name" nowrap><a href="#Client:sendDont">Client:sendDont</a>&nbsp;(op)</td>
+	<td class="summary">Send an IAC DONT message with the given option.</td>
+	</tr>
+
+	<tr>
 	<td class="name" nowrap><a href="#Client:sendLine">Client:sendLine</a>&nbsp;(str)</td>
 	<td class="summary">Sends the given string to the client followed by a linebreak.</td>
 	</tr>
@@ -230,6 +249,16 @@
 	<tr>
 	<td class="name" nowrap><a href="#Client:sendString">Client:sendString</a>&nbsp;(str)</td>
 	<td class="summary">Formats a string before sending it to the client.</td>
+	</tr>
+
+	<tr>
+	<td class="name" nowrap><a href="#Client:sendWill">Client:sendWill</a>&nbsp;(op)</td>
+	<td class="summary">Send an IAC WILL message with the given option.</td>
+	</tr>
+
+	<tr>
+	<td class="name" nowrap><a href="#Client:sendWont">Client:sendWont</a>&nbsp;(op)</td>
+	<td class="summary">Send an IAC WONT message with the given option.</td>
 	</tr>
 
 	<tr>
@@ -260,8 +289,33 @@
 	</tr>
 
 	<tr>
+	<td class="name" nowrap><a href="#Client.options.DO Client.options.DO					= nil">Client.options.DO Client.options.DO					= nil</a></td>
+	<td class="summary">Contains currently flagged options that the Client wants the Server to negotiate.</td>
+	</tr>
+
+	<tr>
+	<td class="name" nowrap><a href="#Client.options.DONT Client.options.DONT				= nil">Client.options.DONT Client.options.DONT				= nil</a></td>
+	<td class="summary">Contains currently flagged options that the Client doesn't want the Server to negotiate.</td>
+	</tr>
+
+	<tr>
+	<td class="name" nowrap><a href="#Client.options.MCCP2">Client.options.MCCP2</a></td>
+	<td class="summary">Contains MCCP2 zlib streams.</td>
+	</tr>
+
+	<tr>
 	<td class="name" nowrap><a href="#Client.options.TTYPE">Client.options.TTYPE</a></td>
 	<td class="summary">Contains terminal type information.</td>
+	</tr>
+
+	<tr>
+	<td class="name" nowrap><a href="#Client.options.WILL Client.options.WILL				= nil">Client.options.WILL Client.options.WILL				= nil</a></td>
+	<td class="summary">Contains currently flagged protocols that the Client wants to negotiate.</td>
+	</tr>
+
+	<tr>
+	<td class="name" nowrap><a href="#Client.options.WONT Client.options.WONT				= nil">Client.options.WONT Client.options.WONT				= nil</a></td>
+	<td class="summary">Contains currently flagged protocols that the Client doesn't want to negotiate.</td>
 	</tr>
 
 </table>
@@ -275,110 +329,6 @@
 
 <h2><a name="functions"></a>Functions</h2>
 <dl class="function">
-
-
-
-<dt><a name="Client:IACDo"></a><strong>Client:IACDo</strong>&nbsp;(op)</dt>
-<dd>
-Send an IAC DO message with the given option.
-
-
-<h3>Parameters:</h3>
-<ul>
-	
-	<li>
-	  <code><em>op</em></code>: Option to tell the client you'll do.
-	</li>
-	
-</ul>
-
-
-
-
-
-
-
-
-</dd>
-
-
-
-
-<dt><a name="Client:IACDont"></a><strong>Client:IACDont</strong>&nbsp;(op)</dt>
-<dd>
-Send an IAC DONT message with the given option.
-
-
-<h3>Parameters:</h3>
-<ul>
-	
-	<li>
-	  <code><em>op</em></code>: Option to tell the client you won't do.
-	</li>
-	
-</ul>
-
-
-
-
-
-
-
-
-</dd>
-
-
-
-
-<dt><a name="Client:IACWill"></a><strong>Client:IACWill</strong>&nbsp;(op)</dt>
-<dd>
-Send an IAC WILL message with the given option.
-
-
-<h3>Parameters:</h3>
-<ul>
-	
-	<li>
-	  <code><em>op</em></code>: Option to tell the client you will do.
-	</li>
-	
-</ul>
-
-
-
-
-
-
-
-
-</dd>
-
-
-
-
-<dt><a name="Client:IACWont"></a><strong>Client:IACWont</strong>&nbsp;(op)</dt>
-<dd>
-Send an IAC WONT message with the given option.
-
-
-<h3>Parameters:</h3>
-<ul>
-	
-	<li>
-	  <code><em>op</em></code>: Option to tell the you won't do.
-	</li>
-	
-</ul>
-
-
-
-
-
-
-
-
-</dd>
-
 
 
 
@@ -419,6 +369,64 @@ Retreive the client's remote address.
 
 
 
+<dt><a name="Client:getDo"></a><strong>Client:getDo</strong>&nbsp;(op)</dt>
+<dd>
+Check if the client expects us to negotiate this option.
+
+
+<h3>Parameters:</h3>
+<ul>
+	
+	<li>
+	  <code><em>op</em></code>: 
+	</li>
+	
+</ul>
+
+
+
+
+
+
+<h3>Return value:</h3>
+<ul>true if option is currently negotiated.<br/>false otherwise.</ul>
+
+
+
+</dd>
+
+
+
+
+<dt><a name="Client:getDont"></a><strong>Client:getDont</strong>&nbsp;(op)</dt>
+<dd>
+Check if the client expects us not to negotiate this option.
+
+
+<h3>Parameters:</h3>
+<ul>
+	
+	<li>
+	  <code><em>op</em></code>: 
+	</li>
+	
+</ul>
+
+
+
+
+
+
+<h3>Return value:</h3>
+<ul>true if option is currently not negotiated.<br/>false otherwise.</ul>
+
+
+
+</dd>
+
+
+
+
 <dt><a name="Client:getSocket"></a><strong>Client:getSocket</strong>&nbsp;()</dt>
 <dd>
 Retreive the client's socket.
@@ -431,6 +439,84 @@ Retreive the client's socket.
 
 <h3>Return value:</h3>
 <ul>The Client's socket.</br>nil if no socket is attached.</ul>
+
+
+
+</dd>
+
+
+
+
+<dt><a name="Client:getTerminalType"></a><strong>Client:getTerminalType</strong>&nbsp;()</dt>
+<dd>
+Retreive the client's terminal type, if applicable.
+
+
+
+
+
+
+
+<h3>Return value:</h3>
+<ul>A string representing the type of terminal.</ul>
+
+
+
+</dd>
+
+
+
+
+<dt><a name="Client:getWill"></a><strong>Client:getWill</strong>&nbsp;(op)</dt>
+<dd>
+Check if we will negotiate the given option.
+
+
+<h3>Parameters:</h3>
+<ul>
+	
+	<li>
+	  <code><em>op</em></code>: 
+	</li>
+	
+</ul>
+
+
+
+
+
+
+<h3>Return value:</h3>
+<ul>true if option is currently negotiated.<br/>false otherwise.</ul>
+
+
+
+</dd>
+
+
+
+
+<dt><a name="Client:getWont"></a><strong>Client:getWont</strong>&nbsp;(op)</dt>
+<dd>
+Check if we will not negotiate the given option.
+
+
+<h3>Parameters:</h3>
+<ul>
+	
+	<li>
+	  <code><em>op</em></code>: 
+	</li>
+	
+</ul>
+
+
+
+
+
+
+<h3>Return value:</h3>
+<ul>true if option is currently not negotiated.<br/>false otherwise.</ul>
 
 
 
@@ -465,7 +551,7 @@ Associates a socket with the Client.
 
 
 
-<dt><a name="Client:onIACDo"></a><strong>Client:onIACDo</strong>&nbsp;(op)</dt>
+<dt><a name="Client:onDo"></a><strong>Client:onDo</strong>&nbsp;(op)</dt>
 <dd>
 What to do when receiving an IAC DO option.
 
@@ -474,7 +560,7 @@ What to do when receiving an IAC DO option.
 <ul>
 	
 	<li>
-	  <code><em>op</em></code>: Option received.
+	  <code><em>op</em></code>: Option the Client wants the Server to negotiate.
 	</li>
 	
 </ul>
@@ -491,7 +577,7 @@ What to do when receiving an IAC DO option.
 
 
 
-<dt><a name="Client:onIACDont"></a><strong>Client:onIACDont</strong>&nbsp;(op)</dt>
+<dt><a name="Client:onDont"></a><strong>Client:onDont</strong>&nbsp;(op)</dt>
 <dd>
 What to do when receiving an IAC DONT option.
 
@@ -500,7 +586,7 @@ What to do when receiving an IAC DONT option.
 <ul>
 	
 	<li>
-	  <code><em>op</em></code>: Option received.
+	  <code><em>op</em></code>: Option the Client doesn't want the Server to negotiate.
 	</li>
 	
 </ul>
@@ -517,16 +603,16 @@ What to do when receiving an IAC DONT option.
 
 
 
-<dt><a name="Client:onIACNegotiation"></a><strong>Client:onIACNegotiation</strong>&nbsp;(negotiation)</dt>
+<dt><a name="Client:onSubnegotiation"></a><strong>Client:onSubnegotiation</strong>&nbsp;(negotiation)</dt>
 <dd>
-What to do when receiving an IAC SE negotiation.
+What to do when receiving an IAC SE subnegotiation.
 
 
 <h3>Parameters:</h3>
 <ul>
 	
 	<li>
-	  <code><em>negotiation</em></code>: The entirety of the negotiation message.
+	  <code><em>negotiation</em></code>: The entirety of the subnegotiation message.
 	</li>
 	
 </ul>
@@ -543,7 +629,7 @@ What to do when receiving an IAC SE negotiation.
 
 
 
-<dt><a name="Client:onIACWill"></a><strong>Client:onIACWill</strong>&nbsp;(op)</dt>
+<dt><a name="Client:onWill"></a><strong>Client:onWill</strong>&nbsp;(op)</dt>
 <dd>
 What to do when receiving an IAC WILL option.
 
@@ -552,7 +638,7 @@ What to do when receiving an IAC WILL option.
 <ul>
 	
 	<li>
-	  <code><em>op</em></code>: Option received.
+	  <code><em>op</em></code>: Option the Client wants to negotiate.
 	</li>
 	
 </ul>
@@ -569,7 +655,7 @@ What to do when receiving an IAC WILL option.
 
 
 
-<dt><a name="Client:onIACWont"></a><strong>Client:onIACWont</strong>&nbsp;(op)</dt>
+<dt><a name="Client:onWont"></a><strong>Client:onWont</strong>&nbsp;(op)</dt>
 <dd>
 What to do when receiving an IAC WONT option.
 
@@ -578,7 +664,7 @@ What to do when receiving an IAC WONT option.
 <ul>
 	
 	<li>
-	  <code><em>op</em></code>: Option received.
+	  <code><em>op</em></code>: Option the Client doesn't want to negotiate.
 	</li>
 	
 </ul>
@@ -665,6 +751,58 @@ Pipe to socket's send() function.
 
 
 
+<dt><a name="Client:sendDo"></a><strong>Client:sendDo</strong>&nbsp;(op)</dt>
+<dd>
+Send an IAC DO message with the given option.
+
+
+<h3>Parameters:</h3>
+<ul>
+	
+	<li>
+	  <code><em>op</em></code>: Option the Server wants the Client to negotiate.
+	</li>
+	
+</ul>
+
+
+
+
+
+
+
+
+</dd>
+
+
+
+
+<dt><a name="Client:sendDont"></a><strong>Client:sendDont</strong>&nbsp;(op)</dt>
+<dd>
+Send an IAC DONT message with the given option.
+
+
+<h3>Parameters:</h3>
+<ul>
+	
+	<li>
+	  <code><em>op</em></code>: Option the Server doesn't wnat the Client to negotiate.
+	</li>
+	
+</ul>
+
+
+
+
+
+
+
+
+</dd>
+
+
+
+
 <dt><a name="Client:sendLine"></a><strong>Client:sendLine</strong>&nbsp;(str)</dt>
 <dd>
 Sends the given string to the client followed by a linebreak.
@@ -715,6 +853,58 @@ Formats a string before sending it to the client.
 
 <h3>Return value:</h3>
 <ul>result of self:send().</ul>
+
+
+
+</dd>
+
+
+
+
+<dt><a name="Client:sendWill"></a><strong>Client:sendWill</strong>&nbsp;(op)</dt>
+<dd>
+Send an IAC WILL message with the given option.
+
+
+<h3>Parameters:</h3>
+<ul>
+	
+	<li>
+	  <code><em>op</em></code>: Option the Server supports and wants the Client to negotiate.
+	</li>
+	
+</ul>
+
+
+
+
+
+
+
+
+</dd>
+
+
+
+
+<dt><a name="Client:sendWont"></a><strong>Client:sendWont</strong>&nbsp;(op)</dt>
+<dd>
+Send an IAC WONT message with the given option.
+
+
+<h3>Parameters:</h3>
+<ul>
+	
+	<li>
+	  <code><em>op</em></code>: Option the Server doesn't support and wants the Client not to negotiate.
+	</li>
+	
+</ul>
+
+
+
+
+
 
 
 
@@ -800,6 +990,47 @@ Returns the string-value of the Client.
 </dd>
 
 
+<dt><a name="Client.options.DO Client.options.DO					= nil"></a><strong>Client.options.DO Client.options.DO					= nil</strong></dt>
+<dd>Contains currently flagged options that the Client wants the Server to negotiate.<br /><br />
+
+
+
+</dd>
+
+
+<dt><a name="Client.options.DONT Client.options.DONT				= nil"></a><strong>Client.options.DONT Client.options.DONT				= nil</strong></dt>
+<dd>Contains currently flagged options that the Client doesn't want the Server to negotiate.<br /><br />
+
+
+
+</dd>
+
+
+<dt><a name="Client.options.MCCP2"></a><strong>Client.options.MCCP2</strong></dt>
+<dd>Contains MCCP2 zlib streams.<br /><br />
+
+
+<h3>Fields:</h3>
+<ul>
+	
+	<li>
+	  <code><em>inflater</em></code>: The zlib inflate input stream.
+	</li>
+	
+	<li>
+	  <code><em>deflater</em></code>: The zlib deflate output stream.
+	</li>
+	
+	<li>
+	  <code><em>deflateBuffer</em></code>: The buffer deflated output is stored in before being sent.
+	</li>
+	
+</ul>
+
+
+</dd>
+
+
 <dt><a name="Client.options.TTYPE"></a><strong>Client.options.TTYPE</strong></dt>
 <dd>Contains terminal type information.<br /><br />
 
@@ -808,14 +1039,26 @@ Returns the string-value of the Client.
 <ul>
 	
 	<li>
-	  <code><em>enabled</em></code>: Is TTYPE negotiation enabled?
-	</li>
-	
-	<li>
-	  <code><em>type</em></code>: The type of terminal the client is using.
+	  <code><em>type</em></code>: The type of terminal the client is using. Client.options.TTYPE				= nil
 	</li>
 	
 </ul>
+
+
+</dd>
+
+
+<dt><a name="Client.options.WILL Client.options.WILL				= nil"></a><strong>Client.options.WILL Client.options.WILL				= nil</strong></dt>
+<dd>Contains currently flagged protocols that the Client wants to negotiate.<br /><br />
+
+
+
+</dd>
+
+
+<dt><a name="Client.options.WONT Client.options.WONT				= nil"></a><strong>Client.options.WONT Client.options.WONT				= nil</strong></dt>
+<dd>Contains currently flagged protocols that the Client doesn't want to negotiate.<br /><br />
+
 
 
 </dd>

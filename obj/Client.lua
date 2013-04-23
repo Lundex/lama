@@ -20,7 +20,6 @@
 -- @author milkmanjack
 module("obj.Client", package.seeall)
 
-local zlib							= require("zlib")
 local Cloneable						= require("obj.Cloneable")
 
 --- Cloneable that manages user I/O.
@@ -31,6 +30,7 @@ local Client						= Cloneable.clone()
 
 -- runtime data
 Client.socket						= nil
+Client.backlogInput					= nil -- backlog that adds support for pure telnet
 
 --- Contains all telnet protocol options on the client.
 -- @class table
@@ -88,7 +88,12 @@ function Client:initialize(socket)
 
 	-- set sockets
 	self:setSocket(socket)
-	self:sendWill(Telnet.commands.MCCP2)
+
+	-- start MCCP2
+	if config.MCCP2IsEnabled() then
+		self:sendWill(Telnet.commands.MCCP2)
+	end
+
 	self:sendDo(Telnet.commands.TTYPE)
 	self:sendWill(Telnet.commands.MSSP)
 end
@@ -108,13 +113,20 @@ end
 -- Telnet protocol processing is handled before values are returned.
 -- @return If successful, returns the received pattern.<br/>In case of error, the method returns nil followed by an error message.
 function Client:receive(pattern, prefix)
-	local result, err, partial = self.socket:receive(pattern, prefix)
+	local _, err, input = self.socket:receive(pattern, prefix)
+
+	-- remove carriage returns
+	input = string.gsub(input, "\r", "")
+
+	if string.len(input) < 1 then
+		return nil, err
+	end
 
 	-- parse IAC messages at the client level before passing off to whoever wants to know
-	local found = string.find(partial, string.char(Telnet.commands.IAC))
+	local found = string.find(input, string.char(Telnet.commands.IAC))
 	while found ~= nil do
-		local command = string.byte(partial, found+1)
-		local option = string.byte(partial, found+2)
+		local command = string.byte(input, found+1)
+		local option = string.byte(input, found+2)
 		local current = found+2
 		if command == Telnet.commands.WILL then
 			self:onWill(option)
@@ -130,9 +142,9 @@ function Client:receive(pattern, prefix)
 
 		elseif command == Telnet.commands.SB then
 			-- check for subnegotiations that start with IAC SB and end with IAC SE
-			local nextIACSE = string.find(partial, string.char(Telnet.commands.IAC, Telnet.commands.SE), current)
+			local nextIACSE = string.find(input, string.char(Telnet.commands.IAC, Telnet.commands.SE), current)
 			if nextIACSE then
-				self:onSubnegotiation(string.sub(partial, current, nextIACSE-1))
+				self:onSubnegotiation(string.sub(input, current, nextIACSE-1))
 				current = nextIACSE+1
 			end
 		end
@@ -140,10 +152,37 @@ function Client:receive(pattern, prefix)
 		-- string.format terminates on null char when displaying, which happens to be used in
 		-- TTYPE negotiation (Telnet.commands.IS == 0 == null terminator).
 		-- as such, use pure concatenation.
-		partial = string.sub(partial, 1, found-1) .. string.sub(partial, current+1) -- strip IAC message from input
-		found = string.find(partial, string.char(Telnet.commands.IAC))
+		input = string.sub(input, 1, found-1) .. string.sub(input, current+1) -- strip IAC message from input
+		found = string.find(input, string.char(Telnet.commands.IAC))
 	end
-	return result, err, partial
+
+	-- backlog input missing a linebreak
+	-- this will add support for ANSI clients
+	local lastLinebreak = string.find(input, "\n")
+	local nextLinebreak = string.find(input, "\n", lastLinebreak)
+	while nextLinebreak do
+		lastLinebreak = nextLinebreak
+		nextLinebreak = string.find(input, "\n", nextLinebreak+1)
+	end
+
+	if not lastLinebreak then
+		self.backlogInput = string.format("%s%s", self.backlogInput or "", input)
+		return nil, err
+	end
+
+	-- copy valid input (input ending with a linebreak)
+	-- move rest into backlog
+	local validInput = string.format("%s%s", self.backlogInput or "", string.sub(input, 1, lastLinebreak))
+	if string.len(validInput) > 0 then
+		self.backlogInput = nil
+	end
+
+	local remainingInput = string.sub(input, lastLinebreak and lastLinebreak+1 or 1)
+	if string.len(remainingInput) > 0 then
+		self.backlogInput = remainingInput
+	end
+
+	return validInput, err
 end
 
 --- Send an IAC WILL message with the given option.
@@ -194,7 +233,7 @@ end
 -- @param op Option the Client wants the Server to negotiate.
 function Client:onDo(op)
 	-- process before setting DO
-	if op == Telnet.commands.MCCP2 then
+	if op == Telnet.commands.MCCP2 and config.MCCP2IsEnabled() then
 		self:send(string.char(Telnet.commands.IAC, Telnet.commands.SB, Telnet.commands.MCCP2, Telnet.commands.IAC, Telnet.commands.SE))
 
 		-- all output from now on is deflated!
