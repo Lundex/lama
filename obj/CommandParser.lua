@@ -44,6 +44,10 @@ function CommandParser:parse(player, mob, input)
 	-- some generic parsing cause I'm too lazy to implement real commands right now
 	if input == "hotboot" then
 		Game.hotboot()
+
+	elseif input == "test" then
+		player:sendMessage(Nanny.getGreeting(), MessageMode.INFO)
+
 	elseif string.find("north", input) == 1 then
 		if mob:step(Direction.NORTH) then
 			mob:showRoom()
@@ -75,7 +79,7 @@ function CommandParser:parse(player, mob, input)
 	elseif string.find("who", input) == 1 then
 		local msg = "\[ Connected Players ]"
 		for i,v in ipairs(Game:getPlayers()) do
-			msg = string.format("%s\n-> %s (client: %s)", msg, v:getMob():getName(), v:getClient():getTerminalType())
+			msg = string.format("%s\n-> %s (client: %s) (MCCP %s)", msg, v:getMob():getName(), v:getClient():getTerminalType(), (v:getClient():getDo(Telnet.commands.MCCP2) and "enabled") or "disabled")
 		end
 
 		player:sendMessage(msg)

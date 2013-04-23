@@ -38,7 +38,8 @@ local Telnet  							= {}
 -- @field EL 248
 -- @field EC 247
 -- @field SE 240
--- @field MCCP 86
+-- @field MCCP 85
+-- @field MCCP2 86
 -- @field MSSP 70
 -- @field MSDP 69
 -- @field TTYPE 24
@@ -57,7 +58,8 @@ Telnet.commands.EC							= 247
 Telnet.commands.SE							= 240
 
 -- protocol options (I guess)
-Telnet.commands.MCCP						= 86
+Telnet.commands.MCCP						= 85
+Telnet.commands.MCCP2						= 86
 Telnet.commands.MSSP						= 70
 Telnet.commands.MSDP						= 69
 Telnet.commands.TTYPE						= 24
@@ -84,6 +86,8 @@ Telnet.commands.IS							= 0
 -- @field Telnet.commands.EL "EL"
 -- @field Telnet.commands.EC "EC"
 -- @field Telnet.commands.SE "SE"
+-- @field Telnet.commands.MCCP "MCCP"
+-- @field Telnet.commands.MCCP2 "MCCP2"
 -- @field Telnet.commands.MSSP "MSSP"
 -- @field Telnet.commands.MSDP "MSDP"
 -- @field Telnet.commands.TTYPE "TTYPE"
@@ -105,6 +109,7 @@ Telnet.commands.names[Telnet.commands.SE]	= "SE"
 
 -- protocols
 Telnet.commands.names[Telnet.commands.MCCP] = "MCCP"
+Telnet.commands.names[Telnet.commands.MCCP2] = "MCCP2"
 Telnet.commands.names[Telnet.commands.MSSP] = "MSSP"
 Telnet.commands.names[Telnet.commands.MSDP] = "MSDP"
 Telnet.commands.names[Telnet.commands.TTYPE] = "TTYPE"

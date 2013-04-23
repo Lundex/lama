@@ -124,7 +124,7 @@ end
 --- Shows a description of the room the mob inhabits to the mob.
 function Mob:showRoom()
 	local location = self:getLoc()
-	local msg = string.format("%s\n %s (%d,%d,%d)", location:getName(), location:getDescription(), location:getX(), location:getY(), location:getZ())
+	local msg = string.format("%s (%d,%d,%d)\n->%s", location:getName(), location:getX(), location:getY(), location:getZ(), location:getDescription())
 
 	for i,v in ipairs(location:getContents()) do
 		if v:isCloneOf(Mob) then

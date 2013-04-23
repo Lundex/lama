@@ -63,9 +63,9 @@ Client.options						= nil
 -- @field type The type of terminal the client is using.
 --Client.options.TTYPE				= nil
 
---- Contains MCCP zlib streams.
+--- Contains MCCP2 zlib streams.
 -- @class table
--- @name Client.options.MCCP
+-- @name Client.options.MCCP2
 -- @field inflater The zlib inflate input stream.
 -- @field deflater The zlib deflate output stream.
 -- @field deflateBuffer The buffer deflated output is stored in before being sent.
@@ -74,21 +74,21 @@ Client.options						= nil
 -- @param socket The socket to be associated.
 function Client:initialize(socket)
 	-- initialize options
-	self.options					= {}
-	self.options.WILL				= {}
-	self.options.WONT				= {}
-	self.options.DO					= {}
-	self.options.DONT				= {}
-	self.options.TTYPE				= {}
-	self.options.TTYPE.type			= nil
-	self.options.MCCP				= {}
-	self.options.MCCP.inflater		= nil
-	self.options.MCCP.defelater		= nil
-	self.options.MCCP.deflateBuffer	= nil
+	self.options						= {}
+	self.options.WILL					= {}
+	self.options.WONT					= {}
+	self.options.DO						= {}
+	self.options.DONT					= {}
+	self.options.TTYPE					= {}
+	self.options.TTYPE.type				= nil
+	self.options.MCCP2					= {}
+	self.options.MCCP2.inflater			= nil
+	self.options.MCCP2.defelater		= nil
+	self.options.MCCP2.deflateBuffer	= nil
 
 	-- set sockets
 	self:setSocket(socket)
-	self:sendWill(Telnet.commands.MCCP)
+	self:sendWill(Telnet.commands.MCCP2)
 	self:sendDo(Telnet.commands.TTYPE)
 	self:sendWill(Telnet.commands.MSSP)
 end
@@ -194,12 +194,12 @@ end
 -- @param op Option the Client wants the Server to negotiate.
 function Client:onDo(op)
 	-- process before setting DO
-	if op == Telnet.commands.MCCP then
-		self:send(string.char(Telnet.commands.IAC, Telnet.commands.SB, Telnet.commands.MCCP, Telnet.commands.IAC, Telnet.commands.SE))
+	if op == Telnet.commands.MCCP2 then
+		self:send(string.char(Telnet.commands.IAC, Telnet.commands.SB, Telnet.commands.MCCP2, Telnet.commands.IAC, Telnet.commands.SE))
 
 		-- all output from now on is deflated!
-		self.options.MCCP.deflateBuffer = {}
-		self.options.MCCP.deflater = zlib.deflate(function(data) table.insert(self.options.MCCP.deflateBuffer, data) end)
+		self.options.MCCP2.deflateBuffer = {}
+		self.options.MCCP2.deflater = zlib.deflate(function(data) table.insert(self.options.MCCP2.deflateBuffer, data) end)
 	end
 
 	self.options.DO[op] = true
@@ -271,12 +271,13 @@ end
 --- Pipe to socket's send() function.
 -- @return If successful, returns number of bytes written.<br/>In case of error, the method returns nil followed by an error message, followed by the number of bytes that were written before failure.
 function Client:send(data, i, j)
-	if self:getDo(Telnet.commands.MCCP) then
+	if self:getDo(Telnet.commands.MCCP2) then
+		-- write data to the deflate buffer
 		self.options.MCCP.deflater:write(data)
 		self.options.MCCP.deflater:flush()
-		local compressed = table.concat(self.options.MCCP.deflateBuffer)
-		print("COMPRESSION RESULT:", string.len(data), string.len(compressed))
-		self.options.MCCP.deflateBuffer = {}
+		local compressed = table.concat(self.options.MCCP.deflateBuffer) -- get the string
+		Game.debug(string.format("MCCP2 compression savings: %d", string.len(data)-string.len(compressed)))
+		self.options.MCCP.deflateBuffer = {} -- prepare next buffer
 		return self.socket:send(compressed,i,j)
 	else
 		return self.socket:send(data, i, j)
