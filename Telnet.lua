@@ -38,6 +38,7 @@ local Telnet  							= {}
 -- @field EL 248
 -- @field EC 247
 -- @field SE 240
+-- @field MCCP 86
 -- @field MSSP 70
 -- @field MSDP 69
 -- @field TTYPE 24
@@ -56,6 +57,7 @@ Telnet.commands.EC							= 247
 Telnet.commands.SE							= 240
 
 -- protocol options (I guess)
+Telnet.commands.MCCP						= 86
 Telnet.commands.MSSP						= 70
 Telnet.commands.MSDP						= 69
 Telnet.commands.TTYPE						= 24
@@ -102,6 +104,7 @@ Telnet.commands.names[Telnet.commands.EC]	= "EC"
 Telnet.commands.names[Telnet.commands.SE]	= "SE"
 
 -- protocols
+Telnet.commands.names[Telnet.commands.MCCP] = "MCCP"
 Telnet.commands.names[Telnet.commands.MSSP] = "MSSP"
 Telnet.commands.names[Telnet.commands.MSDP] = "MSDP"
 Telnet.commands.names[Telnet.commands.TTYPE] = "TTYPE"
@@ -122,6 +125,9 @@ function Telnet.commands.name(command)
 	return Telnet.commands.names[command] or string.format("(%s)", tostring(command))
 end
 
+--- Returns a string with every Telnet command in the given command named, separated by commas.
+-- @param command The command to name all of the options in.
+-- @return Formatted string of all command option names.
 function Telnet.commands.nameAll(command)
 	local msg
 	for i=1, string.len(command) do

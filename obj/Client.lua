@@ -20,6 +20,7 @@
 -- @author milkmanjack
 module("obj.Client", package.seeall)
 
+local zlib							= require("zlib")
 local Cloneable						= require("obj.Cloneable")
 
 --- Cloneable that manages user I/O.
@@ -62,20 +63,32 @@ Client.options						= nil
 -- @field type The type of terminal the client is using.
 --Client.options.TTYPE				= nil
 
+--- Contains MCCP zlib streams.
+-- @class table
+-- @name Client.options.MCCP
+-- @field inflater The zlib inflate input stream.
+-- @field deflater The zlib deflate output stream.
+-- @field deflateBuffer The buffer deflated output is stored in before being sent.
+
 --- Associates a socket with the Client.
 -- @param socket The socket to be associated.
 function Client:initialize(socket)
 	-- initialize options
-	self.options				= {}
-	self.options.WILL			= {}
-	self.options.WONT			= {}
-	self.options.DO				= {}
-	self.options.DONT			= {}
-	self.options.TTYPE			= {}
-	self.options.TTYPE.type		= nil
+	self.options					= {}
+	self.options.WILL				= {}
+	self.options.WONT				= {}
+	self.options.DO					= {}
+	self.options.DONT				= {}
+	self.options.TTYPE				= {}
+	self.options.TTYPE.type			= nil
+	self.options.MCCP				= {}
+	self.options.MCCP.inflater		= nil
+	self.options.MCCP.defelater		= nil
+	self.options.MCCP.deflateBuffer	= nil
 
 	-- set sockets
 	self:setSocket(socket)
+	self:sendWill(Telnet.commands.MCCP)
 	self:sendDo(Telnet.commands.TTYPE)
 	self:sendWill(Telnet.commands.MSSP)
 end
@@ -119,7 +132,7 @@ function Client:receive(pattern, prefix)
 			-- check for subnegotiations that start with IAC SB and end with IAC SE
 			local nextIACSE = string.find(partial, string.char(Telnet.commands.IAC, Telnet.commands.SE), current)
 			if nextIACSE then
-				self:onNegotiation(string.sub(partial, current, nextIACSE-1))
+				self:onSubnegotiation(string.sub(partial, current, nextIACSE-1))
 				current = nextIACSE+1
 			end
 		end
@@ -180,6 +193,15 @@ end
 --- What to do when receiving an IAC DO option.
 -- @param op Option the Client wants the Server to negotiate.
 function Client:onDo(op)
+	-- process before setting DO
+	if op == Telnet.commands.MCCP then
+		self:send(string.char(Telnet.commands.IAC, Telnet.commands.SB, Telnet.commands.MCCP, Telnet.commands.IAC, Telnet.commands.SE))
+
+		-- all output from now on is deflated!
+		self.options.MCCP.deflateBuffer = {}
+		self.options.MCCP.deflater = zlib.deflate(function(data) table.insert(self.options.MCCP.deflateBuffer, data) end)
+	end
+
 	self.options.DO[op] = true
 	self.options.DONT[op] = false
 
@@ -249,7 +271,16 @@ end
 --- Pipe to socket's send() function.
 -- @return If successful, returns number of bytes written.<br/>In case of error, the method returns nil followed by an error message, followed by the number of bytes that were written before failure.
 function Client:send(data, i, j)
-	return self.socket:send(data, i, j)
+	if self:getDo(Telnet.commands.MCCP) then
+		self.options.MCCP.deflater:write(data)
+		self.options.MCCP.deflater:flush()
+		local compressed = table.concat(self.options.MCCP.deflateBuffer)
+		print("COMPRESSION RESULT:", string.len(data), string.len(compressed))
+		self.options.MCCP.deflateBuffer = {}
+		return self.socket:send(compressed,i,j)
+	else
+		return self.socket:send(data, i, j)
+	end
 end
 
 --- Formats a string before sending it to the client.
