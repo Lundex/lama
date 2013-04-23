@@ -87,7 +87,7 @@ loadPackages()
 
 -- open the game for play
 local port = tonumber(... or nil)
-local _, err = Game.openOnPort(port)
+local _, err = Game.openOnPort(port or config.getDefaultPort())
 if not _ then
   Game.error("failed to open game: " .. err)
 	os.exit(0)

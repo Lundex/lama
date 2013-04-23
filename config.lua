@@ -23,9 +23,17 @@ module("config", package.seeall)
 --- Configuration table for the Server.
 -- @class table
 -- @name config
+-- @field defaultPort Default port to host the game on.
 -- @field enableMCCP2 Should MCCP2 be enabled?
 local config		= {}
+config.defaultPort	= 8000
 config.enableMCCP2	= true
+
+--- Get the default port to host the game on.
+-- @return The default port.
+function config.getDefaultPort()
+	return config.defaultPort
+end
 
 --- Check if MCCP2 is enabled.
 -- @return true of MCCP2 is enabled.<br/>false otherwise.

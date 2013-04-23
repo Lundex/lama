@@ -48,7 +48,6 @@ local Game			= {}
 -- game data
 Game.name			= "lama"
 Game.version		= "0.7"
-Game.defaultPort	= 8000
 
 -- runtime data
 Game.state			= GameState.NEW
@@ -76,7 +75,6 @@ Game.commandLogger:setLevel(logging.DEBUG)
 -- @param port The port to be hosted on. Defaults to Game.defaultPort{@link Game.defaultPort}.
 -- @return true on success.<br/>false followed by an error otherwise.
 function Game.openOnPort(port)
-	port = port or Game.defaultPort
 	Game.info(string.format("Preparing to host game server on port %d...", port))
 	Game.server = Server:new()
 	local _, err = Game.server:host(port)
