@@ -273,11 +273,11 @@ end
 function Client:send(data, i, j)
 	if self:getDo(Telnet.commands.MCCP2) then
 		-- write data to the deflate buffer
-		self.options.MCCP.deflater:write(data)
-		self.options.MCCP.deflater:flush()
-		local compressed = table.concat(self.options.MCCP.deflateBuffer) -- get the string
+		self.options.MCCP2.deflater:write(data)
+		self.options.MCCP2.deflater:flush()
+		local compressed = table.concat(self.options.MCCP2.deflateBuffer) -- get the string
 		Game.debug(string.format("MCCP2 compression savings: %d", string.len(data)-string.len(compressed)))
-		self.options.MCCP.deflateBuffer = {} -- prepare next buffer
+		self.options.MCCP2.deflateBuffer = {} -- prepare next buffer
 		return self.socket:send(compressed,i,j)
 	else
 		return self.socket:send(data, i, j)
