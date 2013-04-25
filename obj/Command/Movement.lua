@@ -16,31 +16,28 @@
     along with this program.  If not, see <http://www.gnu.org/licenses/>.
 ]]
 
---- Configuration table for the Server.
+--- Command template for directional movement.
 -- @author milkmanjack
-module("config", package.seeall)
+module("obj.Command.Movement", package.seeall)
 
---- Configuration table for the Server.
+require("ext.string")
+local Command	= require("obj.Command")
+
+--- Command template for directional movement.
 -- @class table
--- @name config
--- @field defaultPort Default port to host the game on.
--- @field enableMCCP2 Should MCCP2 be enabled?
-local config		= {}
-config.defaultPort	= 8000
-config.enableMCCP2	= true
+-- @name Movement
+local Movement		= Command:clone()
+Movement.direction	= Direction.NORTH
 
---- Get the default port to host the game on.
--- @return The default port.
-function config.getDefaultPort()
-	return config.defaultPort
+--- Take a step in a direction.
+-- @param player Player taking a step.
+-- @param mob Mob taking a step.
+function Movement:execute(player, mob)
+	if mob:step(self.direction) then
+		mob:showRoom()
+	else
+		player:sendMessage("Alas, you cannot go that way.", MessageMode.FAILURE)
+	end
 end
 
---- Check if MCCP2 is enabled.
--- @return true of MCCP2 is enabled.<br/>false otherwise.
-function config.MCCP2IsEnabled()
-	return config.enableMCCP2 == true
-end
-
-_G.config = config
-
-return config
+return Movement

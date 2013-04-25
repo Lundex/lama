@@ -62,8 +62,10 @@
 		<a href="../modules/Telnet.html">Telnet</a>
 	</li>
 
-	<li><strong>config</strong></li>
-	
+	<li>
+		<a href="../modules/config.html">config</a>
+	</li>
+
 	<li>
 		<a href="../modules/ext.string.html">ext.string</a>
 	</li>
@@ -88,10 +90,8 @@
 		<a href="../modules/obj.Command.html">obj.Command</a>
 	</li>
 
-	<li>
-		<a href="../modules/obj.Command.East.html">obj.Command.East</a>
-	</li>
-
+	<li><strong>obj.Command.East</strong></li>
+	
 	<li>
 		<a href="../modules/obj.Command.Hotboot.html">obj.Command.Hotboot</a>
 	</li>
@@ -191,9 +191,9 @@
 
 <div id="content">
 
-<h1>Module <code>config</code></h1>
+<h1>Module <code>obj.Command.East</code></h1>
 
-<p>Configuration table for the Server.</p>
+<p>Command for stepping east.</p>
 
 
 <p><b>Author:</b>
@@ -208,29 +208,14 @@
 
 
 
-<h2>Functions</h2>
-<table class="function_list">
-
-	<tr>
-	<td class="name" nowrap><a href="#config.MCCP2IsEnabled">config.MCCP2IsEnabled</a>&nbsp;()</td>
-	<td class="summary">Check if MCCP2 is enabled.</td>
-	</tr>
-
-	<tr>
-	<td class="name" nowrap><a href="#config.getDefaultPort">config.getDefaultPort</a>&nbsp;()</td>
-	<td class="summary">Get the default port to host the game on.</td>
-	</tr>
-
-</table>
-
 
 
 <h2>Tables</h2>
 <table class="table_list">
 
 	<tr>
-	<td class="name" nowrap><a href="#config">config</a></td>
-	<td class="summary">Configuration table for the Server.</td>
+	<td class="name" nowrap><a href="#East">East</a></td>
+	<td class="summary">Command for stepping east.</td>
 	</tr>
 
 </table>
@@ -241,51 +226,6 @@
 <br/>
 
 
-
-<h2><a name="functions"></a>Functions</h2>
-<dl class="function">
-
-
-
-<dt><a name="config.MCCP2IsEnabled"></a><strong>config.MCCP2IsEnabled</strong>&nbsp;()</dt>
-<dd>
-Check if MCCP2 is enabled.
-
-
-
-
-
-
-
-<h3>Return value:</h3>
-<ul>true of MCCP2 is enabled.<br/>false otherwise.</ul>
-
-
-
-</dd>
-
-
-
-
-<dt><a name="config.getDefaultPort"></a><strong>config.getDefaultPort</strong>&nbsp;()</dt>
-<dd>
-Get the default port to host the game on.
-
-
-
-
-
-
-
-<h3>Return value:</h3>
-<ul>The default port.</ul>
-
-
-
-</dd>
-
-
-</dl>
 
 
 
@@ -293,22 +233,9 @@ Get the default port to host the game on.
 <h2><a name="tables"></a>Tables</h2>
 <dl class="table">
 
-<dt><a name="config"></a><strong>config</strong></dt>
-<dd>Configuration table for the Server.<br /><br />
+<dt><a name="East"></a><strong>East</strong></dt>
+<dd>Command for stepping east.<br /><br />
 
-
-<h3>Fields:</h3>
-<ul>
-	
-	<li>
-	  <code><em>defaultPort</em></code>: Default port to host the game on.
-	</li>
-	
-	<li>
-	  <code><em>enableMCCP2</em></code>: Should MCCP2 be enabled?
-	</li>
-	
-</ul>
 
 
 </dd>

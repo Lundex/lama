@@ -138,10 +138,8 @@
 		<a href="../modules/obj.Command.West.html">obj.Command.West</a>
 	</li>
 
-	<li>
-		<a href="../modules/obj.Command.Who.html">obj.Command.Who</a>
-	</li>
-
+	<li><strong>obj.Command.Who</strong></li>
+	
 	<li>
 		<a href="../modules/obj.CommandParser.html">obj.CommandParser</a>
 	</li>
@@ -170,8 +168,10 @@
 		<a href="../modules/obj.Player.html">obj.Player</a>
 	</li>
 
-	<li><strong>obj.Scheduler</strong></li>
-	
+	<li>
+		<a href="../modules/obj.Scheduler.html">obj.Scheduler</a>
+	</li>
+
 	<li>
 		<a href="../modules/obj.Server.html">obj.Server</a>
 	</li>
@@ -191,9 +191,9 @@
 
 <div id="content">
 
-<h1>Module <code>obj.Scheduler</code></h1>
+<h1>Module <code>obj.Command.Who</code></h1>
 
-<p>Cloneable that processes fireable events.</p>
+<p>Command for checking who is online.</p>
 
 
 <p><b>Author:</b>
@@ -212,38 +212,8 @@
 <table class="function_list">
 
 	<tr>
-	<td class="name" nowrap><a href="#Scheduler:clear">Scheduler:clear</a>&nbsp;()</td>
-	<td class="summary">Empties the Scheduler.</td>
-	</tr>
-
-	<tr>
-	<td class="name" nowrap><a href="#Scheduler:dequeue">Scheduler:dequeue</a>&nbsp;(event)</td>
-	<td class="summary">Remove an event from the queue.</td>
-	</tr>
-
-	<tr>
-	<td class="name" nowrap><a href="#Scheduler:initialize">Scheduler:initialize</a>&nbsp;()</td>
-	<td class="summary">Creates a unique events table for each Scheduler.</td>
-	</tr>
-
-	<tr>
-	<td class="name" nowrap><a href="#Scheduler:isReady">Scheduler:isReady</a>&nbsp;(timestamp)</td>
-	<td class="summary">Check if there are any Events ready to fire.</td>
-	</tr>
-
-	<tr>
-	<td class="name" nowrap><a href="#Scheduler:isWaiting">Scheduler:isWaiting</a>&nbsp;()</td>
-	<td class="summary">Check if the Scheduler has Events waiting.</td>
-	</tr>
-
-	<tr>
-	<td class="name" nowrap><a href="#Scheduler:poll">Scheduler:poll</a>&nbsp;(timestamp)</td>
-	<td class="summary">Polls the Scheduler for Events waiting to fire.</td>
-	</tr>
-
-	<tr>
-	<td class="name" nowrap><a href="#Scheduler:queue">Scheduler:queue</a>&nbsp;(event)</td>
-	<td class="summary">Add an Event to the queue.</td>
+	<td class="name" nowrap><a href="#Who:execute">Who:execute</a>&nbsp;(player, mob)</td>
+	<td class="summary">Send a list of players to the player.</td>
 	</tr>
 
 </table>
@@ -254,13 +224,8 @@
 <table class="table_list">
 
 	<tr>
-	<td class="name" nowrap><a href="#Scheduler">Scheduler</a></td>
-	<td class="summary">Cloneable that processes fireable Events.</td>
-	</tr>
-
-	<tr>
-	<td class="name" nowrap><a href="#Scheduler.events">Scheduler.events</a></td>
-	<td class="summary">Contains all of the Events a Scheduler has scheduled.</td>
+	<td class="name" nowrap><a href="#Who">Who</a></td>
+	<td class="summary">Command for checking who is online.</td>
 	</tr>
 
 </table>
@@ -277,151 +242,20 @@
 
 
 
-<dt><a name="Scheduler:clear"></a><strong>Scheduler:clear</strong>&nbsp;()</dt>
+<dt><a name="Who:execute"></a><strong>Who:execute</strong>&nbsp;(player, mob)</dt>
 <dd>
-Empties the Scheduler.
-
-
-
-
-
-
-
-
-
-</dd>
-
-
-
-
-<dt><a name="Scheduler:dequeue"></a><strong>Scheduler:dequeue</strong>&nbsp;(event)</dt>
-<dd>
-Remove an event from the queue.
+Send a list of players to the player.
 
 
 <h3>Parameters:</h3>
 <ul>
 	
 	<li>
-	  <code><em>event</em></code>: The even to deque.
+	  <code><em>player</em></code>: 
 	</li>
 	
-</ul>
-
-
-
-
-
-
-
-
-</dd>
-
-
-
-
-<dt><a name="Scheduler:initialize"></a><strong>Scheduler:initialize</strong>&nbsp;()</dt>
-<dd>
-Creates a unique events table for each Scheduler.
-
-
-
-
-
-
-
-
-
-</dd>
-
-
-
-
-<dt><a name="Scheduler:isReady"></a><strong>Scheduler:isReady</strong>&nbsp;(timestamp)</dt>
-<dd>
-Check if there are any Events ready to fire.
-
-
-<h3>Parameters:</h3>
-<ul>
-	
 	<li>
-	  <code><em>timestamp</em></code>: This is the current timestamp to compare to the destination timestamps.
-	</li>
-	
-</ul>
-
-
-
-
-
-
-<h3>Return value:</h3>
-<ul>true if an Event is waiting to fire.<br/>false otherwise.</ul>
-
-
-
-</dd>
-
-
-
-
-<dt><a name="Scheduler:isWaiting"></a><strong>Scheduler:isWaiting</strong>&nbsp;()</dt>
-<dd>
-Check if the Scheduler has Events waiting.
-
-
-
-
-
-
-
-<h3>Return value:</h3>
-<ul>true if an Event is waiting.<br/> false otherwise.</ul>
-
-
-
-</dd>
-
-
-
-
-<dt><a name="Scheduler:poll"></a><strong>Scheduler:poll</strong>&nbsp;(timestamp)</dt>
-<dd>
-Polls the Scheduler for Events waiting to fire.
-
-
-<h3>Parameters:</h3>
-<ul>
-	
-	<li>
-	  <code><em>timestamp</em></code>: This is the current timestamp to compare to the destination timestamps.
-	</li>
-	
-</ul>
-
-
-
-
-
-
-
-
-</dd>
-
-
-
-
-<dt><a name="Scheduler:queue"></a><strong>Scheduler:queue</strong>&nbsp;(event)</dt>
-<dd>
-Add an Event to the queue.
-
-
-<h3>Parameters:</h3>
-<ul>
-	
-	<li>
-	  <code><em>event</em></code>: The Event to queue.
+	  <code><em>mob</em></code>: 
 	</li>
 	
 </ul>
@@ -444,16 +278,8 @@ Add an Event to the queue.
 <h2><a name="tables"></a>Tables</h2>
 <dl class="table">
 
-<dt><a name="Scheduler"></a><strong>Scheduler</strong></dt>
-<dd>Cloneable that processes fireable Events.<br /><br />
-
-
-
-</dd>
-
-
-<dt><a name="Scheduler.events"></a><strong>Scheduler.events</strong></dt>
-<dd>Contains all of the Events a Scheduler has scheduled.<br /><br />
+<dt><a name="Who"></a><strong>Who</strong></dt>
+<dd>Command for checking who is online.<br /><br />
 
 
 

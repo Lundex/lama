@@ -106,7 +106,7 @@ function Client:toString()
 	end
 
 	local addr, port = self:getAddress()
-	return string.format("client@%s", addr or "unknown")
+	return string.format("client@%s", addr)
 end
 
 --- Pipe to socket's receive() function.
@@ -359,7 +359,7 @@ end
 --- Retreive the client's remote address.
 -- @return The client's remote address.
 function Client:getAddress()
-	return self.socket:getpeername()
+	return self.socket:getpeername() or "nil" -- always return a string
 end
 
 --- Retreive the client's terminal type, if applicable.

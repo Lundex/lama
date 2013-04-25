@@ -47,12 +47,12 @@ local Game			= {}
 
 -- game data
 Game.name			= "lama"
-Game.version		= "0.7"
+Game.version		= "v0.7a"
 
 -- runtime data
 Game.state			= GameState.NEW
-
 Game.playerID		= 0
+
 --- Contains all Players connected to the game.
 -- @class table
 -- @name Game.players
@@ -116,6 +116,8 @@ function Game.onOpen()
 	-- load the parser
 	if not Game.parser then
 		Game.parser = CommandParser:new()
+		Game.info("Generating commands...")
+		Game.generateCommands()
 	end
 
 	-- finalize hotboot
@@ -262,6 +264,21 @@ function Game.announce(message, mode, minState)
 			v:sendMessage(message, mode)
 		end
 	end
+end
+
+function Game.generateCommands()
+	Game.parser:addCommand(require("obj.Command.OOC"):new())
+	Game.parser:addCommand(require("obj.Command.Hotboot"):new())
+	Game.parser:addCommand(require("obj.Command.North"):new())
+	Game.parser:addCommand(require("obj.Command.South"):new())
+	Game.parser:addCommand(require("obj.Command.East"):new())
+	Game.parser:addCommand(require("obj.Command.West"):new())
+	Game.parser:addCommand(require("obj.Command.Northeast"):new())
+	Game.parser:addCommand(require("obj.Command.Northwest"):new())
+	Game.parser:addCommand(require("obj.Command.Southeast"):new())
+	Game.parser:addCommand(require("obj.Command.Southwest"):new())
+	Game.parser:addCommand(require("obj.Command.Quit"):new())
+	Game.parser:addCommand(require("obj.Command.Who"):new())
 end
 
 --- Shortcut for Game.scheduler:queue(event)

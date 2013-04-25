@@ -16,31 +16,31 @@
     along with this program.  If not, see <http://www.gnu.org/licenses/>.
 ]]
 
---- Configuration table for the Server.
+--- Command for checking who is online.
 -- @author milkmanjack
-module("config", package.seeall)
+module("obj.Command.Who", package.seeall)
 
---- Configuration table for the Server.
+require("ext.string")
+local Command	= require("obj.Command")
+
+--- Command for checking who is online.
 -- @class table
--- @name config
--- @field defaultPort Default port to host the game on.
--- @field enableMCCP2 Should MCCP2 be enabled?
-local config		= {}
-config.defaultPort	= 8000
-config.enableMCCP2	= true
+-- @name Who
+local Who		= Command:clone()
+Who.keyword		= "who"
 
---- Get the default port to host the game on.
--- @return The default port.
-function config.getDefaultPort()
-	return config.defaultPort
+--- Send a list of players to the player.
+function Who:execute(player, mob)
+	local msg = "\[ Connected Players ]"
+	for i,v in ipairs(Game.getPlayers()) do
+		local client = v:getClient()
+		local mob = v:getMob()
+		local TerminalType = client:getTerminalType()
+		local MCCPStatus = client:getDo(Telnet.commands.MCCP2) and "enabled" or "disabled"
+		msg = string.format("%s\n-> %s (terminal: %s) (MCCP %s)", msg, tostring(v), TerminalType, MCCPStatus)
+	end
+
+	player:sendMessage(msg)
 end
 
---- Check if MCCP2 is enabled.
--- @return true of MCCP2 is enabled.<br/>false otherwise.
-function config.MCCP2IsEnabled()
-	return config.enableMCCP2 == true
-end
-
-_G.config = config
-
-return config
+return Who

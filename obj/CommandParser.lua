@@ -40,61 +40,16 @@ end
 --- Parses command input with a player as an assumed source.
 -- @param player Player to be treated as the source of the input.
 -- @param mob Mob of the Player being treated as the source of the input.
+-- @return true on successful command match.<br/>false otherwise.
 function CommandParser:parse(player, mob, input)
-	-- some generic parsing cause I'm too lazy to implement real commands right now
-	if input == "hotboot" then
-		Game.hotboot()
-
-	elseif input == "test" then
-		player:sendMessage(Nanny.getGreeting(), MessageMode.INFO)
-
-	elseif string.find("north", input) == 1 then
-		if mob:step(Direction.NORTH) then
-			mob:showRoom()
-		else
-			player:sendMessage("Alas, you cannot go that way.", MessageMode.FAILURE)
+	for i,v in ipairs(self.commands) do
+		if v:match(player, mob, input) then
+			v:parse(player, mob, input)
+			return true
 		end
-
-	elseif string.find("south", input) == 1 then
-		if mob:step(Direction.SOUTH) then
-			mob:showRoom()
-		else
-			player:sendMessage("Alas, you cannot go that way.", MessageMode.FAILURE)
-		end
-
-	elseif string.find("east", input) == 1 then
-		if mob:step(Direction.EAST) then
-			mob:showRoom()
-		else
-			player:sendMessage("Alas, you cannot go that way.", MessageMode.FAILURE)
-		end
-
-	elseif string.find("west", input) == 1 then
-		if mob:step(Direction.WEST) then
-			mob:showRoom()
-		else
-			player:sendMessage("Alas, you cannot go that way.", MessageMode.FAILURE)
-		end
-
-	elseif string.find("who", input) == 1 then
-		local msg = "\[ Connected Players ]"
-		for i,v in ipairs(Game:getPlayers()) do
-			local client = v:getClient()
-			local mob = v:getMob()
-			local TerminalType = client:getTerminalType()
-			local MCCPStatus = client:getDo(Telnet.commands.MCCP2) and "enabled" or "disabled"
-			msg = string.format("%s\n-> %s (terminal: %s) (MCCP %s)", msg, tostring(v), TerminalType, MCCPStatus)
-		end
-
-		player:sendMessage(msg)
-
-	elseif string.find("look", input) == 1 then
-		player:getMob():showRoom()
-
-	elseif string.find(input, "ooc") == 1 then
-		local msg = string.sub(input, 5)
-		Game.announce(string.format("%s OOC: '%s'", mob:getName(), msg), MessageMode.CHAT, PlayerState.PLAYING)
 	end
+
+	return false
 end
 
 --- Adds a Command to the list of commands we recognize.

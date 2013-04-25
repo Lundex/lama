@@ -66,10 +66,8 @@
 		<a href="../modules/config.html">config</a>
 	</li>
 
-	<li>
-		<a href="../modules/ext.string.html">ext.string</a>
-	</li>
-
+	<li><strong>ext.string</strong></li>
+	
 	<li>
 		<a href="../modules/ext.table.html">ext.table</a>
 	</li>
@@ -170,8 +168,10 @@
 		<a href="../modules/obj.Player.html">obj.Player</a>
 	</li>
 
-	<li><strong>obj.Scheduler</strong></li>
-	
+	<li>
+		<a href="../modules/obj.Scheduler.html">obj.Scheduler</a>
+	</li>
+
 	<li>
 		<a href="../modules/obj.Server.html">obj.Server</a>
 	</li>
@@ -191,9 +191,9 @@
 
 <div id="content">
 
-<h1>Module <code>obj.Scheduler</code></h1>
+<h1>Module <code>ext.string</code></h1>
 
-<p>Cloneable that processes fireable events.</p>
+<p>Extension of the string library.</p>
 
 
 <p><b>Author:</b>
@@ -212,58 +212,23 @@
 <table class="function_list">
 
 	<tr>
-	<td class="name" nowrap><a href="#Scheduler:clear">Scheduler:clear</a>&nbsp;()</td>
-	<td class="summary">Empties the Scheduler.</td>
+	<td class="name" nowrap><a href="#string.getWord">string.getWord</a>&nbsp;(s)</td>
+	<td class="summary">Gets the next word in the given string.<br/> A word is defined as the first series of unbroken alphanumeric characters.</td>
 	</tr>
 
 	<tr>
-	<td class="name" nowrap><a href="#Scheduler:dequeue">Scheduler:dequeue</a>&nbsp;(event)</td>
-	<td class="summary">Remove an event from the queue.</td>
+	<td class="name" nowrap><a href="#string.getWords">string.getWords</a>&nbsp;(s)</td>
+	<td class="summary">Returns an iterator that iterates over the words within the given string.</td>
 	</tr>
 
 	<tr>
-	<td class="name" nowrap><a href="#Scheduler:initialize">Scheduler:initialize</a>&nbsp;()</td>
-	<td class="summary">Creates a unique events table for each Scheduler.</td>
-	</tr>
-
-	<tr>
-	<td class="name" nowrap><a href="#Scheduler:isReady">Scheduler:isReady</a>&nbsp;(timestamp)</td>
-	<td class="summary">Check if there are any Events ready to fire.</td>
-	</tr>
-
-	<tr>
-	<td class="name" nowrap><a href="#Scheduler:isWaiting">Scheduler:isWaiting</a>&nbsp;()</td>
-	<td class="summary">Check if the Scheduler has Events waiting.</td>
-	</tr>
-
-	<tr>
-	<td class="name" nowrap><a href="#Scheduler:poll">Scheduler:poll</a>&nbsp;(timestamp)</td>
-	<td class="summary">Polls the Scheduler for Events waiting to fire.</td>
-	</tr>
-
-	<tr>
-	<td class="name" nowrap><a href="#Scheduler:queue">Scheduler:queue</a>&nbsp;(event)</td>
-	<td class="summary">Add an Event to the queue.</td>
+	<td class="name" nowrap><a href="#string.truncate">string.truncate</a>&nbsp;(s)</td>
+	<td class="summary">Remove whitespace from the front and back of a string.</td>
 	</tr>
 
 </table>
 
 
-
-<h2>Tables</h2>
-<table class="table_list">
-
-	<tr>
-	<td class="name" nowrap><a href="#Scheduler">Scheduler</a></td>
-	<td class="summary">Cloneable that processes fireable Events.</td>
-	</tr>
-
-	<tr>
-	<td class="name" nowrap><a href="#Scheduler.events">Scheduler.events</a></td>
-	<td class="summary">Contains all of the Events a Scheduler has scheduled.</td>
-	</tr>
-
-</table>
 
 
 
@@ -277,33 +242,16 @@
 
 
 
-<dt><a name="Scheduler:clear"></a><strong>Scheduler:clear</strong>&nbsp;()</dt>
+<dt><a name="string.getWord"></a><strong>string.getWord</strong>&nbsp;(s)</dt>
 <dd>
-Empties the Scheduler.
-
-
-
-
-
-
-
-
-
-</dd>
-
-
-
-
-<dt><a name="Scheduler:dequeue"></a><strong>Scheduler:dequeue</strong>&nbsp;(event)</dt>
-<dd>
-Remove an event from the queue.
+Gets the next word in the given string.<br/> A word is defined as the first series of unbroken alphanumeric characters. Special delimiters can be defined for the word. For example, if the next word starts with a single or double quote (', "), it will end with a single or double quote, respectively. If neither are found after the first, then it will merely return everything.<br/> Also returns the remainder of the given string, if anything remains. The remainder of the string has its whitespace truncated via string.truncate().
 
 
 <h3>Parameters:</h3>
 <ul>
 	
 	<li>
-	  <code><em>event</em></code>: The even to deque.
+	  <code><em>s</em></code>: String to get the next word from.
 	</li>
 	
 </ul>
@@ -313,22 +261,14 @@ Remove an event from the queue.
 
 
 
-
-
-</dd>
-
-
-
-
-<dt><a name="Scheduler:initialize"></a><strong>Scheduler:initialize</strong>&nbsp;()</dt>
-<dd>
-Creates a unique events table for each Scheduler.
-
-
-
-
-
-
+<h3>Return values:</h3>
+<ol>
+	
+	<li>The word.</li>
+	
+	<li>The remainder of the string, or nil.</li>
+	
+</ol>
 
 
 
@@ -337,16 +277,16 @@ Creates a unique events table for each Scheduler.
 
 
 
-<dt><a name="Scheduler:isReady"></a><strong>Scheduler:isReady</strong>&nbsp;(timestamp)</dt>
+<dt><a name="string.getWords"></a><strong>string.getWords</strong>&nbsp;(s)</dt>
 <dd>
-Check if there are any Events ready to fire.
+Returns an iterator that iterates over the words within the given string.
 
 
 <h3>Parameters:</h3>
 <ul>
 	
 	<li>
-	  <code><em>timestamp</em></code>: This is the current timestamp to compare to the destination timestamps.
+	  <code><em>s</em></code>: String to iterate over.
 	</li>
 	
 </ul>
@@ -357,7 +297,7 @@ Check if there are any Events ready to fire.
 
 
 <h3>Return value:</h3>
-<ul>true if an Event is waiting to fire.<br/>false otherwise.</ul>
+<ul>Word iterator for the given string.</ul>
 
 
 
@@ -366,10 +306,19 @@ Check if there are any Events ready to fire.
 
 
 
-<dt><a name="Scheduler:isWaiting"></a><strong>Scheduler:isWaiting</strong>&nbsp;()</dt>
+<dt><a name="string.truncate"></a><strong>string.truncate</strong>&nbsp;(s)</dt>
 <dd>
-Check if the Scheduler has Events waiting.
+Remove whitespace from the front and back of a string.
 
+
+<h3>Parameters:</h3>
+<ul>
+	
+	<li>
+	  <code><em>s</em></code>: String to be truncated.
+	</li>
+	
+</ul>
 
 
 
@@ -377,59 +326,7 @@ Check if the Scheduler has Events waiting.
 
 
 <h3>Return value:</h3>
-<ul>true if an Event is waiting.<br/> false otherwise.</ul>
-
-
-
-</dd>
-
-
-
-
-<dt><a name="Scheduler:poll"></a><strong>Scheduler:poll</strong>&nbsp;(timestamp)</dt>
-<dd>
-Polls the Scheduler for Events waiting to fire.
-
-
-<h3>Parameters:</h3>
-<ul>
-	
-	<li>
-	  <code><em>timestamp</em></code>: This is the current timestamp to compare to the destination timestamps.
-	</li>
-	
-</ul>
-
-
-
-
-
-
-
-
-</dd>
-
-
-
-
-<dt><a name="Scheduler:queue"></a><strong>Scheduler:queue</strong>&nbsp;(event)</dt>
-<dd>
-Add an Event to the queue.
-
-
-<h3>Parameters:</h3>
-<ul>
-	
-	<li>
-	  <code><em>event</em></code>: The Event to queue.
-	</li>
-	
-</ul>
-
-
-
-
-
+<ul>Truncated version of the string.</ul>
 
 
 
@@ -440,27 +337,6 @@ Add an Event to the queue.
 
 
 
-
-<h2><a name="tables"></a>Tables</h2>
-<dl class="table">
-
-<dt><a name="Scheduler"></a><strong>Scheduler</strong></dt>
-<dd>Cloneable that processes fireable Events.<br /><br />
-
-
-
-</dd>
-
-
-<dt><a name="Scheduler.events"></a><strong>Scheduler.events</strong></dt>
-<dd>Contains all of the Events a Scheduler has scheduled.<br /><br />
-
-
-
-</dd>
-
-
-</dl>
 
 
 

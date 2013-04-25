@@ -16,31 +16,31 @@
     along with this program.  If not, see <http://www.gnu.org/licenses/>.
 ]]
 
---- Configuration table for the Server.
+--- Command for sending Out of Character chat.
 -- @author milkmanjack
-module("config", package.seeall)
+module("obj.Command.OOC", package.seeall)
 
---- Configuration table for the Server.
+require("ext.string")
+local Command	= require("obj.Command")
+
+--- Command for sending Out of Character chat.
 -- @class table
--- @name config
--- @field defaultPort Default port to host the game on.
--- @field enableMCCP2 Should MCCP2 be enabled?
-local config		= {}
-config.defaultPort	= 8000
-config.enableMCCP2	= true
+-- @name OOC
+local OOC		= Command:clone()
+OOC.keyword		= "ooc"
 
---- Get the default port to host the game on.
--- @return The default port.
-function config.getDefaultPort()
-	return config.defaultPort
+--- Passes everything after the keyword to the command execution.
+function OOC:parse(player, mob, input)
+	local cmd, msg = string.getWord(input)
+	self:execute(player, mob, msg)
 end
 
---- Check if MCCP2 is enabled.
--- @return true of MCCP2 is enabled.<br/>false otherwise.
-function config.MCCP2IsEnabled()
-	return config.enableMCCP2 == true
+--- Sends a message on the OOC channel.
+-- @param player Player chatting
+-- @param mob Mob chatting.
+-- @param msg Message to be sent.
+function OOC:execute(player, mob, msg)
+	Game.announce(string.format("%s OOC: %s", mob:getName(), msg), MessageMode.CHAT, PlayerState.PLAYING)
 end
 
-_G.config = config
-
-return config
+return OOC

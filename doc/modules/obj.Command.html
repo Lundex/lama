@@ -86,10 +86,8 @@
 		<a href="../modules/obj.Cloneable.html">obj.Cloneable</a>
 	</li>
 
-	<li>
-		<a href="../modules/obj.Command.html">obj.Command</a>
-	</li>
-
+	<li><strong>obj.Command</strong></li>
+	
 	<li>
 		<a href="../modules/obj.Command.East.html">obj.Command.East</a>
 	</li>
@@ -170,8 +168,10 @@
 		<a href="../modules/obj.Player.html">obj.Player</a>
 	</li>
 
-	<li><strong>obj.Scheduler</strong></li>
-	
+	<li>
+		<a href="../modules/obj.Scheduler.html">obj.Scheduler</a>
+	</li>
+
 	<li>
 		<a href="../modules/obj.Server.html">obj.Server</a>
 	</li>
@@ -191,9 +191,9 @@
 
 <div id="content">
 
-<h1>Module <code>obj.Scheduler</code></h1>
+<h1>Module <code>obj.Command</code></h1>
 
-<p>Cloneable that processes fireable events.</p>
+<p>Cloneable that is used to handle text commands.</p>
 
 
 <p><b>Author:</b>
@@ -212,38 +212,18 @@
 <table class="function_list">
 
 	<tr>
-	<td class="name" nowrap><a href="#Scheduler:clear">Scheduler:clear</a>&nbsp;()</td>
-	<td class="summary">Empties the Scheduler.</td>
+	<td class="name" nowrap><a href="#Command:execute">Command:execute</a>&nbsp;(player, mob)</td>
+	<td class="summary">Execute the command by the given player/mob pair.</td>
 	</tr>
 
 	<tr>
-	<td class="name" nowrap><a href="#Scheduler:dequeue">Scheduler:dequeue</a>&nbsp;(event)</td>
-	<td class="summary">Remove an event from the queue.</td>
+	<td class="name" nowrap><a href="#Command:match">Command:match</a>&nbsp;(player, mob, input)</td>
+	<td class="summary">Verify that the given input can/will trigger this Command.</td>
 	</tr>
 
 	<tr>
-	<td class="name" nowrap><a href="#Scheduler:initialize">Scheduler:initialize</a>&nbsp;()</td>
-	<td class="summary">Creates a unique events table for each Scheduler.</td>
-	</tr>
-
-	<tr>
-	<td class="name" nowrap><a href="#Scheduler:isReady">Scheduler:isReady</a>&nbsp;(timestamp)</td>
-	<td class="summary">Check if there are any Events ready to fire.</td>
-	</tr>
-
-	<tr>
-	<td class="name" nowrap><a href="#Scheduler:isWaiting">Scheduler:isWaiting</a>&nbsp;()</td>
-	<td class="summary">Check if the Scheduler has Events waiting.</td>
-	</tr>
-
-	<tr>
-	<td class="name" nowrap><a href="#Scheduler:poll">Scheduler:poll</a>&nbsp;(timestamp)</td>
-	<td class="summary">Polls the Scheduler for Events waiting to fire.</td>
-	</tr>
-
-	<tr>
-	<td class="name" nowrap><a href="#Scheduler:queue">Scheduler:queue</a>&nbsp;(event)</td>
-	<td class="summary">Add an Event to the queue.</td>
+	<td class="name" nowrap><a href="#Command:parse">Command:parse</a>&nbsp;(player, mob, input)</td>
+	<td class="summary">Parses a string and runs the Command with necessary arguments.</td>
 	</tr>
 
 </table>
@@ -254,13 +234,8 @@
 <table class="table_list">
 
 	<tr>
-	<td class="name" nowrap><a href="#Scheduler">Scheduler</a></td>
-	<td class="summary">Cloneable that processes fireable Events.</td>
-	</tr>
-
-	<tr>
-	<td class="name" nowrap><a href="#Scheduler.events">Scheduler.events</a></td>
-	<td class="summary">Contains all of the Events a Scheduler has scheduled.</td>
+	<td class="name" nowrap><a href="#Command">Command</a></td>
+	<td class="summary">Cloneable that is used to handle text commands.</td>
 	</tr>
 
 </table>
@@ -277,33 +252,20 @@
 
 
 
-<dt><a name="Scheduler:clear"></a><strong>Scheduler:clear</strong>&nbsp;()</dt>
+<dt><a name="Command:execute"></a><strong>Command:execute</strong>&nbsp;(player, mob)</dt>
 <dd>
-Empties the Scheduler.
-
-
-
-
-
-
-
-
-
-</dd>
-
-
-
-
-<dt><a name="Scheduler:dequeue"></a><strong>Scheduler:dequeue</strong>&nbsp;(event)</dt>
-<dd>
-Remove an event from the queue.
+Execute the command by the given player/mob pair.
 
 
 <h3>Parameters:</h3>
 <ul>
 	
 	<li>
-	  <code><em>event</em></code>: The even to deque.
+	  <code><em>player</em></code>: Player running the command
+	</li>
+	
+	<li>
+	  <code><em>mob</em></code>: Mob running the command.
 	</li>
 	
 </ul>
@@ -320,33 +282,24 @@ Remove an event from the queue.
 
 
 
-<dt><a name="Scheduler:initialize"></a><strong>Scheduler:initialize</strong>&nbsp;()</dt>
+<dt><a name="Command:match"></a><strong>Command:match</strong>&nbsp;(player, mob, input)</dt>
 <dd>
-Creates a unique events table for each Scheduler.
-
-
-
-
-
-
-
-
-
-</dd>
-
-
-
-
-<dt><a name="Scheduler:isReady"></a><strong>Scheduler:isReady</strong>&nbsp;(timestamp)</dt>
-<dd>
-Check if there are any Events ready to fire.
+Verify that the given input can/will trigger this Command.
 
 
 <h3>Parameters:</h3>
 <ul>
 	
 	<li>
-	  <code><em>timestamp</em></code>: This is the current timestamp to compare to the destination timestamps.
+	  <code><em>player</em></code>: 
+	</li>
+	
+	<li>
+	  <code><em>mob</em></code>: 
+	</li>
+	
+	<li>
+	  <code><em>input</em></code>: 
 	</li>
 	
 </ul>
@@ -357,7 +310,7 @@ Check if there are any Events ready to fire.
 
 
 <h3>Return value:</h3>
-<ul>true if an Event is waiting to fire.<br/>false otherwise.</ul>
+<ul>true on success.<br/>false otherwise.</ul>
 
 
 
@@ -366,62 +319,24 @@ Check if there are any Events ready to fire.
 
 
 
-<dt><a name="Scheduler:isWaiting"></a><strong>Scheduler:isWaiting</strong>&nbsp;()</dt>
+<dt><a name="Command:parse"></a><strong>Command:parse</strong>&nbsp;(player, mob, input)</dt>
 <dd>
-Check if the Scheduler has Events waiting.
-
-
-
-
-
-
-
-<h3>Return value:</h3>
-<ul>true if an Event is waiting.<br/> false otherwise.</ul>
-
-
-
-</dd>
-
-
-
-
-<dt><a name="Scheduler:poll"></a><strong>Scheduler:poll</strong>&nbsp;(timestamp)</dt>
-<dd>
-Polls the Scheduler for Events waiting to fire.
+Parses a string and runs the Command with necessary arguments.
 
 
 <h3>Parameters:</h3>
 <ul>
 	
 	<li>
-	  <code><em>timestamp</em></code>: This is the current timestamp to compare to the destination timestamps.
+	  <code><em>player</em></code>: Player running the command
 	</li>
 	
-</ul>
-
-
-
-
-
-
-
-
-</dd>
-
-
-
-
-<dt><a name="Scheduler:queue"></a><strong>Scheduler:queue</strong>&nbsp;(event)</dt>
-<dd>
-Add an Event to the queue.
-
-
-<h3>Parameters:</h3>
-<ul>
+	<li>
+	  <code><em>mob</em></code>: Mob running the command.
+	</li>
 	
 	<li>
-	  <code><em>event</em></code>: The Event to queue.
+	  <code><em>input</em></code>: Input to be parsed.
 	</li>
 	
 </ul>
@@ -444,17 +359,18 @@ Add an Event to the queue.
 <h2><a name="tables"></a>Tables</h2>
 <dl class="table">
 
-<dt><a name="Scheduler"></a><strong>Scheduler</strong></dt>
-<dd>Cloneable that processes fireable Events.<br /><br />
+<dt><a name="Command"></a><strong>Command</strong></dt>
+<dd>Cloneable that is used to handle text commands.<br /><br />
 
 
-
-</dd>
-
-
-<dt><a name="Scheduler.events"></a><strong>Scheduler.events</strong></dt>
-<dd>Contains all of the Events a Scheduler has scheduled.<br /><br />
-
+<h3>Fields:</h3>
+<ul>
+	
+	<li>
+	  <code><em>keyword</em></code>: Keyword for the Cloneable.
+	</li>
+	
+</ul>
 
 
 </dd>

@@ -44,36 +44,34 @@ function loadPackages()
 	require("Game") -- make sure this is always loaded last.
 end
 
---- Unloads all of the game packages.
+--- Unloads all of the game packages.<br/>
+-- I can probably fix this up in the future so that obj.* packages are
+-- removed automatically instead of having to go through all this.
 function unloadPackages()
 	-- unload globals
-	_G.Game								= nil
-	_G.Nanny							= nil
-	_G.Telnet							= nil
-	_G.PlayerState						= nil
-	_G.GameState						= nil
-	_G.MessageMode						= nil
-	_G.Direction						= nil
+	_G.Game									= nil
+	_G.Nanny								= nil
+	_G.Telnet								= nil
+	_G.PlayerState							= nil
+	_G.GameState							= nil
+	_G.MessageMode							= nil
+	_G.Direction							= nil
 
 	-- unload packages
-	package.loaded["Game"]				= nil
-	package.loaded["Nanny"]				= nil
-	package.loaded["Telnet"]			= nil
-	package.loaded["PlayerState"]		= nil
-	package.loaded["GameState"]			= nil
-	package.loaded["MessageMode"]		= nil
-	package.loaded["Direction"]			= nil
-	package.loaded["obj.Client"]		= nil
-	package.loaded["obj.Cloneable"]		= nil
-	package.loaded["obj.CommandParser"]	= nil
-	package.loaded["obj.Event"]			= nil
-	package.loaded["obj.Map"]			= nil
-	package.loaded["obj.MapObject"]		= nil
-	package.loaded["obj.MapTile"]		= nil
-	package.loaded["obj.Mob"]			= nil
-	package.loaded["obj.Player"]		= nil
-	package.loaded["obj.Scheduler"]		= nil
-	package.loaded["obj.Server"]		= nil
+	package.loaded["Game"]					= nil
+	package.loaded["Nanny"]					= nil
+	package.loaded["Telnet"]				= nil
+	package.loaded["PlayerState"]			= nil
+	package.loaded["GameState"]				= nil
+	package.loaded["MessageMode"]			= nil
+	package.loaded["Direction"]				= nil
+
+	-- unload obj.* packages
+	for i,v in pairs(package.loaded) do
+		if string.find(i, "obj.") == 1 then
+			package.loaded[i] = nil
+		end
+	end
 end
 
 --- Reloads all of the game packages.
