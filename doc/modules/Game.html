@@ -89,58 +89,6 @@
 	</li>
 
 	<li>
-		<a href="../modules/obj.Command.East.html">obj.Command.East</a>
-	</li>
-
-	<li>
-		<a href="../modules/obj.Command.Hotboot.html">obj.Command.Hotboot</a>
-	</li>
-
-	<li>
-		<a href="../modules/obj.Command.Movement.html">obj.Command.Movement</a>
-	</li>
-
-	<li>
-		<a href="../modules/obj.Command.North.html">obj.Command.North</a>
-	</li>
-
-	<li>
-		<a href="../modules/obj.Command.Northeast.html">obj.Command.Northeast</a>
-	</li>
-
-	<li>
-		<a href="../modules/obj.Command.Northwest.html">obj.Command.Northwest</a>
-	</li>
-
-	<li>
-		<a href="../modules/obj.Command.OOC.html">obj.Command.OOC</a>
-	</li>
-
-	<li>
-		<a href="../modules/obj.Command.Quit.html">obj.Command.Quit</a>
-	</li>
-
-	<li>
-		<a href="../modules/obj.Command.South.html">obj.Command.South</a>
-	</li>
-
-	<li>
-		<a href="../modules/obj.Command.Southeast.html">obj.Command.Southeast</a>
-	</li>
-
-	<li>
-		<a href="../modules/obj.Command.Southwest.html">obj.Command.Southwest</a>
-	</li>
-
-	<li>
-		<a href="../modules/obj.Command.West.html">obj.Command.West</a>
-	</li>
-
-	<li>
-		<a href="../modules/obj.Command.Who.html">obj.Command.Who</a>
-	</li>
-
-	<li>
 		<a href="../modules/obj.CommandParser.html">obj.CommandParser</a>
 	</li>
 
@@ -297,11 +245,6 @@
 	</tr>
 
 	<tr>
-	<td class="name" nowrap><a href="#Game.onHotboot">Game.onHotboot</a>&nbsp;()</td>
-	<td class="summary">Specifies further action for a hotboot.</td>
-	</tr>
-
-	<tr>
 	<td class="name" nowrap><a href="#Game.onPlayerConnect">Game.onPlayerConnect</a>&nbsp;(player, hotboot)</td>
 	<td class="summary">Specifies further actions for a connecting Player.</td>
 	</tr>
@@ -329,6 +272,11 @@
 	<tr>
 	<td class="name" nowrap><a href="#Game.queue">Game.queue</a>&nbsp;(event)</td>
 	<td class="summary">Shortcut for Game.scheduler:queue(event) </td>
+	</tr>
+
+	<tr>
+	<td class="name" nowrap><a href="#Game.recoverFromHotboot">Game.recoverFromHotboot</a>&nbsp;(preservedData)</td>
+	<td class="summary">Specifies further action for a hotboot.</td>
 	</tr>
 
 	<tr>
@@ -814,23 +762,6 @@ Get a unique player ID.
 
 
 
-<dt><a name="Game.onHotboot"></a><strong>Game.onHotboot</strong>&nbsp;()</dt>
-<dd>
-Specifies further action for a hotboot. By the time this calls, the server has been reestablished and clients have been reconnected to the server, but no players have been reconstituted yet. As such, we need to create players and reload their mobs.
-
-
-
-
-
-
-
-
-
-</dd>
-
-
-
-
 <dt><a name="Game.onPlayerConnect"></a><strong>Game.onPlayerConnect</strong>&nbsp;(player, hotboot)</dt>
 <dd>
 Specifies further actions for a connecting Player.
@@ -985,6 +916,32 @@ Shortcut for Game.scheduler:queue(event)
 	
 	<li>
 	  <code><em>event</em></code>: Event to queue.
+	</li>
+	
+</ul>
+
+
+
+
+
+
+
+
+</dd>
+
+
+
+
+<dt><a name="Game.recoverFromHotboot"></a><strong>Game.recoverFromHotboot</strong>&nbsp;(preservedData)</dt>
+<dd>
+Specifies further action for a hotboot. By the time this calls, the server has been reestablished and clients have been reconnected to the server, but no players have been reconstituted yet. As such, we need to create players and reload their mobs.
+
+
+<h3>Parameters:</h3>
+<ul>
+	
+	<li>
+	  <code><em>preservedData</em></code>: A table containing formatted tables that are used to reconstitute old players. Most importantly, their sockets are included in this table, but also things like their client options, and even mob IDs for loading temporary player files.
 	</li>
 	
 </ul>

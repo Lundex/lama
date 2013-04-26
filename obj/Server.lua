@@ -153,17 +153,6 @@ function Server:getSocket()
 	return self.socket
 end
 
---- Return the Server's list of connected Client's sockets.
--- @return The list of connected Client's sockets.
-function Server:getClientSockets()
-	local sockets = {}
-	for i,v in ipairs(self.clients) do
-		table.insert(sockets, v:getSocket())
-	end
-
-	return sockets
-end
-
 --- Return the Server's list of Clients.
 -- @return The list of Clients.
 function Server:getClients()

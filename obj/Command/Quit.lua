@@ -16,11 +16,6 @@
     along with this program.  If not, see <http://www.gnu.org/licenses/>.
 ]]
 
---- Command template for directional movement.
--- @author milkmanjack
-module("obj.Command.Quit", package.seeall)
-
-require("ext.string")
 local Command	= require("obj.Command")
 
 --- Command for quitting!

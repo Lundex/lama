@@ -16,11 +16,6 @@
     along with this program.  If not, see <http://www.gnu.org/licenses/>.
 ]]
 
---- Command for stepping south.
--- @author milkmanjack
-module("obj.Command.South", package.seeall)
-
-require("ext.string")
 local Movement		= require("obj.Command.Movement")
 
 --- Command for stepping south.

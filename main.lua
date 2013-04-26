@@ -22,13 +22,14 @@ module("main", package.seeall)
 
 -- these are packages that should be ever-present and don't need reloading.
 require("config") -- config is loaded separately, before everything else, and is not reloaded.
+require("lfs")
 require("socket")
 require("logging")
 require("logging.file")
 require("logging.console")
 
 -- load zlib
-print("MCCP?", config.MCCP2IsEnabled())
+print("MCCP2?", config.MCCP2IsEnabled())
 if config.MCCP2IsEnabled() then
 	_G.zlib = require("zlib")
 end
@@ -102,19 +103,35 @@ while Game.isReady() do
 
 		-- disconnect players
 		Game.info("*** Preserving old client sockets.")
-		local clientSockets = Game.server:getClientSockets()
+		local preservedData = {}
 		for i,v in ipairs(Game.getPlayers()) do
-			Game.info(string.format("*** Preserving %s for hotboot.", tostring(v)))
-			v:sendLine("\n*** HOTBOOT ***\n") -- inform them of the hotboot
+			-- kill players that are out of game
+			if v:getState() ~= PlayerState.PLAYING then
+				v:sendLine("\n*** HOTBOOT IN PROGRESS!!! ***\n*** COME BACK LATER! ***\n")
+				Game.disconnectPlayer(v)
+
+			-- preserve players that are in-game
+			else
+				local client = v:getClient()
+
+				-- compile this player's relevant data
+				-- in the future, you might want to save a temporary
+				-- version of a player, give it a unique ID, and
+				-- store it here so you can reload it in a second.
+				local data = {}
+				data.socket = client:getSocket()
+				data.options = client.options
+				data.name = v:getMob():getName()
+				table.insert(preservedData, data)
+
+				-- let the player know what's up.
+				Game.info(string.format("*** Preserved %s for hotboot.", tostring(v)))
+				v:sendLine("\n*** HOTBOOT ***\n") -- inform them of the hotboot
+			end
 		end
 
 		Game.info("*** Preserving old server socket.")
 		local serverSocket = Game.server:getSocket()
-
-		-- in the future, you should save player characters here as normal.
-		-- it's impossible to preserve mobs here, as there is too much
-		-- data we need to transfer, so instead save and reload the player
-		-- character as normal.
 
 		-- reload packages
 		Game.info("*** Reloading packages")
@@ -130,14 +147,6 @@ while Game.isReady() do
 		Game.info("*** Recreating old Server out of preserved socket.")
 		local server = Server:new(serverSocket)
 
-		-- we don't create new players here, because we're lacking Game data.
-		-- we want the Map to be loaded and all that good stuff before we 
-		-- create the players.
-		Game.info("*** Recreating old Clients and connecting them to recreated Server.")
-		for i,v in ipairs(clientSockets) do
-			server:connectClient(Client:new(v), true)
-		end
-
 		-- update the new Game's state (we're hotbooting)
 		Game.info("*** Informing new Game of hotboot status.")
 		Game.setState(GameState.HOTBOOT)
@@ -145,6 +154,9 @@ while Game.isReady() do
 		-- reopen the Game on the new server
 		Game.info("*** Opening Game with reconstituted Server.")
 		Game.openOnServer(server)
+
+		-- recover from the hotboot using preserved player data
+		Game.recoverFromHotboot(preservedData)
 	end
 end
 

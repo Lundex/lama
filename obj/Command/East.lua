@@ -16,10 +16,6 @@
     along with this program.  If not, see <http://www.gnu.org/licenses/>.
 ]]
 
---- Command for stepping east.
--- @author milkmanjack
-module("obj.Command.East", package.seeall)
-
 require("ext.string")
 local Movement		= require("obj.Command.Movement")
 

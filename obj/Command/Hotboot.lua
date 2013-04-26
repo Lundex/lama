@@ -16,10 +16,6 @@
     along with this program.  If not, see <http://www.gnu.org/licenses/>.
 ]]
 
---- Command for initiating a hotboot.
--- @author milkmanjack
-module("obj.Command.Hotboot", package.seeall)
-
 local Command	= require("obj.Command")
 
 --- Command for initiating a hotboot.

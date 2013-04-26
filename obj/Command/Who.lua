@@ -16,10 +16,6 @@
     along with this program.  If not, see <http://www.gnu.org/licenses/>.
 ]]
 
---- Command for checking who is online.
--- @author milkmanjack
-module("obj.Command.Who", package.seeall)
-
 require("ext.string")
 local Command	= require("obj.Command")
 

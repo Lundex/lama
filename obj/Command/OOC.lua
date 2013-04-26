@@ -16,10 +16,6 @@
     along with this program.  If not, see <http://www.gnu.org/licenses/>.
 ]]
 
---- Command for sending Out of Character chat.
--- @author milkmanjack
-module("obj.Command.OOC", package.seeall)
-
 require("ext.string")
 local Command	= require("obj.Command")
 

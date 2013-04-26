@@ -89,58 +89,6 @@
 	</li>
 
 	<li>
-		<a href="../modules/obj.Command.East.html">obj.Command.East</a>
-	</li>
-
-	<li>
-		<a href="../modules/obj.Command.Hotboot.html">obj.Command.Hotboot</a>
-	</li>
-
-	<li>
-		<a href="../modules/obj.Command.Movement.html">obj.Command.Movement</a>
-	</li>
-
-	<li>
-		<a href="../modules/obj.Command.North.html">obj.Command.North</a>
-	</li>
-
-	<li>
-		<a href="../modules/obj.Command.Northeast.html">obj.Command.Northeast</a>
-	</li>
-
-	<li>
-		<a href="../modules/obj.Command.Northwest.html">obj.Command.Northwest</a>
-	</li>
-
-	<li>
-		<a href="../modules/obj.Command.OOC.html">obj.Command.OOC</a>
-	</li>
-
-	<li>
-		<a href="../modules/obj.Command.Quit.html">obj.Command.Quit</a>
-	</li>
-
-	<li>
-		<a href="../modules/obj.Command.South.html">obj.Command.South</a>
-	</li>
-
-	<li>
-		<a href="../modules/obj.Command.Southeast.html">obj.Command.Southeast</a>
-	</li>
-
-	<li>
-		<a href="../modules/obj.Command.Southwest.html">obj.Command.Southwest</a>
-	</li>
-
-	<li>
-		<a href="../modules/obj.Command.West.html">obj.Command.West</a>
-	</li>
-
-	<li>
-		<a href="../modules/obj.Command.Who.html">obj.Command.Who</a>
-	</li>
-
-	<li>
 		<a href="../modules/obj.CommandParser.html">obj.CommandParser</a>
 	</li>
 
@@ -252,7 +200,7 @@
 	</tr>
 
 	<tr>
-	<td class="name" nowrap><a href="#Client:initialize">Client:initialize</a>&nbsp;(socket)</td>
+	<td class="name" nowrap><a href="#Client:initialize">Client:initialize</a>&nbsp;(socket, updateOptions)</td>
 	<td class="summary">Associates a socket with the Client.</td>
 	</tr>
 
@@ -309,6 +257,11 @@
 	<tr>
 	<td class="name" nowrap><a href="#Client:sendString">Client:sendString</a>&nbsp;(str)</td>
 	<td class="summary">Formats a string before sending it to the client.</td>
+	</tr>
+
+	<tr>
+	<td class="name" nowrap><a href="#Client:sendSupportedOptions">Client:sendSupportedOptions</a>&nbsp;()</td>
+	<td class="summary">Inform the Client of which options we support.</td>
 	</tr>
 
 	<tr>
@@ -585,7 +538,7 @@ Check if we will not negotiate the given option.
 
 
 
-<dt><a name="Client:initialize"></a><strong>Client:initialize</strong>&nbsp;(socket)</dt>
+<dt><a name="Client:initialize"></a><strong>Client:initialize</strong>&nbsp;(socket, updateOptions)</dt>
 <dd>
 Associates a socket with the Client.
 
@@ -595,6 +548,10 @@ Associates a socket with the Client.
 	
 	<li>
 	  <code><em>socket</em></code>: The socket to be associated.
+	</li>
+	
+	<li>
+	  <code><em>updateOptions</em></code>: Tell the client which options we support.
 	</li>
 	
 </ul>
@@ -913,6 +870,23 @@ Formats a string before sending it to the client.
 
 <h3>Return value:</h3>
 <ul>result of self:send().</ul>
+
+
+
+</dd>
+
+
+
+
+<dt><a name="Client:sendSupportedOptions"></a><strong>Client:sendSupportedOptions</strong>&nbsp;()</dt>
+<dd>
+Inform the Client of which options we support. <b>Should be called only once per socket to avoid miscommunications.</b>
+
+
+
+
+
+
 
 
 

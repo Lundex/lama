@@ -72,7 +72,11 @@ Client.options						= nil
 
 --- Associates a socket with the Client.
 -- @param socket The socket to be associated.
-function Client:initialize(socket)
+-- @param updateOptions Tell the client which options we support.
+function Client:initialize(socket, updateOptions)
+	updateOptions = (updateOptions ~= nil and updateOptions or true)
+	self:setSocket(socket)
+
 	-- initialize options
 	self.options						= {}
 	self.options.WILL					= {}
@@ -83,19 +87,12 @@ function Client:initialize(socket)
 	self.options.TTYPE.type				= nil
 	self.options.MCCP2					= {}
 	self.options.MCCP2.inflater			= nil
-	self.options.MCCP2.defelater		= nil
+	self.options.MCCP2.deflater			= nil
 	self.options.MCCP2.deflateBuffer	= nil
 
-	-- set sockets
-	self:setSocket(socket)
-
-	-- start MCCP2 negotiation
-	if config.MCCP2IsEnabled() then
-		self:sendWill(Telnet.commands.MCCP2)
+	if updateOptions then
+		self:sendSupportedOptions()
 	end
-
-	self:sendDo(Telnet.commands.TTYPE)
-	self:sendWill(Telnet.commands.MSSP)
 end
 
 --- Returns the string-value of the Client.
@@ -186,6 +183,18 @@ function Client:receive(pattern, prefix)
 	return validInput, err
 end
 
+--- Inform the Client of which options we support.
+-- <b>Should be called only once per socket to avoid miscommunications.</b>
+function Client:sendSupportedOptions()
+	-- start MCCP2 negotiation
+	if config.MCCP2IsEnabled() then
+		self:sendWill(Telnet.commands.MCCP2)
+	end
+
+	self:sendDo(Telnet.commands.TTYPE) -- tell us your terminal type please.
+	self:sendWill(Telnet.commands.MSSP) -- this works, kinda.
+end
+
 --- Send an IAC WILL message with the given option.
 -- @param op Option the Server supports and wants the Client to negotiate.
 function Client:sendWill(op)
@@ -265,7 +274,6 @@ function Client:onSubnegotiation(negotiation)
 	if string.find(negotiation, string.char(Telnet.commands.TTYPE, Telnet.commands.IS)) == 1 then
 		local type = string.sub(negotiation, 3)
 		self.options.TTYPE.type = type
-		Game.info(string.format("%s terminal type: '%s'", tostring(self), type))
 	end
 end
 

@@ -23,6 +23,7 @@ module("Game", package.seeall)
 local Event			= require("obj.Event")
 local Scheduler		= require("obj.Scheduler")
 local Server		= require("obj.Server")
+local Client		= require("obj.Client")
 local Player		= require("obj.Player")
 local Mob			= require("obj.Mob")
 local Map			= require("obj.Map")
@@ -120,11 +121,6 @@ function Game.onOpen()
 		Game.generateCommands()
 	end
 
-	-- finalize hotboot
-	if Game.state == GameState.HOTBOOT then
-		Game.onHotboot()
-	end
-
 	Game.setState(GameState.READY)
 	Game.info("Game is ready for business...")
 end
@@ -163,10 +159,20 @@ end
 -- clients have been reconnected to the server, but no players have
 -- been reconstituted yet. As such, we need to create players and
 -- reload their mobs.
-function Game.onHotboot()
-	Game.info("Reconnecting old players...")
-	for i,v in ipairs(Game.server:getClients()) do
-		local player = Player:new(v)
+-- @param preservedData A table containing formatted tables that
+-- are used to reconstitute old players. Most importantly, their
+-- sockets are included in this table, but also things like their
+-- client options, and even mob IDs for loading temporary player
+-- files.
+function Game.recoverFromHotboot(preservedData)
+	Game.info("*** Reconnecting old players...")
+	for i,v in ipairs(preservedData) do
+		-- load new client and restore options.
+		local client = Client:new(v.socket, false)
+		client.options = v.options
+
+		-- load new player
+		local player = Player:new(client)
 		player:setID(Game.nextPlayerID())
 		Game.connectPlayer(player, true)
 
@@ -174,6 +180,7 @@ function Game.onHotboot()
 		-- future implementations should probably load the saved
 		-- version of the player's character.
 		local mob = Mob:new()
+		mob.name = v.name -- for now just load the name
 		mob:moveToMap(Game.map)
 		mob:setXYZLoc(1,1,1)
 		player:setMob(mob)
@@ -267,6 +274,19 @@ function Game.announce(message, mode, minState)
 end
 
 function Game.generateCommands()
+	for i in lfs.dir("obj/Command") do
+		if i ~= "." and i ~= ".." then
+			local file = string.match(i, "(.+)%.lua")
+			if file then -- it's an lua file!
+				local package = string.format("obj.Command.%s", file)
+				if package ~= "obj.Command.Movement" then
+					local command = require(package)
+					Game.parser:addCommand(command:new())
+				end
+			end
+		end
+	end
+--[[
 	Game.parser:addCommand(require("obj.Command.OOC"):new())
 	Game.parser:addCommand(require("obj.Command.Hotboot"):new())
 	Game.parser:addCommand(require("obj.Command.North"):new())
@@ -279,6 +299,7 @@ function Game.generateCommands()
 	Game.parser:addCommand(require("obj.Command.Southwest"):new())
 	Game.parser:addCommand(require("obj.Command.Quit"):new())
 	Game.parser:addCommand(require("obj.Command.Who"):new())
+]]
 end
 
 --- Shortcut for Game.scheduler:queue(event)
