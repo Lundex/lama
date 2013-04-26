@@ -1,0 +1,26 @@
+	Changes in v0.7a-1 (4/26/2013)
+	------DEV--------
+	* Made the hotboot phase a little more intelligible. The hotboot is now split into 3 distinct phases.
+
+		1) Game.hotboot() initiates a hotboot.
+		2) main.lua's game loop processes the hotboot.
+		 2a) First, relevant player data is preserved in the preservedData table.
+		 2b) Second, all of the game packages are unloaded, allowing for them to be reloaded.
+		 2c) Third, all of the game packages are reloaded.
+		 2d) Game is re-opened on the preserved Server.
+		3) Game.recoverFromHotboot() handles reconnecting Players from the preservedData table.
+
+	* Clients no longer send option negotiations right away for supported options on creation. Instead, the second argument to Client:initialize() determines if this should be done. This is to prevent the same negotiation from being requested on an already negotiated option after, say, a hotboot, where clients have to be recreated using the sockets of the old clients.
+
+	* Commands are no longer documented as packages.
+
+	* Added generic Command structure with generic commands.
+
+	* Added string extension. Mostly just for the getWord() function.
+
+	* Added automatic unloading of obj.* packages. Still have to unload the singletons yourself.
+
+	* Game.generateCommands() now loads every Command in the obj/Command directory. By default, anyway.
+
+	* Moved default port to config structure.
+

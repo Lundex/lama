@@ -48,7 +48,7 @@ local Game			= {}
 
 -- game data
 Game.name			= "lama"
-Game.version		= "v0.7a"
+Game.version		= "v0.7a-1"
 
 -- runtime data
 Game.state			= GameState.NEW
@@ -154,11 +154,7 @@ function Game.hotboot()
 	return true
 end
 
---- Specifies further action for a hotboot.
--- By the time this calls, the server has been reestablished and
--- clients have been reconnected to the server, but no players have
--- been reconstituted yet. As such, we need to create players and
--- reload their mobs.
+--- Recovers old players after a hotboot.
 -- @param preservedData A table containing formatted tables that
 -- are used to reconstitute old players. Most importantly, their
 -- sockets are included in this table, but also things like their
@@ -273,6 +269,7 @@ function Game.announce(message, mode, minState)
 	end
 end
 
+--- Generates a list of every Command for the CommandParser.
 function Game.generateCommands()
 	for i in lfs.dir("obj/Command") do
 		if i ~= "." and i ~= ".." then
@@ -286,20 +283,6 @@ function Game.generateCommands()
 			end
 		end
 	end
---[[
-	Game.parser:addCommand(require("obj.Command.OOC"):new())
-	Game.parser:addCommand(require("obj.Command.Hotboot"):new())
-	Game.parser:addCommand(require("obj.Command.North"):new())
-	Game.parser:addCommand(require("obj.Command.South"):new())
-	Game.parser:addCommand(require("obj.Command.East"):new())
-	Game.parser:addCommand(require("obj.Command.West"):new())
-	Game.parser:addCommand(require("obj.Command.Northeast"):new())
-	Game.parser:addCommand(require("obj.Command.Northwest"):new())
-	Game.parser:addCommand(require("obj.Command.Southeast"):new())
-	Game.parser:addCommand(require("obj.Command.Southwest"):new())
-	Game.parser:addCommand(require("obj.Command.Quit"):new())
-	Game.parser:addCommand(require("obj.Command.Who"):new())
-]]
 end
 
 --- Shortcut for Game.scheduler:queue(event)

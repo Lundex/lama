@@ -195,6 +195,11 @@
 	</tr>
 
 	<tr>
+	<td class="name" nowrap><a href="#Game.generateCommands">Game.generateCommands</a>&nbsp;()</td>
+	<td class="summary">Generates a list of every Command for the CommandParser.</td>
+	</tr>
+
+	<tr>
 	<td class="name" nowrap><a href="#Game.getName">Game.getName</a>&nbsp;()</td>
 	<td class="summary">Retreive the Game's name.</td>
 	</tr>
@@ -276,7 +281,7 @@
 
 	<tr>
 	<td class="name" nowrap><a href="#Game.recoverFromHotboot">Game.recoverFromHotboot</a>&nbsp;(preservedData)</td>
-	<td class="summary">Specifies further action for a hotboot.</td>
+	<td class="summary">Recovers old players after a hotboot.</td>
 	</tr>
 
 	<tr>
@@ -526,6 +531,23 @@ Shortcut to Game.logger:fatal(message)
 	</li>
 	
 </ul>
+
+
+
+
+
+
+
+
+</dd>
+
+
+
+
+<dt><a name="Game.generateCommands"></a><strong>Game.generateCommands</strong>&nbsp;()</dt>
+<dd>
+Generates a list of every Command for the CommandParser.
+
 
 
 
@@ -934,7 +956,7 @@ Shortcut for Game.scheduler:queue(event)
 
 <dt><a name="Game.recoverFromHotboot"></a><strong>Game.recoverFromHotboot</strong>&nbsp;(preservedData)</dt>
 <dd>
-Specifies further action for a hotboot. By the time this calls, the server has been reestablished and clients have been reconnected to the server, but no players have been reconstituted yet. As such, we need to create players and reload their mobs.
+Recovers old players after a hotboot.
 
 
 <h3>Parameters:</h3>
