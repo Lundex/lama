@@ -16,7 +16,7 @@
     along with this program.  If not, see <http://www.gnu.org/licenses/>.
 ]]
 
-local Movement		= require("obj.Command.Movement")
+local Movement		= require("obj.command.Movement")
 
 --- Command for stepping southeast.
 -- @class table

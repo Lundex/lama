@@ -1,0 +1,23 @@
+	Changes in v0.7a-2 (4/30/2013)
+	------DEV--------
+	* I have fixed a huge performance bottleneck in Map:contains() and MapObject:contains(). Essentially, because of how tables work, I have loop through the entire table to find the location of a MapObject within these tables, which I need to be able to remove it from said table. Unfortunately, the only fix I have for this is to use the hashmap feature of tables, and when adding something to a Map or MapObject's contents, I create a special index of the specific MapObject with an associated value of true. When removing something, I just clear that entry out of the table by setting it to nil.
+
+	* Modularized greeting so I don't have the MUD name, version, and developer in 3 different places. txt/GREETING now contains a string that can be injected into a string.format() call, with the first 2 arguments being the game name and game version, followed by the game developers.
+
+	* Added developers table to Game, with getDevelopers() function. getDevelopers() returns the unpacked version of the table, mostly for use with the greeting.
+
+	* Added "score" command to test saving and loading.
+
+	* Added "save" command for testing.
+
+	* Added "commands" command.
+
+	* Added character directory for storing savefiles.
+
+	* Implemented basic XML savefiles for characters.
+
+	* When hotbooting, client option settings are preserved, as well as player IDs, and the name of the player's character. With the new character saving, what happens is that on hotboot, the character is saved and its name is preserved. After hotbooting, the character is reloaded based on its name.
+
+	* Renamed obj/Command directory to obj/command. This is more consistent.
+
+	* Moved around the Telnet.commands options to other tables based on their categories. Protocols (Telnet.protocol) are separate from commands (Telnet.command), along with MSSP (Telnet.MSSP) and environment (Telnet.environment) options.

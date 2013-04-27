@@ -110,11 +110,13 @@ end
 --- Stop managing a Client.
 -- @param client The Client to stop managing.
 function Server:disconnectClient(client)
-	for i,v in ipairs(self.clients) do
+	table.removeValue(self.clients, client)
+--[[	for i,v in ipairs(self.clients) do
 		if v == client then
 			table.remove(self.clients, i)
 		end
 	end
+]]
 
 	client:getSocket():close()
 end

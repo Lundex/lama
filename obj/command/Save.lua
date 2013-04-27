@@ -16,13 +16,20 @@
     along with this program.  If not, see <http://www.gnu.org/licenses/>.
 ]]
 
-local Movement		= require("obj.Command.Movement")
+local Command	= require("obj.Command")
 
---- Command for stepping northwest.
+--- Command for saving our character.
 -- @class table
--- @name Northwest
-local Northwest		= Movement:clone()
-Northwest.keyword	= "northwest"
-Northwest.direction	= Direction.NORTHWEST
+-- @name Save
+local Save		= Command:clone()
+Save.keyword	= "save"
 
-return Northwest
+--- Save the character.
+-- @param player Player to be saved.
+-- @param mob Mob to be saved.
+function Save:execute(player, mob)
+	CharacterManager.saveCharacter(mob)
+	mob:sendMessage("SAVED!", MessageMode.INFO)
+end
+
+return Save

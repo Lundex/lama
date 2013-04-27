@@ -91,6 +91,7 @@ end
 -- @param mapObject MapObject to be added.
 function Map:addToContents(mapObject)
 	table.insert(self.contents, mapObject)
+	self.contents[mapObject] = true
 
 	-- mutuality
 	if mapObject:getMap() ~= self then
@@ -104,11 +105,8 @@ end
 -- map is set to nil, and it is removed from any location in that map.
 -- @param mapObject MapObject to be removed.
 function Map:removeFromContents(mapObject)
-	for i,v in ipairs(self.contents) do
-		if v == mapObject then
-			table.remove(self.contents, i)
-		end
-	end
+	table.removeValue(self.contents, mapObject)
+	self.contents[mapObject] = nil
 
 	-- mutuality
 	if mapObject:getMap() == self then
@@ -161,13 +159,7 @@ end
 -- @param mapObject The MapObject to check for.
 -- @return true if the Map contains it.<br/>false otherwise.
 function Map:contains(mapObject)
-	for i,v in ipairs(self.contents) do
-		if v == mapObject then
-			return true
-		end
-	end
-
-	return false
+	return self.contents[mapObject] == true
 end
 
 --- Gets contents list.

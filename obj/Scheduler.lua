@@ -60,11 +60,13 @@ end
 --- Remove an event from the queue.
 -- @param event	The even to deque.
 function Scheduler:dequeue(event)
-	for i,v in ipairs(self.events) do
+	table.removeValue(self.events, event)
+--[[	for i,v in ipairs(self.events) do
 		if v == event then
 			table.remove(self.events, i)
 		end
 	end
+]]
 end
 
 --- Check if the Scheduler has Events waiting.

@@ -16,14 +16,13 @@
     along with this program.  If not, see <http://www.gnu.org/licenses/>.
 ]]
 
-require("ext.string")
-local Movement		= require("obj.Command.Movement")
+local Movement		= require("obj.command.Movement")
 
---- Command for stepping east.
+--- Command for stepping southwest.
 -- @class table
--- @name East
-local East			= Movement:clone()
-East.keyword		= "east"
-East.direction		= Direction.EAST
+-- @name Southwest
+local Southwest		= Movement:clone()
+Southwest.keyword	= "southwest"
+Southwest.direction	= Direction.SOUTHWEST
 
-return East
+return Southwest

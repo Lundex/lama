@@ -49,12 +49,16 @@ end
 --- Removes a value from a table as opposed to an index.
 -- @param t Table to be modified.
 -- @param value Value to be removed.
+-- @return true on successful removal.<br/>false otherwise.
 function table.removeValue(t, value)
 	for i,v in pairs(t) do
 		if v == value then
 			table.remove(t, i)
+			return true
 		end
 	end
+
+	return false
 end
 
 --- Converts the members of a table into a string, using tostring()

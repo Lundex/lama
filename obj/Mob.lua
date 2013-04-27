@@ -35,7 +35,7 @@ local MapObject	= require("obj.MapObject")
 -- @field player The Player we're associated with.
 local Mob		= MapObject:clone()
 
--- creature data
+-- mob data, bro.
 Mob.name			= "mob"
 Mob.description		= "It's a mob."
 
@@ -164,6 +164,18 @@ function Mob:unsetPlayer()
 	if oldPlayer:getMob() == self then
 		oldPlayer:unsetMob()
 	end
+end
+
+--- Get the Mob's name.
+-- @return Mob's name.
+function Mob:getName()
+	return self.name
+end
+
+--- Get the Mob's description.
+-- @return Mob's description.
+function Mob:getDescription()
+	return self.description
 end
 
 --- Check if this Mob has a Player controlling it.

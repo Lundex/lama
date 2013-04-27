@@ -16,13 +16,13 @@
     along with this program.  If not, see <http://www.gnu.org/licenses/>.
 ]]
 
-local Movement		= require("obj.Command.Movement")
+local Movement		= require("obj.command.Movement")
 
---- Command for stepping northeast.
+--- Command for stepping west.
 -- @class table
--- @name Northeast
-local Northeast		= Movement:clone()
-Northeast.keyword	= "northeast"
-Northeast.direction	= Direction.NORTHEAST
+-- @name West
+local West			= Movement:clone()
+West.keyword		= "west"
+West.direction		= Direction.WEST
 
-return Northeast
+return West

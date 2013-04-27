@@ -64,4 +64,10 @@ function CommandParser:removeCommand(command)
 	table.removeValue(self.commands, command)
 end
 
+--- Return the Commands this parser sorts through.
+-- @return List of Commands.
+function CommandParser:getCommands()
+	return self.commands
+end
+
 return CommandParser

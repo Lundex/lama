@@ -44,31 +44,30 @@ local CommandParser	= require("obj.CommandParser")
 -- @field logger Logger that prints to the standard output.
 -- @field fileLogger Logger that prints to the standard log file for this session.
 -- @field commandLogger Logger that prints all command input to the standard command log file for this session.
-local Game			= {}
+local Game				= {}
 
 -- game data
-Game.name			= "lama"
-Game.version		= "v0.7a-1"
+Game.name				= "lama"
+Game.version			= "v0.7a-1"
+Game.developers			= {"milkmanjack"}
 
--- runtime data
-Game.state			= GameState.NEW
-Game.playerID		= 0
+-- current game info
+Game.state				= GameState.NEW
+Game.playerID			= 0
+Game.server				= nil
+Game.scheduler			= nil
+Game.map				= nil
+Game.parser				= nil
 
 --- Contains all Players connected to the game.
 -- @class table
 -- @name Game.players
-Game.players		= {}
+Game.players			= {}
 
-Game.server			= nil
-Game.scheduler		= nil
-Game.map			= nil
-Game.parser			= nil
-
-Game.logger			= logging.console()
-Game.fileLogger		= logging.file("log/%s.log", "%m%d%y")
-Game.commandLogger	= logging.file("log/%s-commands.log", "%m%d%y")
-
--- log everything!
+-- loggers for the game
+Game.logger				= logging.console()
+Game.fileLogger			= logging.file("log/%s.log", "%m%d%y")
+Game.commandLogger		= logging.file("log/%s-commands.log", "%m%d%y")
 Game.fileLogger:setLevel(logging.DEBUG)
 Game.commandLogger:setLevel(logging.DEBUG)
 
@@ -161,7 +160,6 @@ end
 -- client options, and even mob IDs for loading temporary player
 -- files.
 function Game.recoverFromHotboot(preservedData)
-	Game.info("*** Reconnecting old players...")
 	for i,v in ipairs(preservedData) do
 		-- load new client and restore options.
 		local client = Client:new(v.socket, false)
@@ -169,17 +167,16 @@ function Game.recoverFromHotboot(preservedData)
 
 		-- load new player
 		local player = Player:new(client)
-		player:setID(Game.nextPlayerID())
+		player:setID(v.id)
 		Game.connectPlayer(player, true)
 
-		-- creates a new mob for the player, for now.
-		-- future implementations should probably load the saved
-		-- version of the player's character.
 		local mob = Mob:new()
-		mob.name = v.name -- for now just load the name
+		CharacterManager.loadCharacter(v.name, mob) -- load the old mob, based on its name
 		mob:moveToMap(Game.map)
 		mob:setXYZLoc(1,1,1)
 		player:setMob(mob)
+
+		Game.info(string.format("*** Character loaded: %s->%s", tostring(mob), tostring(player)))
 	end
 end
 
@@ -271,12 +268,12 @@ end
 
 --- Generates a list of every Command for the CommandParser.
 function Game.generateCommands()
-	for i in lfs.dir("obj/Command") do
+	for i in lfs.dir("obj/command") do
 		if i ~= "." and i ~= ".." then
 			local file = string.match(i, "(.+)%.lua")
 			if file then -- it's an lua file!
-				local package = string.format("obj.Command.%s", file)
-				if package ~= "obj.Command.Movement" then
+				local package = string.format("obj.command.%s", file)
+				if package ~= "obj.command.Movement" then
 					local command = require(package)
 					Game.parser:addCommand(command:new())
 				end
@@ -375,6 +372,12 @@ end
 -- @return The version of the Game.
 function Game.getVersion()
 	return Game.version
+end
+
+--- Retreive the Game's list of developers.
+-- @return A tuple of each developer
+function Game.getDevelopers()
+	return unpack(Game.developers)
 end
 
 --- Retreive the Game's state.

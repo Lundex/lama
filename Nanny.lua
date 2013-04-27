@@ -34,12 +34,23 @@ local Nanny			= {}
 -- @param input The input to process.
 function Nanny.process(player, input)
 	if player:getState() == PlayerState.NAME then
+		local name = CharacterManager.legalizeName(input)
 		if string.len(input) < 3 or string.len(input) > 12 then
 			Nanny.messageNameLengthLimit(player)
 			Nanny.askForName(player)
 		else
 			local mob = Mob:new()
-			mob:setName(input)
+
+			-- load saved character
+			if CharacterManager.characterNameTaken(name) then
+				CharacterManager.loadCharacter(name, mob)
+
+			-- create new character
+			else
+				mob:setName(name)
+				CharacterManager.saveCharacter(mob)
+			end
+
 			player:setMob(mob)
 			player:setState(PlayerState.MOTD)
 			Nanny.MOTD(player)
@@ -141,18 +152,20 @@ end
 --- Get the greeting message. By default, refers to "txt/GREETING". If not found, returns generic credits.
 -- @return The message.
 function Nanny.getGreeting()
+	-- use contents of txt/GREETING for our greeting, if available.
 	local file = io.open("txt/GREETING", "r")
 	if file then
-		local greeting = file:read("*all")
-		file:close()
-		return greeting
+		local txt = file:read("*a")
+		local formatted = string.format(txt, Game.getName(), Game.getVersion(), Game.getDevelopers())
+		return formatted
 	end
 
-	return [[lama (v0.5a)
-    by Jack
+	-- generic greeting
+	return string.format([[%s (%s)
+    by %s
 
 Developed in
-    Lua 5.2]]
+    Lua 5.2]], Game.getName(), Game.getVersion(), Game.getDevelopers())
 
 end
 

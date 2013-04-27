@@ -16,13 +16,27 @@
     along with this program.  If not, see <http://www.gnu.org/licenses/>.
 ]]
 
-local Movement		= require("obj.Command.Movement")
+require("ext.string")
+local Command	= require("obj.Command")
 
---- Command for stepping north.
+--- Command for checking who is online.
 -- @class table
--- @name North
-local North			= Movement:clone()
-North.keyword		= "north"
-North.direction		= Direction.NORTH
+-- @name Who
+local Who		= Command:clone()
+Who.keyword		= "who"
 
-return North
+--- Send a list of players to the player.
+function Who:execute(player, mob)
+	local msg = "\[ Connected Players ]"
+	for i,v in ipairs(Game.getPlayers()) do
+		local client = v:getClient()
+		local mob = v:getMob()
+		local TerminalType = client:getTerminalType()
+		local MCCPStatus = client:getDo(Telnet.protocol.MCCP2) and "enabled" or "disabled"
+		msg = string.format("%s\n-> %s (terminal: %s) (MCCP %s)", msg, tostring(v), TerminalType, MCCPStatus)
+	end
+
+	player:sendMessage(msg)
+end
+
+return Who

@@ -35,6 +35,10 @@
 <ul>
 
 	<li>
+		<a href="../modules/CharacterManager.html">CharacterManager</a>
+	</li>
+
+	<li>
 		<a href="../modules/Directions.html">Directions</a>
 	</li>
 
@@ -160,13 +164,43 @@
 <table class="function_list">
 
 	<tr>
-	<td class="name" nowrap><a href="#Telnet.commands.name">Telnet.commands.name</a>&nbsp;(command)</td>
-	<td class="summary">Allows for quick reference to Telnet.commands.names enums.</td>
+	<td class="name" nowrap><a href="#Telnet.MSSP.name">Telnet.MSSP.name</a>&nbsp;(option)</td>
+	<td class="summary">Allows for quick reference to Telnet.MSSP.names values.</td>
 	</tr>
 
 	<tr>
-	<td class="name" nowrap><a href="#Telnet.commands.nameAll">Telnet.commands.nameAll</a>&nbsp;(command)</td>
-	<td class="summary">Returns a string with every Telnet command in the given command named, separated by commas.</td>
+	<td class="name" nowrap><a href="#Telnet.MSSP.nameAll">Telnet.MSSP.nameAll</a>&nbsp;(option)</td>
+	<td class="summary">Returns a string with every Telnet.MSSP value in the given string, separated by commas.</td>
+	</tr>
+
+	<tr>
+	<td class="name" nowrap><a href="#Telnet.command.name">Telnet.command.name</a>&nbsp;(option)</td>
+	<td class="summary">Allows for quick reference to Telnet.command.names values.</td>
+	</tr>
+
+	<tr>
+	<td class="name" nowrap><a href="#Telnet.command.nameAll">Telnet.command.nameAll</a>&nbsp;(option)</td>
+	<td class="summary">Returns a string with every Telnet.command value in the given string, separated by commas.</td>
+	</tr>
+
+	<tr>
+	<td class="name" nowrap><a href="#Telnet.environment.name">Telnet.environment.name</a>&nbsp;(option)</td>
+	<td class="summary">Allows for quick reference to Telnet.environment.names values.</td>
+	</tr>
+
+	<tr>
+	<td class="name" nowrap><a href="#Telnet.environment.nameAll">Telnet.environment.nameAll</a>&nbsp;(option)</td>
+	<td class="summary">Returns a string with every Telnet.environment value in the given string, separated by commas.</td>
+	</tr>
+
+	<tr>
+	<td class="name" nowrap><a href="#Telnet.protocol.name">Telnet.protocol.name</a>&nbsp;(option)</td>
+	<td class="summary">Allows for quick reference to Telnet.protocol.names values.</td>
+	</tr>
+
+	<tr>
+	<td class="name" nowrap><a href="#Telnet.protocol.nameAll">Telnet.protocol.nameAll</a>&nbsp;(option)</td>
+	<td class="summary">Returns a string with every Telnet.protocol value in the given string, separated by commas.</td>
 	</tr>
 
 </table>
@@ -182,13 +216,43 @@
 	</tr>
 
 	<tr>
-	<td class="name" nowrap><a href="#Telnet.commands">Telnet.commands</a></td>
-	<td class="summary">Contains enum-styled values for telnet commands.</td>
+	<td class="name" nowrap><a href="#Telnet.MSSP">Telnet.MSSP</a></td>
+	<td class="summary">Contains MSSP options.</td>
 	</tr>
 
 	<tr>
-	<td class="name" nowrap><a href="#Telnet.commands.names">Telnet.commands.names</a></td>
-	<td class="summary">Contains textual representations of Telnet.commands enums.</td>
+	<td class="name" nowrap><a href="#Telnet.MSSP.names">Telnet.MSSP.names</a></td>
+	<td class="summary">Contains textual representations of Telnet.MSSP values.</td>
+	</tr>
+
+	<tr>
+	<td class="name" nowrap><a href="#Telnet.command">Telnet.command</a></td>
+	<td class="summary">Contains telnet command options.</td>
+	</tr>
+
+	<tr>
+	<td class="name" nowrap><a href="#Telnet.command.names">Telnet.command.names</a></td>
+	<td class="summary">Contains textual representations of Telnet.command values.</td>
+	</tr>
+
+	<tr>
+	<td class="name" nowrap><a href="#Telnet.environment">Telnet.environment</a></td>
+	<td class="summary">Contains environment options.</td>
+	</tr>
+
+	<tr>
+	<td class="name" nowrap><a href="#Telnet.environment.names">Telnet.environment.names</a></td>
+	<td class="summary">Contains textual representations of Telnet.environment values.</td>
+	</tr>
+
+	<tr>
+	<td class="name" nowrap><a href="#Telnet.protocol">Telnet.protocol</a></td>
+	<td class="summary">Contains telnet protocol options.</td>
+	</tr>
+
+	<tr>
+	<td class="name" nowrap><a href="#Telnet.protocol.names">Telnet.protocol.names</a></td>
+	<td class="summary">Contains textual representations of Telnet.protocol values.</td>
 	</tr>
 
 </table>
@@ -205,16 +269,16 @@
 
 
 
-<dt><a name="Telnet.commands.name"></a><strong>Telnet.commands.name</strong>&nbsp;(command)</dt>
+<dt><a name="Telnet.MSSP.name"></a><strong>Telnet.MSSP.name</strong>&nbsp;(option)</dt>
 <dd>
-Allows for quick reference to Telnet.commands.names enums.
+Allows for quick reference to Telnet.MSSP.names values.
 
 
 <h3>Parameters:</h3>
 <ul>
 	
 	<li>
-	  <code><em>command</em></code>: The command to retrieve the name of.
+	  <code><em>option</em></code>: The option to retrieve the name of.
 	</li>
 	
 </ul>
@@ -225,7 +289,7 @@ Allows for quick reference to Telnet.commands.names enums.
 
 
 <h3>Return value:</h3>
-<ul>Name of the command.</ul>
+<ul>Name of the option.</ul>
 
 
 
@@ -234,16 +298,16 @@ Allows for quick reference to Telnet.commands.names enums.
 
 
 
-<dt><a name="Telnet.commands.nameAll"></a><strong>Telnet.commands.nameAll</strong>&nbsp;(command)</dt>
+<dt><a name="Telnet.MSSP.nameAll"></a><strong>Telnet.MSSP.nameAll</strong>&nbsp;(option)</dt>
 <dd>
-Returns a string with every Telnet command in the given command named, separated by commas.
+Returns a string with every Telnet.MSSP value in the given string, separated by commas.
 
 
 <h3>Parameters:</h3>
 <ul>
 	
 	<li>
-	  <code><em>command</em></code>: The command to name all of the options in.
+	  <code><em>option</em></code>: The string to be named.
 	</li>
 	
 </ul>
@@ -254,7 +318,181 @@ Returns a string with every Telnet command in the given command named, separated
 
 
 <h3>Return value:</h3>
-<ul>Formatted string of all command option names.</ul>
+<ul>Formatted string of all option names.</ul>
+
+
+
+</dd>
+
+
+
+
+<dt><a name="Telnet.command.name"></a><strong>Telnet.command.name</strong>&nbsp;(option)</dt>
+<dd>
+Allows for quick reference to Telnet.command.names values.
+
+
+<h3>Parameters:</h3>
+<ul>
+	
+	<li>
+	  <code><em>option</em></code>: The option to retrieve the name of.
+	</li>
+	
+</ul>
+
+
+
+
+
+
+<h3>Return value:</h3>
+<ul>Name of the option.</ul>
+
+
+
+</dd>
+
+
+
+
+<dt><a name="Telnet.command.nameAll"></a><strong>Telnet.command.nameAll</strong>&nbsp;(option)</dt>
+<dd>
+Returns a string with every Telnet.command value in the given string, separated by commas.
+
+
+<h3>Parameters:</h3>
+<ul>
+	
+	<li>
+	  <code><em>option</em></code>: The string to be named.
+	</li>
+	
+</ul>
+
+
+
+
+
+
+<h3>Return value:</h3>
+<ul>Formatted string of all option names.</ul>
+
+
+
+</dd>
+
+
+
+
+<dt><a name="Telnet.environment.name"></a><strong>Telnet.environment.name</strong>&nbsp;(option)</dt>
+<dd>
+Allows for quick reference to Telnet.environment.names values.
+
+
+<h3>Parameters:</h3>
+<ul>
+	
+	<li>
+	  <code><em>option</em></code>: The option to retrieve the name of.
+	</li>
+	
+</ul>
+
+
+
+
+
+
+<h3>Return value:</h3>
+<ul>Name of the option.</ul>
+
+
+
+</dd>
+
+
+
+
+<dt><a name="Telnet.environment.nameAll"></a><strong>Telnet.environment.nameAll</strong>&nbsp;(option)</dt>
+<dd>
+Returns a string with every Telnet.environment value in the given string, separated by commas.
+
+
+<h3>Parameters:</h3>
+<ul>
+	
+	<li>
+	  <code><em>option</em></code>: The string to be named.
+	</li>
+	
+</ul>
+
+
+
+
+
+
+<h3>Return value:</h3>
+<ul>Formatted string of all option names.</ul>
+
+
+
+</dd>
+
+
+
+
+<dt><a name="Telnet.protocol.name"></a><strong>Telnet.protocol.name</strong>&nbsp;(option)</dt>
+<dd>
+Allows for quick reference to Telnet.protocol.names values.
+
+
+<h3>Parameters:</h3>
+<ul>
+	
+	<li>
+	  <code><em>option</em></code>: The option to retrieve the name of.
+	</li>
+	
+</ul>
+
+
+
+
+
+
+<h3>Return value:</h3>
+<ul>Name of the option.</ul>
+
+
+
+</dd>
+
+
+
+
+<dt><a name="Telnet.protocol.nameAll"></a><strong>Telnet.protocol.nameAll</strong>&nbsp;(option)</dt>
+<dd>
+Returns a string with every Telnet.protocol value in the given string, separated by commas.
+
+
+<h3>Parameters:</h3>
+<ul>
+	
+	<li>
+	  <code><em>option</em></code>: The string to be named.
+	</li>
+	
+</ul>
+
+
+
+
+
+
+<h3>Return value:</h3>
+<ul>Formatted string of all option names.</ul>
 
 
 
@@ -277,8 +515,50 @@ Returns a string with every Telnet command in the given command named, separated
 </dd>
 
 
-<dt><a name="Telnet.commands"></a><strong>Telnet.commands</strong></dt>
-<dd>Contains enum-styled values for telnet commands.<br /><br />
+<dt><a name="Telnet.MSSP"></a><strong>Telnet.MSSP</strong></dt>
+<dd>Contains MSSP options.<br /><br />
+
+
+<h3>Fields:</h3>
+<ul>
+	
+	<li>
+	  <code><em>VAL</em></code>: 2
+	</li>
+	
+	<li>
+	  <code><em>VAR</em></code>: 1
+	</li>
+	
+</ul>
+
+
+</dd>
+
+
+<dt><a name="Telnet.MSSP.names"></a><strong>Telnet.MSSP.names</strong></dt>
+<dd>Contains textual representations of Telnet.MSSP values.<br /><br />
+
+
+<h3>Fields:</h3>
+<ul>
+	
+	<li>
+	  <code><em>Telnet.options.VAL</em></code>: "VAL"
+	</li>
+	
+	<li>
+	  <code><em>Telnet.options.VAR</em></code>: "VAR"
+	</li>
+	
+</ul>
+
+
+</dd>
+
+
+<dt><a name="Telnet.command"></a><strong>Telnet.command</strong></dt>
+<dd>Contains telnet command options.<br /><br />
 
 
 <h3>Fields:</h3>
@@ -325,6 +605,146 @@ Returns a string with every Telnet command in the given command named, separated
 	</li>
 	
 	<li>
+	  <code><em>EOR</em></code>: 239
+	</li>
+	
+	<li>
+	  <code><em>ABORT</em></code>: 238
+	</li>
+	
+	<li>
+	  <code><em>SUSP</em></code>: 237
+	</li>
+	
+	<li>
+	  <code><em>xEOF</em></code>: 236
+	</li>
+	
+</ul>
+
+
+</dd>
+
+
+<dt><a name="Telnet.command.names"></a><strong>Telnet.command.names</strong></dt>
+<dd>Contains textual representations of Telnet.command values.<br /><br />
+
+
+<h3>Fields:</h3>
+<ul>
+	
+	<li>
+	  <code><em>Telnet.command.IAC</em></code>: "IAC"
+	</li>
+	
+	<li>
+	  <code><em>Telnet.command.DONT</em></code>: "DONT"
+	</li>
+	
+	<li>
+	  <code><em>Telnet.command.DO</em></code>: "DO"
+	</li>
+	
+	<li>
+	  <code><em>Telnet.command.WONT</em></code>: "WONT"
+	</li>
+	
+	<li>
+	  <code><em>Telnet.command.WILL</em></code>: "WILL"
+	</li>
+	
+	<li>
+	  <code><em>Telnet.command.SB</em></code>: "SB"
+	</li>
+	
+	<li>
+	  <code><em>Telnet.command.GA</em></code>: "GA"
+	</li>
+	
+	<li>
+	  <code><em>Telnet.command.EL</em></code>: "EL"
+	</li>
+	
+	<li>
+	  <code><em>Telnet.command.EC</em></code>: "EC"
+	</li>
+	
+	<li>
+	  <code><em>Telnet.command.SE</em></code>: "SE"
+	</li>
+	
+	<li>
+	  <code><em>Telnet.command.EOR</em></code>: "EOR"
+	</li>
+	
+	<li>
+	  <code><em>Telnet.command.ABORT</em></code>: "ABORT"
+	</li>
+	
+	<li>
+	  <code><em>Telnet.command.SUSP</em></code>: "SUSP"
+	</li>
+	
+	<li>
+	  <code><em>Telnet.command.xEOF</em></code>: "xEOF"
+	</li>
+	
+</ul>
+
+
+</dd>
+
+
+<dt><a name="Telnet.environment"></a><strong>Telnet.environment</strong></dt>
+<dd>Contains environment options.<br /><br />
+
+
+<h3>Fields:</h3>
+<ul>
+	
+	<li>
+	  <code><em>SEND</em></code>: 1
+	</li>
+	
+	<li>
+	  <code><em>IS</em></code>: 0
+	</li>
+	
+</ul>
+
+
+</dd>
+
+
+<dt><a name="Telnet.environment.names"></a><strong>Telnet.environment.names</strong></dt>
+<dd>Contains textual representations of Telnet.environment values.<br /><br />
+
+
+<h3>Fields:</h3>
+<ul>
+	
+	<li>
+	  <code><em>Telnet.environment.SEND</em></code>: "SEND"
+	</li>
+	
+	<li>
+	  <code><em>Telnet.environment.IS</em></code>: "IS"
+	</li>
+	
+</ul>
+
+
+</dd>
+
+
+<dt><a name="Telnet.protocol"></a><strong>Telnet.protocol</strong></dt>
+<dd>Contains telnet protocol options.<br /><br />
+
+
+<h3>Fields:</h3>
+<ul>
+	
+	<li>
 	  <code><em>MCCP</em></code>: 85
 	</li>
 	
@@ -344,101 +764,37 @@ Returns a string with every Telnet command in the given command named, separated
 	  <code><em>TTYPE</em></code>: 24
 	</li>
 	
-	<li>
-	  <code><em>IS</em></code>: 0
-	</li>
-	
-	<li>
-	  <code><em>SEND</em></code>: 1
-	</li>
-	
 </ul>
 
 
 </dd>
 
 
-<dt><a name="Telnet.commands.names"></a><strong>Telnet.commands.names</strong></dt>
-<dd>Contains textual representations of Telnet.commands enums.<br /><br />
+<dt><a name="Telnet.protocol.names"></a><strong>Telnet.protocol.names</strong></dt>
+<dd>Contains textual representations of Telnet.protocol values.<br /><br />
 
 
 <h3>Fields:</h3>
 <ul>
 	
 	<li>
-	  <code><em>Telnet.commands.IAC</em></code>: "IAC"
+	  <code><em>Telnet.protocol.MCCP</em></code>: "MCCP"
 	</li>
 	
 	<li>
-	  <code><em>Telnet.commands.DONT</em></code>: "DONT"
+	  <code><em>Telnet.protocol.MCCP2</em></code>: "MCCP2"
 	</li>
 	
 	<li>
-	  <code><em>Telnet.commands.DO</em></code>: "DO"
+	  <code><em>Telnet.protocol.MSSP</em></code>: "MSSP"
 	</li>
 	
 	<li>
-	  <code><em>Telnet.commands.WONT</em></code>: "WONT"
+	  <code><em>Telnet.protocol.MSDP</em></code>: "MSDP"
 	</li>
 	
 	<li>
-	  <code><em>Telnet.commands.WILL</em></code>: "WILL"
-	</li>
-	
-	<li>
-	  <code><em>Telnet.commands.SB</em></code>: "SB"
-	</li>
-	
-	<li>
-	  <code><em>Telnet.commands.GA</em></code>: "GA"
-	</li>
-	
-	<li>
-	  <code><em>Telnet.commands.EL</em></code>: "EL"
-	</li>
-	
-	<li>
-	  <code><em>Telnet.commands.EC</em></code>: "EC"
-	</li>
-	
-	<li>
-	  <code><em>Telnet.commands.SE</em></code>: "SE"
-	</li>
-	
-	<li>
-	  <code><em>Telnet.commands.MCCP</em></code>: "MCCP"
-	</li>
-	
-	<li>
-	  <code><em>Telnet.commands.MCCP2</em></code>: "MCCP2"
-	</li>
-	
-	<li>
-	  <code><em>Telnet.commands.MSSP</em></code>: "MSSP"
-	</li>
-	
-	<li>
-	  <code><em>Telnet.commands.MSDP</em></code>: "MSDP"
-	</li>
-	
-	<li>
-	  <code><em>Telnet.commands.TTYPE</em></code>: "TTYPE"
-	</li>
-	
-	<li>
-	  <code><em>Telnet.commands.MSSP_VAL</em></code>: "MSDP_VAL"
-	</li>
-	
-	<li>
-	  <code><em>Telnet.commands.MSSP_VAR</em></code>: "MSDP_VAR"
-	</li>
-	
-	<li>
-	  <code><em>Telnet.commands.SEND</em></code>: "SEND"
-	</li>
-	
-	<li>
-	  <code><em>Telnet.commands.IS</em></code>: "IS"
+	  <code><em>Telnet.protocol.TTYPE</em></code>: "TTYPE"
 	</li>
 	
 </ul>

@@ -164,19 +164,14 @@ end
 -- @param mapObject MapObject we might be containing.
 -- @return true if we contain the given MapObject.<br/>false otherwise.
 function MapObject:contains(mapObject)
-	for i,v in ipairs(self.contents) do
-		if v == mapObject then
-			return true
-		end
-	end
-
-	return false
+	return self.contents[mapObject] == true
 end
 
 --- Adds a MapObject to our contents and fires self:onEnter(mapObject).
 -- @param mapObject MapObject to be added to our contents.
 function MapObject:addToContents(mapObject)
 	table.insert(self.contents, mapObject)
+	self.contents[mapObject] = true
 
 	-- mutuality
 	if mapObject:getLoc() ~= self then
@@ -189,11 +184,8 @@ end
 --- Removes a MapObject from our contents.
 -- @param mapObject MapObject to be removed from our contents.
 function MapObject:removeFromContents(mapObject)
-	for i,v in ipairs(self.contents) do
-		if v == mapObject then
-			table.remove(self.contents, i)
-		end
-	end
+	table.removeValue(self.contents, mapObject)
+	self.contents[mapObject] = nil
 
 	-- mutuality
 	if mapObject:getLoc() == self then

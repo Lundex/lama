@@ -16,13 +16,27 @@
     along with this program.  If not, see <http://www.gnu.org/licenses/>.
 ]]
 
-local Movement		= require("obj.Command.Movement")
+--- Command for listing usable commands.
+-- @author milkmanjack
+module("obj.Command.Commands", package.seeall)
 
---- Command for stepping southwest.
+local Command		= require("obj.Command")
+
+--- Command for listing usable commands.
 -- @class table
--- @name Southwest
-local Southwest		= Movement:clone()
-Southwest.keyword	= "southwest"
-Southwest.direction	= Direction.SOUTHWEST
+-- @name Commands
+local Commands		= Command:clone()
+Commands.keyword	= "commands"
 
-return Southwest
+--- Show commands.
+function Commands:execute(player, mob)
+	local msg = "--- Commands ---"
+	local perLine = 5
+	for i,v in ipairs(Game.parser:getCommands()) do
+		msg = string.format("%s%s%16s", msg, math.mod(i-1, perLine) == 0 and "\n" or "", v.keyword)
+	end
+
+	mob:sendMessage(msg, MessageMode.INFO)
+end
+
+return Commands

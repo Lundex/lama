@@ -23,6 +23,7 @@ module("main", package.seeall)
 -- these are packages that should be ever-present and don't need reloading.
 require("config") -- config is loaded separately, before everything else, and is not reloaded.
 require("lfs")
+require("lxp")
 require("socket")
 require("logging")
 require("logging.file")
@@ -42,6 +43,7 @@ function loadPackages()
 	require("GameState")
 	require("MessageMode")
 	require("Direction")
+	require("CharacterManager")
 	require("Game") -- make sure this is always loaded last.
 end
 
@@ -57,6 +59,7 @@ function unloadPackages()
 	_G.GameState							= nil
 	_G.MessageMode							= nil
 	_G.Direction							= nil
+	_G.CharacterManager						= nil
 
 	-- unload packages
 	package.loaded["Game"]					= nil
@@ -66,6 +69,7 @@ function unloadPackages()
 	package.loaded["GameState"]				= nil
 	package.loaded["MessageMode"]			= nil
 	package.loaded["Direction"]				= nil
+	package.loaded["CharacterManager"]		= nil
 
 	-- unload obj.* packages
 	for i,v in pairs(package.loaded) do
@@ -101,8 +105,9 @@ while Game.isReady() do
 	if Game:getState() == GameState.HOTBOOT then
 		Game.info("*** Hotbooting game...")
 
-		-- disconnect players
-		Game.info("*** Preserving old client sockets.")
+		local playerID = Game.playerID
+
+		-- disconnect and preserve players
 		local preservedData = {}
 		for i,v in ipairs(Game.getPlayers()) do
 			-- kill players that are out of game
@@ -112,16 +117,15 @@ while Game.isReady() do
 
 			-- preserve players that are in-game
 			else
-				local client = v:getClient()
+				local client, mob = v:getClient(), v:getMob()
+				CharacterManager.saveCharacter(mob) -- save the mob
 
 				-- compile this player's relevant data
-				-- in the future, you might want to save a temporary
-				-- version of a player, give it a unique ID, and
-				-- store it here so you can reload it in a second.
 				local data = {}
+				data.id = v:getID()
 				data.socket = client:getSocket()
 				data.options = client.options
-				data.name = v:getMob():getName()
+				data.name = mob:getName()
 				table.insert(preservedData, data)
 
 				-- let the player know what's up.
@@ -130,32 +134,21 @@ while Game.isReady() do
 			end
 		end
 
-		Game.info("*** Preserving old server socket.")
 		local serverSocket = Game.server:getSocket()
 
 		-- reload packages
-		Game.info("*** Reloading packages")
 		reloadPackages()
 		-- Game no longer refers to the old Game from here on.
 		-- A new Game has been loaded, along with a new everything else.
 
-		-- recreate Server with new Server object
+		-- grab Server package, load old game data.
 		local Server = require("obj.Server")
-		local Client = require("obj.Client")
+		Game.playerID = playerID
 
-		-- reuse server socket
-		Game.info("*** Recreating old Server out of preserved socket.")
+		-- re-run the game, recover from hotboot
 		local server = Server:new(serverSocket)
-
-		-- update the new Game's state (we're hotbooting)
-		Game.info("*** Informing new Game of hotboot status.")
 		Game.setState(GameState.HOTBOOT)
-
-		-- reopen the Game on the new server
-		Game.info("*** Opening Game with reconstituted Server.")
 		Game.openOnServer(server)
-
-		-- recover from the hotboot using preserved player data
 		Game.recoverFromHotboot(preservedData)
 	end
 end

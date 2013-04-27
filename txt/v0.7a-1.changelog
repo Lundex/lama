@@ -23,4 +23,3 @@
 	* Game.generateCommands() now loads every Command in the obj/Command directory. By default, anyway.
 
 	* Moved default port to config structure.
-

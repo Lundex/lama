@@ -74,7 +74,7 @@ Client.options						= nil
 -- @param socket The socket to be associated.
 -- @param updateOptions Tell the client which options we support.
 function Client:initialize(socket, updateOptions)
-	updateOptions = (updateOptions ~= nil and updateOptions or true)
+	updateOptions = (updateOptions == nil and true) or updateOptions -- default to true
 	self:setSocket(socket)
 
 	-- initialize options
@@ -120,26 +120,26 @@ function Client:receive(pattern, prefix)
 	end
 
 	-- parse IAC messages at the client level before passing off to whoever wants to know
-	local found = string.find(input, string.char(Telnet.commands.IAC))
+	local found = string.find(input, string.char(Telnet.command.IAC))
 	while found ~= nil do
 		local command = string.byte(input, found+1)
 		local option = string.byte(input, found+2)
 		local current = found+2
-		if command == Telnet.commands.WILL then
+		if command == Telnet.command.WILL then
 			self:onWill(option)
 
-		elseif command == Telnet.commands.WONT then
+		elseif command == Telnet.command.WONT then
 			self:onWont(option)
 
-		elseif command == Telnet.commands.DO then
+		elseif command == Telnet.command.DO then
 			self:onDo(option)
 
-		elseif command == Telnet.commands.DONT then
+		elseif command == Telnet.command.DONT then
 			self:onDont(option)
 
-		elseif command == Telnet.commands.SB then
+		elseif command == Telnet.command.SB then
 			-- check for subnegotiations that start with IAC SB and end with IAC SE
-			local nextIACSE = string.find(input, string.char(Telnet.commands.IAC, Telnet.commands.SE), current)
+			local nextIACSE = string.find(input, string.char(Telnet.command.IAC, Telnet.command.SE), current)
 			if nextIACSE then
 				self:onSubnegotiation(string.sub(input, current, nextIACSE-1))
 				current = nextIACSE+1
@@ -147,10 +147,10 @@ function Client:receive(pattern, prefix)
 		end
 
 		-- string.format terminates on null char when displaying, which happens to be used in
-		-- TTYPE negotiation (Telnet.commands.IS == 0 == null terminator).
+		-- TTYPE negotiation (Telnet.command.IS == 0 == null terminator).
 		-- as such, use pure concatenation.
 		input = string.sub(input, 1, found-1) .. string.sub(input, current+1) -- strip IAC message from input
-		found = string.find(input, string.char(Telnet.commands.IAC))
+		found = string.find(input, string.char(Telnet.command.IAC))
 	end
 
 	-- backlog input missing a linebreak
@@ -188,35 +188,35 @@ end
 function Client:sendSupportedOptions()
 	-- start MCCP2 negotiation
 	if config.MCCP2IsEnabled() then
-		self:sendWill(Telnet.commands.MCCP2)
+		self:sendWill(Telnet.protocol.MCCP2)
 	end
 
-	self:sendDo(Telnet.commands.TTYPE) -- tell us your terminal type please.
-	self:sendWill(Telnet.commands.MSSP) -- this works, kinda.
+	self:sendDo(Telnet.protocol.TTYPE) -- tell us your terminal type please.
+	self:sendWill(Telnet.protocol.MSSP) -- this works, kinda.
 end
 
 --- Send an IAC WILL message with the given option.
 -- @param op Option the Server supports and wants the Client to negotiate.
 function Client:sendWill(op)
-	self:send(string.char(Telnet.commands.IAC, Telnet.commands.WILL, op))
+	self:send(string.char(Telnet.command.IAC, Telnet.command.WILL, op))
 end
 
 --- Send an IAC WONT message with the given option.
 -- @param op Option the Server doesn't support and wants the Client not to negotiate.
 function Client:sendWont(op)
-	self:send(string.char(Telnet.commands.IAC, Telnet.commands.WONT, op))
+	self:send(string.char(Telnet.command.IAC, Telnet.command.WONT, op))
 end
 
 --- Send an IAC DO message with the given option.
 -- @param op Option the Server wants the Client to negotiate.
 function Client:sendDo(op)
-	self:send(string.char(Telnet.commands.IAC, Telnet.commands.DO, op))
+	self:send(string.char(Telnet.command.IAC, Telnet.command.DO, op))
 end
 
 --- Send an IAC DONT message with the given option.
 -- @param op Option the Server doesn't wnat the Client to negotiate.
 function Client:sendDont(op)
-	self:send(string.char(Telnet.commands.IAC, Telnet.commands.DONT, op))
+	self:send(string.char(Telnet.command.IAC, Telnet.command.DONT, op))
 end
 
 --- What to do when receiving an IAC WILL option.
@@ -226,9 +226,9 @@ function Client:onWill(op)
 	self.options.WONT[op] = false
 
 	-- if they will negotiate terminal type, ask for it right away
-	if op == Telnet.commands.TTYPE then
+	if op == Telnet.protocol.TTYPE then
 		self.options.TTYPE.enabled = true
-		self:send(string.char(Telnet.commands.IAC, Telnet.commands.SB, Telnet.commands.TTYPE, Telnet.commands.SEND, Telnet.commands.IAC, Telnet.commands.SE))
+		self:send(string.char(Telnet.command.IAC, Telnet.command.SB, Telnet.protocol.TTYPE, Telnet.environment.SEND, Telnet.command.IAC, Telnet.command.SE))
 	end
 end
 
@@ -243,8 +243,8 @@ end
 -- @param op Option the Client wants the Server to negotiate.
 function Client:onDo(op)
 	-- process before setting DO
-	if op == Telnet.commands.MCCP2 and config.MCCP2IsEnabled() then
-		self:send(string.char(Telnet.commands.IAC, Telnet.commands.SB, Telnet.commands.MCCP2, Telnet.commands.IAC, Telnet.commands.SE))
+	if op == Telnet.protocol.MCCP2 and config.MCCP2IsEnabled() then
+		self:send(string.char(Telnet.command.IAC, Telnet.command.SB, Telnet.protocol.MCCP2, Telnet.command.IAC, Telnet.command.SE))
 
 		-- all output from now on is deflated!
 		self.options.MCCP2.deflateBuffer = {}
@@ -255,8 +255,8 @@ function Client:onDo(op)
 	self.options.DONT[op] = false
 
 	-- start doing MSSP negotiations
-	if op == Telnet.commands.MSSP then
-		self:MSSP(Telnet.commands.MSSP_VAR, "NAME", Telnet.commands.MSSP_VAL, "lama", Telnet.commands.MSSP_VAR, "UPTIME", Telnet.commands.MSSP_VAL, os.time())
+	if op == Telnet.protocol.MSSP then
+		self:MSSP(Telnet.MSSP.VAR, "NAME", Telnet.MSSP.VAL, "lama", Telnet.MSSP.VAR, "UPTIME", Telnet.MSSP.VAL, os.time())
 	end
 end
 
@@ -271,7 +271,7 @@ end
 -- @param negotiation The entirety of the subnegotiation message.
 function Client:onSubnegotiation(negotiation)
 	-- TTYPE IS <type>
-	if string.find(negotiation, string.char(Telnet.commands.TTYPE, Telnet.commands.IS)) == 1 then
+	if string.find(negotiation, string.char(Telnet.protocol.TTYPE, Telnet.environment.IS)) == 1 then
 		local type = string.sub(negotiation, 3)
 		self.options.TTYPE.type = type
 	end
@@ -304,14 +304,14 @@ end
 -- send an MSSP negotiation.
 function Client:MSSP(...)
 	local packed = {...}
-	local formatted = string.char(Telnet.commands.IAC, Telnet.commands.SB, Telnet.commands.MSSP)
+	local formatted = string.char(Telnet.command.IAC, Telnet.command.SB, Telnet.protocol.MSSP)
 	for i=1, #packed, 2 do
 		local op = packed[i]
 		local val = packed[i+1]
 		formatted = string.format("%s%s%s", formatted, string.char(op), val)
 	end
 
-	formatted = string.format("%s%s", formatted, string.char(Telnet.commands.IAC, Telnet.commands.SE))
+	formatted = string.format("%s%s", formatted, string.char(Telnet.command.IAC, Telnet.command.SE))
 
 	self:send(formatted)
 end
@@ -319,7 +319,7 @@ end
 --- Pipe to socket's send() function.
 -- @return If successful, returns number of bytes written.<br/>In case of error, the method returns nil followed by an error message, followed by the number of bytes that were written before failure.
 function Client:send(data, i, j)
-	if self:getDo(Telnet.commands.MCCP2) then
+	if self:getDo(Telnet.protocol.MCCP2) then
 		-- write data to the deflate buffer
 		self.options.MCCP2.deflater:write(data)
 		self.options.MCCP2.deflater:flush()
@@ -336,7 +336,7 @@ end
 -- @param str String to be sent.
 -- @return result of self:send().
 function Client:sendString(str)
-	str = string.gsub(str or "", "\n", "\r\n")
+	str = string.gsub(str or "", "\n", "\r\n") -- insert carriage returns for each linefeed
 	return self:send(str)
 end
 
@@ -373,7 +373,7 @@ end
 --- Retreive the client's terminal type, if applicable.
 -- @return A string representing the type of terminal.
 function Client:getTerminalType()
-	if not self:getWill(Telnet.commands.TTYPE) then
+	if not self:getWill(Telnet.protocol.TTYPE) then
 		return "TTYPE not supported"
 	end
 
