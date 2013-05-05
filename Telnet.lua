@@ -165,35 +165,11 @@ function Telnet.command.name(option)
 	return Telnet.command.names[option] or string.format("(%s)", tostring(option))
 end
 
---- Returns a string with every Telnet.command value in the given string, separated by commas.
--- @param option The string to be named.
--- @return Formatted string of all option names.
-function Telnet.command.nameAll(option)
-	local msg
-	for i=1, string.len(option) do
-		msg = string.format("%s%s%s", msg or "", msg and "," or "", Telnet.command.name(string.byte(option, i)))
-	end
-
-	return msg
-end
-
 --- Allows for quick reference to Telnet.protocol.names values.
 -- @param option The option to retrieve the name of.
 -- @return Name of the option.
 function Telnet.protocol.name(option)
 	return Telnet.protocol.names[option] or string.format("(%s)", tostring(option))
-end
-
---- Returns a string with every Telnet.protocol value in the given string, separated by commas.
--- @param option The string to be named.
--- @return Formatted string of all option names.
-function Telnet.protocol.nameAll(option)
-	local msg
-	for i=1, string.len(option) do
-		msg = string.format("%s%s%s", msg or "", msg and "," or "", Telnet.protocol.name(string.byte(option, i)))
-	end
-
-	return msg
 end
 
 --- Allows for quick reference to Telnet.MSSP.names values.
@@ -203,35 +179,11 @@ function Telnet.MSSP.name(option)
 	return Telnet.MSSP.names[option] or string.format("(%s)", tostring(option))
 end
 
---- Returns a string with every Telnet.MSSP value in the given string, separated by commas.
--- @param option The string to be named.
--- @return Formatted string of all option names.
-function Telnet.MSSP.nameAll(option)
-	local msg
-	for i=1, string.len(option) do
-		msg = string.format("%s%s%s", msg or "", msg and "," or "", Telnet.MSSP.name(string.byte(option, i)))
-	end
-
-	return msg
-end
-
 --- Allows for quick reference to Telnet.environment.names values.
 -- @param option The option to retrieve the name of.
 -- @return Name of the option.
 function Telnet.environment.name(option)
 	return Telnet.environment.names[option] or string.format("(%s)", tostring(option))
-end
-
---- Returns a string with every Telnet.environment value in the given string, separated by commas.
--- @param option The string to be named.
--- @return Formatted string of all option names.
-function Telnet.environment.nameAll(option)
-	local msg
-	for i=1, string.len(option) do
-		msg = string.format("%s%s%s", msg or "", msg and "," or "", Telnet.environment.name(string.byte(option, i)))
-	end
-
-	return msg
 end
 
 _G.Telnet = Telnet
