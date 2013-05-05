@@ -85,7 +85,6 @@ end
 function CharacterManager.characterNameTaken(name)
 	local filename = CharacterManager.getCharacterFileFromName(name)
 	local file = io.open(filename, "r")
-	print(name, file)
 	if not file then
 		return false
 	end
@@ -95,7 +94,7 @@ function CharacterManager.characterNameTaken(name)
 end
 
 --- Save a mob as a character.
--- @param mob Mob to be saved.
+-- @param mob Mob of the character to save.
 function CharacterManager.saveCharacter(mob)
 	lfs.mkdir(CharacterManager.directory)
 	local filename = CharacterManager.getCharacterFileFromName(mob:getName())
@@ -118,6 +117,7 @@ function CharacterManager.loadCharacter(name, mob)
 end
 
 --- Get the XML format of a character.
+-- @param mob Mob of the character to generate data of.
 -- @return The XML format of the character.
 function CharacterManager.generateCharacterData(mob)
 	return string.format("<mob lamaSaveVersion='0'>\
@@ -137,7 +137,7 @@ function CharacterManager.generateCharacterData(mob)
 	)
 end
 
---- Read XML data to determine a mob's attributes.<br/>
+--- Read XML data into a mob's attributes.<br/>
 -- <b>I am not liking the Expat library. I might switch to LuaXML.</b>
 -- @param xml The XML to be read.
 -- @param mob Optional mob to read data into.<br/>If not specified, will return a new mob created with the XML data.

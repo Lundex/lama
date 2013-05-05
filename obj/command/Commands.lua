@@ -18,7 +18,6 @@
 
 --- Command for listing usable commands.
 -- @author milkmanjack
-module("obj.Command.Commands", package.seeall)
 
 local Command		= require("obj.Command")
 

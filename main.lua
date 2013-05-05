@@ -22,6 +22,8 @@ module("main", package.seeall)
 
 -- these are packages that should be ever-present and don't need reloading.
 require("config") -- config is loaded separately, before everything else, and is not reloaded.
+require("loader") -- the package loader functions
+require("etc") -- other functions we want access to
 require("lfs")
 require("lxp")
 require("socket")
@@ -30,67 +32,22 @@ require("logging.file")
 require("logging.console")
 
 -- load zlib
-print("MCCP2?", config.MCCP2IsEnabled())
+print("MCCP2", config.MCCP2IsEnabled() and "enabled" or "disabled") -- print config status as of now
 if config.MCCP2IsEnabled() then
-	_G.zlib = require("zlib")
-end
-
---- Loads all of the game packages.
-function loadPackages()
-	require("Nanny")
-	require("Telnet")
-	require("PlayerState")
-	require("GameState")
-	require("MessageMode")
-	require("Direction")
-	require("CharacterManager")
-	require("Game") -- make sure this is always loaded last.
-end
-
---- Unloads all of the game packages.<br/>
--- I can probably fix this up in the future so that obj.* packages are
--- removed automatically instead of having to go through all this.
-function unloadPackages()
-	-- unload globals
-	_G.Game									= nil
-	_G.Nanny								= nil
-	_G.Telnet								= nil
-	_G.PlayerState							= nil
-	_G.GameState							= nil
-	_G.MessageMode							= nil
-	_G.Direction							= nil
-	_G.CharacterManager						= nil
-
-	-- unload packages
-	package.loaded["Game"]					= nil
-	package.loaded["Nanny"]					= nil
-	package.loaded["Telnet"]				= nil
-	package.loaded["PlayerState"]			= nil
-	package.loaded["GameState"]				= nil
-	package.loaded["MessageMode"]			= nil
-	package.loaded["Direction"]				= nil
-	package.loaded["CharacterManager"]		= nil
-
-	-- unload obj.* packages
-	for i,v in pairs(package.loaded) do
-		if string.find(i, "obj.") == 1 then
-			package.loaded[i] = nil
-		end
+	if not prequire("zlib") then
+		print("MCCP2", "disabled automatically. (lzlib not installed)")
+		config.enableMCCP2=false
+	else
+		_G.zlib = require("zlib")
 	end
 end
 
---- Reloads all of the game packages.
-function reloadPackages()
-	unloadPackages()
-	loadPackages()
-end
-
--- load all game packages to start with
+-- load all game packages
 loadPackages()
 
 -- open the game for play
-local port = tonumber(... or nil)
-local _, err = Game.openOnPort(port or config.getDefaultPort())
+local port = ... -- first given argument
+local _, err = Game.openOnPort(tonumber(port) or config.getDefaultPort())
 if not _ then
   Game.error("failed to open game: " .. err)
 	os.exit(0)
@@ -107,12 +64,12 @@ while Game.isReady() do
 
 		local playerID = Game.playerID
 
-		-- disconnect and preserve players
+		-- preserve players (disconnect the ones that haven't entered the game yet)
 		local preservedData = {}
 		for i,v in ipairs(Game.getPlayers()) do
 			-- kill players that are out of game
 			if v:getState() ~= PlayerState.PLAYING then
-				v:sendLine("\n*** HOTBOOT IN PROGRESS!!! ***\n*** COME BACK LATER! ***\n")
+				v:sendLine("\n*** HOTBOOT IN PROGRESS!!! ***\n***    COME BACK LATER!    ***\n")
 				Game.disconnectPlayer(v)
 
 			-- preserve players that are in-game
@@ -138,7 +95,6 @@ while Game.isReady() do
 
 		-- reload packages
 		reloadPackages()
-		-- Game no longer refers to the old Game from here on.
 		-- A new Game has been loaded, along with a new everything else.
 
 		-- grab Server package, load old game data.

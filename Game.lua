@@ -52,7 +52,7 @@ Game.version			= "v0.7a-1"
 Game.developers			= {"milkmanjack"}
 
 -- current game info
-Game.state				= GameState.NEW
+Game.state				= 0
 Game.playerID			= 0
 Game.server				= nil
 Game.scheduler			= nil

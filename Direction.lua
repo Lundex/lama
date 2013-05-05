@@ -18,7 +18,7 @@
 
 --- Singleton that contains enum-styled values for directional movement.
 -- @author milkmanjack
-module("Directions", package.seeall)
+module("Direction", package.seeall)
 
 --- Singleton that contains enum-styled values for directional movement.
 -- @class table

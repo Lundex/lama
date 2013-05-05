@@ -35,9 +35,11 @@
 <ul>
 
 	<li>
-		<a href="../modules/Directions.html">Directions</a>
+		<a href="../modules/CharacterManager.html">CharacterManager</a>
 	</li>
 
+	<li><strong>Direction</strong></li>
+	
 	<li>
 		<a href="../modules/Game.html">Game</a>
 	</li>
@@ -91,56 +93,6 @@
 	</li>
 
 	<li>
-		<a href="../modules/obj.Command.East.html">obj.Command.East</a>
-	</li>
-
-	<li>
-		<a href="../modules/obj.Command.Hotboot.html">obj.Command.Hotboot</a>
-	</li>
-
-	<li>
-		<a href="../modules/obj.Command.Movement.html">obj.Command.Movement</a>
-	</li>
-
-	<li>
-		<a href="../modules/obj.Command.North.html">obj.Command.North</a>
-	</li>
-
-	<li>
-		<a href="../modules/obj.Command.Northeast.html">obj.Command.Northeast</a>
-	</li>
-
-	<li>
-		<a href="../modules/obj.Command.Northwest.html">obj.Command.Northwest</a>
-	</li>
-
-	<li><strong>obj.Command.OOC</strong></li>
-	
-	<li>
-		<a href="../modules/obj.Command.Quit.html">obj.Command.Quit</a>
-	</li>
-
-	<li>
-		<a href="../modules/obj.Command.South.html">obj.Command.South</a>
-	</li>
-
-	<li>
-		<a href="../modules/obj.Command.Southeast.html">obj.Command.Southeast</a>
-	</li>
-
-	<li>
-		<a href="../modules/obj.Command.Southwest.html">obj.Command.Southwest</a>
-	</li>
-
-	<li>
-		<a href="../modules/obj.Command.West.html">obj.Command.West</a>
-	</li>
-
-	<li>
-		<a href="../modules/obj.Command.Who.html">obj.Command.Who</a>
-	</li>
-
-	<li>
 		<a href="../modules/obj.CommandParser.html">obj.CommandParser</a>
 	</li>
 
@@ -191,9 +143,9 @@
 
 <div id="content">
 
-<h1>Module <code>obj.Command.OOC</code></h1>
+<h1>Module <code>Direction</code></h1>
 
-<p>Command for sending Out of Character chat.</p>
+<p>Singleton that contains enum-styled values for directional movement.</p>
 
 
 <p><b>Author:</b>
@@ -212,13 +164,13 @@
 <table class="function_list">
 
 	<tr>
-	<td class="name" nowrap><a href="#OOC:execute">OOC:execute</a>&nbsp;(player, mob, msg)</td>
-	<td class="summary">Sends a message on the OOC channel.</td>
+	<td class="name" nowrap><a href="#Direction.name">Direction.name</a>&nbsp;(state)</td>
+	<td class="summary">Allows for quick reference Direction.names enums.</td>
 	</tr>
 
 	<tr>
-	<td class="name" nowrap><a href="#OOC:parse">OOC:parse</a>&nbsp;(player, mob, input)</td>
-	<td class="summary">Passes everything after the keyword to the command execution.</td>
+	<td class="name" nowrap><a href="#Direction.reverse">Direction.reverse</a>&nbsp;(direction)</td>
+	<td class="summary">Reverses the given direction.</td>
 	</tr>
 
 </table>
@@ -229,8 +181,13 @@
 <table class="table_list">
 
 	<tr>
-	<td class="name" nowrap><a href="#OOC">OOC</a></td>
-	<td class="summary">Command for sending Out of Character chat.</td>
+	<td class="name" nowrap><a href="#Direction">Direction</a></td>
+	<td class="summary">Singleton that contains enum-styled values for directional movement.</td>
+	</tr>
+
+	<tr>
+	<td class="name" nowrap><a href="#Direction.names">Direction.names</a></td>
+	<td class="summary">Contains textual representations of Direction enums.</td>
 	</tr>
 
 </table>
@@ -247,24 +204,16 @@
 
 
 
-<dt><a name="OOC:execute"></a><strong>OOC:execute</strong>&nbsp;(player, mob, msg)</dt>
+<dt><a name="Direction.name"></a><strong>Direction.name</strong>&nbsp;(state)</dt>
 <dd>
-Sends a message on the OOC channel.
+Allows for quick reference Direction.names enums.
 
 
 <h3>Parameters:</h3>
 <ul>
 	
 	<li>
-	  <code><em>player</em></code>: Player chatting
-	</li>
-	
-	<li>
-	  <code><em>mob</em></code>: Mob chatting.
-	</li>
-	
-	<li>
-	  <code><em>msg</em></code>: Message to be sent.
+	  <code><em>state</em></code>: The direction to retrieve the name of.
 	</li>
 	
 </ul>
@@ -273,6 +222,9 @@ Sends a message on the OOC channel.
 
 
 
+
+<h3>Return value:</h3>
+<ul>Name of the direction.</ul>
 
 
 
@@ -281,24 +233,16 @@ Sends a message on the OOC channel.
 
 
 
-<dt><a name="OOC:parse"></a><strong>OOC:parse</strong>&nbsp;(player, mob, input)</dt>
+<dt><a name="Direction.reverse"></a><strong>Direction.reverse</strong>&nbsp;(direction)</dt>
 <dd>
-Passes everything after the keyword to the command execution.
+Reverses the given direction.
 
 
 <h3>Parameters:</h3>
 <ul>
 	
 	<li>
-	  <code><em>player</em></code>: 
-	</li>
-	
-	<li>
-	  <code><em>mob</em></code>: 
-	</li>
-	
-	<li>
-	  <code><em>input</em></code>: 
+	  <code><em>direction</em></code>: Direction to reverse.
 	</li>
 	
 </ul>
@@ -307,6 +251,9 @@ Passes everything after the keyword to the command execution.
 
 
 
+
+<h3>Return value:</h3>
+<ul>The reverse of the given direction.</ul>
 
 
 
@@ -321,9 +268,91 @@ Passes everything after the keyword to the command execution.
 <h2><a name="tables"></a>Tables</h2>
 <dl class="table">
 
-<dt><a name="OOC"></a><strong>OOC</strong></dt>
-<dd>Command for sending Out of Character chat.<br /><br />
+<dt><a name="Direction"></a><strong>Direction</strong></dt>
+<dd>Singleton that contains enum-styled values for directional movement.<br /><br />
 
+
+<h3>Fields:</h3>
+<ul>
+	
+	<li>
+	  <code><em>NORTH</em></code>: North.
+	</li>
+	
+	<li>
+	  <code><em>SOUTH</em></code>: South.
+	</li>
+	
+	<li>
+	  <code><em>EAST</em></code>: East.
+	</li>
+	
+	<li>
+	  <code><em>WEST</em></code>: West.
+	</li>
+	
+	<li>
+	  <code><em>NORTHEAST</em></code>: Northeast.
+	</li>
+	
+	<li>
+	  <code><em>NORTHWEST</em></code>: Northwest.
+	</li>
+	
+	<li>
+	  <code><em>SOUTHEAST</em></code>: Southeast.
+	</li>
+	
+	<li>
+	  <code><em>SOUTHWEST</em></code>: Southwest.
+	</li>
+	
+</ul>
+
+
+</dd>
+
+
+<dt><a name="Direction.names"></a><strong>Direction.names</strong></dt>
+<dd>Contains textual representations of Direction enums.<br /><br />
+
+
+<h3>Fields:</h3>
+<ul>
+	
+	<li>
+	  <code><em>Direction.NORTH</em></code>: "north"
+	</li>
+	
+	<li>
+	  <code><em>Direction.SOUTH</em></code>: "south"
+	</li>
+	
+	<li>
+	  <code><em>Direction.EAST</em></code>: "east"
+	</li>
+	
+	<li>
+	  <code><em>Direction.WEST</em></code>: "west"
+	</li>
+	
+	<li>
+	  <code><em>Direction.NORTHEAST</em></code>: "northeast"
+	</li>
+	
+	<li>
+	  <code><em>Direction.NORTHWEST</em></code>: "northwest"
+	</li>
+	
+	<li>
+	  <code><em>Direction.SOUTHEAST</em></code>: "southeast"
+	</li>
+	
+	<li>
+	  <code><em>DIRECTION.SOUTHWEST</em></code>: "southwest"
+	</li>
+	
+</ul>
 
 
 </dd>

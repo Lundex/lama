@@ -16,31 +16,18 @@
     along with this program.  If not, see <http://www.gnu.org/licenses/>.
 ]]
 
---- Configuration table for the Server.
+--- Generic functionality for main.lua.
 -- @author milkmanjack
-module("config", package.seeall)
 
---- Configuration table for the Server.
--- @class table
--- @name config
--- @field defaultPort Default port to host the game on.
--- @field enableMCCP2 Should MCCP2 be enabled?
-local config		= {}
-config.defaultPort	= 8000
-config.enableMCCP2	= true
+--- Runs a require call in protected mode.
+-- @param package Package to require.
+-- @return The package value (package.loaded[package]) on success.<br/>nil followed by an error stack otherwise.
+function prequire(package)
+	-- pcall returns true or false, followed by the return value of the function it calls, or an error stack, respectively.
+	local result, eop = pcall(function() return require(package) end)
+	if not result then
+		return nil, eop -- return nil followed by an error.
+	end
 
---- Get the default port to host the game on.
--- @return The default port.
-function config.getDefaultPort()
-	return config.defaultPort
+	return eop -- return the package value
 end
-
---- Check if MCCP2 is enabled.
--- @return true of MCCP2 is enabled.<br/>false otherwise.
-function config.MCCP2IsEnabled()
-	return config.enableMCCP2 == true
-end
-
-_G.config = config
-
-return config
