@@ -80,25 +80,12 @@ function Nanny.login(player)
 	player:setState(PlayerState.PLAYING) -- we're playing
 end
 
---- Greets a new player.
--- @param player Player to be greeted.
--- @param hotboot If true, greeting after a hotboot.
-function Nanny.greet(player, hotboot)
-	if hotboot then
-		player:sendLine("Welcome back!")
-		player:setState(PlayerState.PLAYING)
-	else
-		player:sendLine(Nanny.getGreeting())
-		player:setState(PlayerState.NAME)
-		player:sendLine()
-		Nanny.askForName(player)
-	end
-end
-
 --- Transitions from being "logged in" to being "logged out."
 -- Announces the player's exit, removes the mob from the map, and so on.
 -- @param player Player that is logging out.
 function Nanny.logout(player)
+	player:setState(PlayerState.DISCONNECTING) -- we are disconnecting
+
 	local mob = player:getMob()
 	Nanny.sendOff(player)
 
@@ -106,20 +93,6 @@ function Nanny.logout(player)
 
 	-- remove their mob from the map
 	mob:moveToMap(nil)
-
-	player:setState(PlayerState.DISCONNECTING) -- we are disconnecting
-end
-
---- Asks for a name.
--- @param player Player to ask.
-function Nanny.askForName(player)
-	player:askQuestion("What is your name? ")
-end
-
---- Tell the player the name length limits.
--- @param player Player to inform.
-function Nanny.messageNameLengthLimit(player)
-	player:sendMessage("Your name must be between 3 and 12 characters.", MessageMode.FAILURE)
 end
 
 --- Introduce the player to the world.
@@ -135,6 +108,35 @@ function Nanny.sendOff(player)
 	player:sendLine("Goodbye!")
 	Game.announce(string.format("%s has left!", tostring(player:getMob())), MessageMode.INFO, PlayerState.PLAYING)
 end	
+
+--- Greets a connecting player and begins the logging in.<br/>
+-- In the case of a hotboot greeting, merely puts the player back
+-- in the game.
+-- @param player Player to be greeted.
+-- @param hotboot If true, greeting after a hotboot.
+function Nanny.greet(player, hotboot)
+	if hotboot then
+		player:sendLine("Welcome back!")
+		player:setState(PlayerState.PLAYING)
+	else
+		player:sendLine(Nanny.getGreeting())
+		player:setState(PlayerState.NAME)
+		player:sendLine()
+		Nanny.askForName(player)
+	end
+end
+
+--- Asks for a name.
+-- @param player Player to ask.
+function Nanny.askForName(player)
+	player:askQuestion("What is your name? ")
+end
+
+--- Tell the player the name length limits.
+-- @param player Player to inform.
+function Nanny.messageNameLengthLimit(player)
+	player:sendMessage("Your name must be between 3 and 12 characters.", MessageMode.FAILURE)
+end
 
 --- Send the MOTD to the player.
 -- @param player Player to be MOTDed.

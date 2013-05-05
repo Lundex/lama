@@ -33,11 +33,13 @@ require("logging")
 require("logging.file")
 require("logging.console")
 
--- load zlib
-print("MCCP2", config.MCCP2IsEnabled() and "enabled" or "disabled") -- print config status as of now
+-- show the current config settings
+config.present()
+
+--- if MCCP2 is enabled, load up lzlib
 if config.MCCP2IsEnabled() then
 	if not prequire("zlib") then
-		print("MCCP2", "disabled automatically. (lzlib not installed)")
+		print("MCCP2 disabled automatically. (lzlib not installed)")
 		config.enableMCCP2=false
 	else
 		_G.zlib = require("zlib")
@@ -48,7 +50,7 @@ end
 loadPackages()
 
 -- open the game for play
-local port = ... -- first given argument
+local port = select(1, ...) -- first given argument is the port to use
 local _, err = Game.openOnPort(tonumber(port) or config.getDefaultPort())
 if not _ then
   Game.error("failed to open game: " .. err)

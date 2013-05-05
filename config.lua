@@ -41,6 +41,20 @@ function config.MCCP2IsEnabled()
 	return config.enableMCCP2 == true
 end
 
+--- Print the current settings of the config table.
+function config.present()
+	print(string.format("CONFIG:\
+%20s: %s\
+%20s: %s\
+",
+						"MCCP status",
+						config.enableMCCP2 == true and "enabled" or "disabled",
+						"default port",
+						config.defaultPort
+					)
+	)
+end
+
 _G.config = config
 
 return config
