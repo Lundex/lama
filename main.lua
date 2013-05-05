@@ -20,10 +20,12 @@
 -- @author milkmanjack
 module("main", package.seeall)
 
--- these are packages that should be ever-present and don't need reloading.
-require("config") -- config is loaded separately, before everything else, and is not reloaded.
-require("loader") -- the package loader functions
-require("etc") -- other functions we want access to
+-- local packages that provide extra functionality
+require("config")
+require("loader")
+require("etc")
+
+-- libraries we need
 require("lfs")
 require("lxp")
 require("socket")
