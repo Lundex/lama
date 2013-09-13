@@ -23,14 +23,14 @@
 -- This only loads the singletons, as they provide the functionality for
 -- the rest of the game, and therefore will load the packages as needed.
 function loadPackages()
-	require("Nanny")
-	require("Telnet")
-	require("PlayerState")
-	require("GameState")
-	require("MessageMode")
-	require("Direction")
-	require("CharacterManager")
-	require("Game") -- make sure this is always loaded last.
+	require("global.Nanny")
+	require("global.Telnet")
+	require("global.PlayerState")
+	require("global.GameState")
+	require("global.MessageMode")
+	require("global.Direction")
+	require("global.CharacterManager")
+	require("global.Game") -- make sure this is always loaded last.
 	-- the Game package requires other packages that require the
 	-- other singletons, so always load it last.
 end
@@ -48,14 +48,14 @@ function unloadPackages()
 	_G.CharacterManager						= nil
 
 	-- unload packages
-	package.loaded["Game"]					= nil
-	package.loaded["Nanny"]					= nil
-	package.loaded["Telnet"]				= nil
-	package.loaded["PlayerState"]			= nil
-	package.loaded["GameState"]				= nil
-	package.loaded["MessageMode"]			= nil
-	package.loaded["Direction"]				= nil
-	package.loaded["CharacterManager"]		= nil
+	package.loaded["global.Game"]					= nil
+	package.loaded["global.Nanny"]					= nil
+	package.loaded["global.Telnet"]				= nil
+	package.loaded["global.PlayerState"]			= nil
+	package.loaded["global.GameState"]				= nil
+	package.loaded["global.MessageMode"]			= nil
+	package.loaded["global.Direction"]				= nil
+	package.loaded["global.CharacterManager"]		= nil
 
 	-- unload obj.* packages
 	for i,v in pairs(package.loaded) do
