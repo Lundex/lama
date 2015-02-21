@@ -35,7 +35,8 @@
  * [LuaSocket](http://w3.impa.br/~diego/software/luasocket/)
  * [LuaLogging](http://www.keplerproject.org/lualogging/)
  * [LuaFileSystem](http://keplerproject.github.io/luafilesystem/)
- * [LuaExpat](http://matthewwild.co.uk/projects/luaexpat/)
+ * [LuaXML](http://www.viremo.de/LuaXML/)
+ * [MD5](http://www.keplerproject.org/md5/)
 
 #Optional Packages:#
  * [lzlib](https://github.com/LuaDist/lzlib) -- **Required for MCCP2.**
