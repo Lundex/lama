@@ -34,7 +34,8 @@ local CharacterData = require("obj.CharacterData")
 -- @field mana Current mana.
 -- @field moves Current moves.
 -- @field player The Player we're associated with.
-local Mob		= MapObject:clone()
+-- @field characterData Character data for this mob.
+local Mob			= MapObject:clone()
 
 -- mob data, bro.
 Mob.name			= "mob"

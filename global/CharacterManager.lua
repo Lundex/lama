@@ -64,10 +64,14 @@ function CharacterManager.legalizeName(name)
 	-- standard name made of only alphanumeric characters, beginning with a capital letter.
 	-- "Garret", "Judas"
 	name = string.match(name, "([a-z]+)")
-	return string.format("%s%s",
-							string.upper(string.sub(name, 1, 1)),
-							string.sub(name, 2)
-						)
+	if name then
+		return string.format("%s%s",
+								string.upper(string.sub(name, 1, 1)),
+								string.sub(name, 2)
+							)
+	end
+
+	return nil, "invalid name"
 end
 
 --- Get the character filename for a given name.
@@ -120,10 +124,11 @@ end
 -- @param mob Mob of the character to generate data of.
 -- @return The XML format of the character.
 function CharacterManager.generateCharacterData(mob)
-	return string.format("<character password='%s' lamaSaveVersion='0'>\
+	return string.format("<character password='%s'>\
 	<name>%s</name>\
 	<description>%s</description>\
-	<experience level='%d'>%d</experience>\
+	<level>%d</level>\
+	<experience>%d</experience>\
 	<health>%d</health>\
 	<mana>%d</mana>\
 	<moves>%d</moves>\
@@ -131,7 +136,8 @@ function CharacterManager.generateCharacterData(mob)
 	md5.sumhexa(mob.characterData.password),
 	mob.name,
 	mob.description,
-	mob.level, mob.experience,
+	mob.level,
+	mob.experience,
 	mob.health,
 	mob.mana,
 	mob.moves

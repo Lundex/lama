@@ -57,7 +57,7 @@ function Nanny.process(player, input)
 	elseif player:getState() == PlayerState.OLD_CHAR_PASSWORD then
 		if md5.sumhexa(input) ~= player.mob:getPassword() then
 			player:sendMessage("That password doesn't match the old password!", MessageMode.FAILURE)
-			player.mob = nil
+			player:unsetMob()
 			player:setState(PlayerState.NAME)
 			Nanny.askForName(player)
 		else

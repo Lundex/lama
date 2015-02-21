@@ -16,7 +16,7 @@
     along with this program.  If not, see <http://www.gnu.org/licenses/>.
 ]]
 
---- Cloneable that holds data about a fireable event, meant to be used with a Scheduler.
+--- Cloneable that holds data for characters.
 -- @author milkmanjack
 module("obj.CharacterData", package.seeall)
 

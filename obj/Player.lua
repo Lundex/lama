@@ -69,12 +69,6 @@ function Player:setMessageMode(mode)
 	self.messageMode = mode
 end
 
---- Get message mode.
--- @return Current message mode. Always a member of the MessageMode table.
-function Player:getMessageMode()
-	return self.messageMode
-end
-
 --- Sends a message to the Player.
 -- @param msg The message to send.
 -- @param mode The mode of the message. Always a member of the MessageMode table.
@@ -198,5 +192,12 @@ end
 function Player:getMob()
 	return self.mob
 end
+
+--- Get message mode.
+-- @return Current message mode. Always a member of the MessageMode table.
+function Player:getMessageMode()
+	return self.messageMode
+end
+
 
 return Player
