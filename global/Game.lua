@@ -48,7 +48,7 @@ local Game				= {}
 
 -- game data
 Game.name				= "lama"
-Game.version			= "v0.7a-1"
+Game.version			= "v0.7a-2"
 Game.developers			= {"milkmanjack"}
 
 -- current game info

@@ -39,7 +39,7 @@ function string.getWord(s)
 
 	-- handles empty strings
 	if length < 1 then
-		return nil, nil
+		return "", nil
 	end
 
 	-- handles 1 character long strings
@@ -67,7 +67,7 @@ function string.getWord(s)
 		_end = _end+1
 	end
 
-	return word, (_end and _end < length and string.truncate(string.sub(s, _end))) or nil
+	return word, (_end and _end < length and string.truncate(string.sub(s, _end))) or ""
 end
 
 --- Returns an iterator that iterates over the words within

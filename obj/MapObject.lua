@@ -61,7 +61,7 @@ function MapObject:initialize(map,loc)
 end
 
 --- String identifier for this mob.
--- @return Returns a string in format of "&lt;MapObject's name&gt;".
+-- @return Returns the MapObject's name.
 function MapObject:toString()
 	return self.name
 end
