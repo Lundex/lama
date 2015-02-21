@@ -109,11 +109,6 @@ function Mob:setMessageMode(mode)
 	end
 end
 
---- Shortcut to player:getMessageMode()
-function Mob:getMessageMode(mode)
-	return self.player and self.player:getMessageMode()
-end
-
 --- Shortcut to player:sendMessage(msg, mode, autobreak)
 function Mob:sendMessage(msg, mode, autobreak)
 	if self.player then
@@ -189,6 +184,11 @@ end
 -- @return Mob's description.
 function Mob:getDescription()
 	return self.description
+end
+
+--- Shortcut to player:getMessageMode()
+function Mob:getMessageMode(mode)
+	return self.player and self.player:getMessageMode()
 end
 
 --- Get the Mob's password.

@@ -29,6 +29,7 @@ function loadPackages()
 	require("global.GameState")
 	require("global.MessageMode")
 	require("global.Direction")
+	require("global.Color")
 	require("global.CharacterManager")
 	require("global.Game") -- make sure this is always loaded last.
 	-- the Game package requires other packages that require the
