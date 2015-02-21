@@ -89,13 +89,13 @@ function Player:sendMessage(msg, mode, autobreak)
 		-- separate the next message from the previous
 		-- but only if the previous mode was not nil
 		if oldMode ~= nil then
-			self:sendLine()
+			self:sendString("\n")
 		end
 	end
 
 	-- if autobreak is true, append a linebreak to the message. (default)
 	if autobreak == true then
-		self:sendLine(msg)
+		self:sendString(msg.."\n")
 
 	-- otherwise, just send it as a string with no linebreak
 	else
@@ -110,12 +110,8 @@ end
 
 --- shortcut to client:sendMessage(str).
 function Player:sendString(str)
+	str = Color.colorize(str)
 	return self.client:sendString(str)
-end
-
---- shortcut to client:sendLine(str).
-function Player:sendLine(str)
-	return self.client:sendLine(str)
 end
 
 --- Set ID.

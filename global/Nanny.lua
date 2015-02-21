@@ -130,7 +130,7 @@ end
 --- Send the player off, announcing their departure.
 -- @param player Player that is departing.
 function Nanny.sendOff(player)
-	player:sendLine("Goodbye!")
+	player:sendMessage("Goodbye!")
 	Game.announce(string.format("%s has left!", tostring(player:getMob())), MessageMode.INFO, PlayerState.PLAYING)
 end	
 
@@ -141,12 +141,11 @@ end
 -- @param hotboot If true, greeting after a hotboot.
 function Nanny.greet(player, hotboot)
 	if hotboot then
-		player:sendLine("Welcome back!")
+		player:sendMessage("Welcome back!")
 		player:setState(PlayerState.PLAYING)
 	else
-		player:sendLine(Nanny.getGreeting())
+		player:sendMessage(Nanny.getGreeting())
 		player:setState(PlayerState.NAME)
-		player:sendLine()
 		Nanny.askForName(player)
 	end
 end

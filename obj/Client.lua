@@ -344,13 +344,6 @@ function Client:sendString(str)
 	return self:send(str)
 end
 
---- Sends the given string to the client followed by a linebreak.
--- @param str String to be sent.
--- @return result of self:sendString()
-function Client:sendLine(str)
-	self:sendString(string.format("%s%s", str or "", "\r\n"))
-end
-
 --- Close the client's socket.
 function Client:close()
 	return self.socket:close()

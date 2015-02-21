@@ -1,3 +1,4 @@
+
 --[[
     lama is a MUD server made in Lua.
     Copyright (C) 2013 Curtis Erickson
@@ -43,34 +44,101 @@ Color.C_B_MAGENTA				= "[1;35m"
 Color.C_B_CYAN					= "[1;36m"
 Color.C_B_WHITE					= "[1;37m"
 
+Color.escape					= "{"
+
 --- Contains textual representations of colors.
 -- @class table
 -- @name Color.names
 Color.names						= {}
-Color.names[Color.CLEAR]		= "CLEAR"
-Color.names[Color.BLINK]		= "BLINK"
-Color.names[Color.C_BLACK]		= "C_BLACK"
-Color.names[Color.C_RED]		= "C_RED"
-Color.names[Color.C_GREEN]		= "C_GREEN"
-Color.names[Color.C_YELLOW]		= "C_YELLOW"
-Color.names[Color.C_BLUE]		= "C_BLUE"
-Color.names[Color.C_MAGENTA]	= "C_MAGENTA"
-Color.names[Color.C_CYAN]		= "C_CYAN"
-Color.names[Color.C_WHITE]		= "C_WHITE"
-Color.names[Color.C_D_GREY]		= "C_D_GREY"
-Color.names[Color.C_B_RED]		= "C_B_RED"
-Color.names[Color.C_B_GREEN]	= "C_B_GREEN"
-Color.names[Color.C_B_YELLOW]	= "C_B_YELLOW"
-Color.names[Color.C_B_BLUE]		= "C_B_BLUE"
-Color.names[Color.C_B_MAGENTA]	= "C_B_MAGENTA"
-Color.names[Color.C_B_CYAN]		= "C_B_CYAN"
-Color.names[Color.C_B_WHITE]	= "C_B_WHITE"
+Color.names[Color.CLEAR]		= "clear"
+Color.names[Color.BLINK]		= "blink"
+Color.names[Color.C_BLACK]		= "black"
+Color.names[Color.C_RED]		= "light red"
+Color.names[Color.C_GREEN]		= "light green"
+Color.names[Color.C_YELLOW]		= "light yellow"
+Color.names[Color.C_BLUE]		= "light blue"
+Color.names[Color.C_MAGENTA]	= "light magenta"
+Color.names[Color.C_CYAN]		= "light cyan"
+Color.names[Color.C_WHITE]		= "light white"
+Color.names[Color.C_D_GREY]		= "grey"
+Color.names[Color.C_B_RED]		= "dark red"
+Color.names[Color.C_B_GREEN]	= "dark green"
+Color.names[Color.C_B_YELLOW]	= "dark yellow"
+Color.names[Color.C_B_BLUE]		= "dark blue"
+Color.names[Color.C_B_MAGENTA]	= "dark magenta"
+Color.names[Color.C_B_CYAN]		= "dark cyan"
+Color.names[Color.C_B_WHITE]	= "dark white"
 
 --- Allows for quick reference to Color.names enums.
--- @param state The state to retrieve the name of.
--- @return Name of the state.
-function Color.name(state)
-	return Color.names[state]
+-- @param color The color to retrieve the name of.
+-- @return Name of the color.
+function Color.name(color)
+	return Color.names[color]
+end
+
+--- Contains letters for color escapes.
+-- @class table
+-- @name Color.letters
+Color.letters					= {}
+Color.letters["x"]				= Color.CLEAR
+Color.letters["X"]				= Color.CLEAR
+Color.letters["!"]				= Color.BLINK
+Color.letters["["]				= Color.C_BLACK
+Color.letters["r"]				= Color.C_RED
+Color.letters["g"]				= Color.C_GREEN
+Color.letters["y"]				= Color.C_YELLOW
+Color.letters["b"]				= Color.C_BLUE
+Color.letters["m"]				= Color.C_MAGENTA
+Color.letters["c"]				= Color.C_CYAN
+Color.letters["w"]				= Color.C_WHITE
+Color.letters["D"]				= Color.C_D_GREY
+Color.letters["R"]				= Color.C_B_RED
+Color.letters["G"]				= Color.C_B_GREEN
+Color.letters["Y"]				= Color.C_B_YELLOW
+Color.letters["B"]				= Color.C_B_BLUE
+Color.letters["M"]				= Color.C_B_MAGENTA
+Color.letters["C"]				= Color.C_B_CYAN
+Color.letters["W"]				= Color.C_B_WHITE
+
+--- Allows for quick reference to Color.letters enums.
+-- @param letter The letter to retrieve the color for.
+-- @return Color for letter.
+function Color.letter(letter)
+	return Color.letters[letter]
+end
+
+--- Colorize a string.
+function Color.colorize(s, strip)
+	s = s .. "{x"
+	local length = string.len(s)
+	local swap = function(letter)
+		if strip or not letter then
+			return ""
+		end
+
+		if letter == Color.escape then
+			return Color.escape
+		end
+
+		return Color.letter(letter) or ""
+	end
+
+	return string.gsub(s, Color.escape.."(.?)", swap)
+end
+
+--- Length of string ignoring colors.
+function Color.safelen(s, strip)
+	s = s .. "{x"
+	local length = string.len(s)
+	for letter in string.gmatch(s, Color.escape.."(.?)") do
+		if letter == Color.escape then
+			length = length - 1
+		else
+			length = length - 2
+		end
+	end
+
+	return length
 end
 
 _G.Color = Color
