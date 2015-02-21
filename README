@@ -36,6 +36,7 @@ Features and Explanations:
  * LuaLogging (http://www.keplerproject.org/lualogging/)
  * LuaFileSystem (http://keplerproject.github.io/luafilesystem/)
  * LuaExpat (http://matthewwild.co.uk/projects/luaexpat/)
+ * MD5 (http://keplerproject.org/md5/)
 
 #Optional Packages:#
  * lzlib (https://github.com/LuaDist/lzlib) [Required for MCCP2.]
