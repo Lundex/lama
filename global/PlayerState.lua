@@ -39,7 +39,7 @@ PlayerState.NAME						= 2
 PlayerState.NEW_CHAR_NAME_CONFIRM		= 3
 PlayerState.NEW_CHAR_PASSWORD			= 4
 PlayerState.NEW_CHAR_PASSWORD_CONFIRM	= 5
-PlayerState.LOAD_CHAR_PASSWORD			= 6
+PlayerState.OLD_CHAR_PASSWORD			= 6
 PlayerState.MOTD						= 7
 PlayerState.PLAYING						= 8
 
@@ -62,7 +62,7 @@ PlayerState.names[PlayerState.NAME]							= "name"
 PlayerState.names[PlayerState.NEW_CHAR_NAME_CONFIRM]		= "name confirm"
 PlayerState.names[PlayerState.NEW_CHAR_PASSWORD]			= "password"
 PlayerState.names[PlayerState.NEW_CHAR_PASSWORD_CONFIRM]	= "password confirm"
-PlayerState.names[PlayerState.LOAD_CHAR_PASSWORD]			= "login password"
+PlayerState.names[PlayerState.OLD_CHAR_PASSWORD]			= "login password"
 PlayerState.names[PlayerState.MOTD]							= "MOTD"
 PlayerState.names[PlayerState.PLAYING]						= "playing"
 

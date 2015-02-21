@@ -120,14 +120,15 @@ end
 -- @param mob Mob of the character to generate data of.
 -- @return The XML format of the character.
 function CharacterManager.generateCharacterData(mob)
-	return string.format("<mob lamaSaveVersion='0'>\
+	return string.format("<character password='%s' lamaSaveVersion='0'>\
 	<name>%s</name>\
 	<description>%s</description>\
 	<experience level='%d'>%d</experience>\
 	<health>%d</health>\
 	<mana>%d</mana>\
 	<moves>%d</moves>\
-</mob>",
+</character>",
+	md5.sumhexa(mob.characterData.password),
 	mob.name,
 	mob.description,
 	mob.level, mob.experience,
@@ -146,7 +147,12 @@ function CharacterManager.readCharacterData(xml, mob)
 	mob = mob or Mob:new()
 	local callback = {}
 	callback.StartElement = function(parser, name, attributes)
-		if name == "name" then
+		if name == "character" then
+			callback.CharacterData = function(parser, data)
+				mob.characterData.password = attributes["password"]
+				callback.CharacterData = false
+			end
+		elseif name == "name" then
 			callback.CharacterData = function(parser, data)
 				mob.name = data
 				callback.CharacterData = false

@@ -21,6 +21,7 @@
 module("obj.Mob", package.seeall)
 
 local MapObject	= require("obj.MapObject")
+local CharacterData = require("obj.CharacterData")
 
 --- Cloneable:MapObject that holds data for mobile creatures.
 -- @class table
@@ -47,6 +48,11 @@ Mob.mana			= 100
 Mob.moves			= 100
 
 Mob.player			= nil -- this is a cross-reference to a player that is controlling us.
+
+--- Assigns a character data table.
+function Mob:initialize()
+	self.characterData = CharacterData:new()
+end
 
 --- Takes a step in the given direction.
 -- @param direction Direction to step in.
@@ -142,6 +148,12 @@ function Mob:showRoom()
 	self:sendMessage(msg, MessageMode.INFO)
 end
 
+--- Assign the mob's password.
+-- @param password New password.
+function Mob:setPassword(password)
+	self.characterData.password = password
+end
+
 --- Associate this Mob with the given Player. A Mob's Player
 -- shares a mututal reference with the Mob, so when the
 -- Mob's Player changes, so does the Player's Mob.
@@ -176,6 +188,12 @@ end
 -- @return Mob's description.
 function Mob:getDescription()
 	return self.description
+end
+
+--- Get the Mob's password.
+-- @return The password.
+function Mob:getPassword()
+	return self.characterData.password
 end
 
 --- Check if this Mob has a Player controlling it.

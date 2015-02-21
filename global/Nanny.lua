@@ -39,19 +39,44 @@ function Nanny.process(player, input)
 			Nanny.messageNameLengthLimit(player)
 			Nanny.askForName(player)
 		else
-			local mob = Mob:new()
-
-			-- load saved character
-			if CharacterManager.characterNameTaken(name) then
-				CharacterManager.loadCharacter(name, mob)
-
-			-- create new character
+			if CharacterManager.characterNameTaken(input) then
+				local mob = Mob:new()
+				player:setMob(mob)
+				CharacterManager.loadCharacter(input, mob)
+				player:setState(PlayerState.OLD_CHAR_PASSWORD)
+				Nanny.askForOldPassword(player)
 			else
+				local mob = Mob:new()
+				player:setMob(mob)
 				mob:setName(name)
-				CharacterManager.saveCharacter(mob)
+				player:setState(PlayerState.NEW_CHAR_PASSWORD)
+				Nanny.askForNewPassword(player, false)
 			end
+		end
 
-			player:setMob(mob)
+	elseif player:getState() == PlayerState.OLD_CHAR_PASSWORD then
+		if md5.sumhexa(input) ~= player.mob:getPassword() then
+			player:sendMessage("That password doesn't match the old password!", MessageMode.FAILURE)
+			player.mob = nil
+			player:setState(PlayerState.NAME)
+			Nanny.askForName(player)
+		else
+			player:setState(PlayerState.MOTD)
+			Nanny.MOTD(player)
+		end
+
+	elseif player:getState() == PlayerState.NEW_CHAR_PASSWORD then
+		player.nanny.password = input
+		player:setState(PlayerState.NEW_CHAR_PASSWORD_CONFIRM)
+		Nanny.askForNewPassword(player, true)
+
+	elseif player:getState() == PlayerState.NEW_CHAR_PASSWORD_CONFIRM then
+		if input ~= player.nanny.password then
+			player:sendMessage("Those passwords don't match!")
+			Nanny.askForNewPassword(player, false)
+			player:setState(PlayerState.NEW_CHAR_PASSWORD)
+		else
+			player.mob:setPassword(player.nanny.password)
 			player:setState(PlayerState.MOTD)
 			Nanny.MOTD(player)
 		end
@@ -98,7 +123,7 @@ end
 --- Introduce the player to the world.
 -- @param player Player to introduce.
 function Nanny.introduce(player)
-	player:sendMessage(string.format("\nWelcome to %s, %s!", tostring(Game.getName()), tostring(player:getMob())), MessageMode.GENERAL)
+	player:sendMessage(string.format("\nWelcome to %s, %s!", tostring(Game.getName()), tostring(player:getMob())))
 	Game.announce(string.format("%s has joined!", tostring(player:getMob())), MessageMode.INFO, PlayerState.PLAYING)
 end
 
@@ -132,6 +157,22 @@ function Nanny.askForName(player)
 	player:askQuestion("What is your name? ")
 end
 
+--- Ask for a new password.
+-- @param player Player to ask.
+function Nanny.askForNewPassword(player, confirm)
+	if not confirm then
+		player:askQuestion("New password: ")
+	else
+		player:askQuestion("Repeat password: ")
+	end
+end
+
+--- Ask for the old password.
+-- @param player Player to ask.
+function Nanny.askForOldPassword(player)
+	player:askQuestion("Password: ")
+end
+
 --- Tell the player the name length limits.
 -- @param player Player to inform.
 function Nanny.messageNameLengthLimit(player)
@@ -141,8 +182,8 @@ end
 --- Send the MOTD to the player.
 -- @param player Player to be MOTDed.
 function Nanny.MOTD(player)
-	player:sendMessage("\n" .. Nanny.getMOTD(), MessageMode.GENERAL)
-	player:sendMessage("< PRESS ENTER >", MessageMode.GENERAL, false)
+	player:sendMessage("\n" .. Nanny.getMOTD())
+	player:sendMessage("< PRESS ENTER >", false)
 end
 
 --- Retreive the text to be used as the MOTD.

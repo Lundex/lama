@@ -30,6 +30,7 @@ local Cloneable		= require("obj.Cloneable")
 -- @field client The Client we are associated with.
 -- @field mob The Mob we are associated with.
 -- @field messageMode Our message mode. Always a member of the MessageMode table.
+-- @field nanny A table containing data for use with logging in.
 local Player		= Cloneable.clone()
 
 -- runtime data
@@ -42,6 +43,7 @@ Player.messageMode	= nil -- the current message mode
 --- Initialize the Player and associated it with the given Client.
 -- @param client Client to be associated with this Player.
 function Player:initialize(client)
+	self.nanny = {} -- data for nanny stuff
 	self:setClient(client)
 end
 
