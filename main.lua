@@ -27,7 +27,7 @@ require("etc")
 
 -- libraries we need
 require("lfs")
-require("lxp")
+require("LuaXML_lib")
 require("socket")
 require("md5")
 require("logging")

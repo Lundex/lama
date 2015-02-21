@@ -114,10 +114,7 @@ end
 -- @return The mob that data was read into.
 function CharacterManager.loadCharacter(name, mob)
 	local filename = CharacterManager.getCharacterFileFromName(name)
-	local file = io.open(filename, "r")
-	local xml = file:read("*a")
-	file:close()
-	return CharacterManager.readCharacterData(xml, mob)
+	return CharacterManager.readCharacterData(xml.load(filename), mob)
 end
 
 --- Get the XML format of a character.
@@ -149,53 +146,26 @@ end
 -- @param xml The XML to be read.
 -- @param mob Optional mob to read data into.<br/>If not specified, will return a new mob created with the XML data.
 -- @return The mob that the data was applied to.
-function CharacterManager.readCharacterData(xml, mob)
+function CharacterManager.readCharacterData(data, mob)
 	mob = mob or Mob:new()
-	local callback = {}
-	callback.StartElement = function(parser, name, attributes)
-		if name == "character" then
-			callback.CharacterData = function(parser, data)
-				mob.characterData.password = attributes["password"]
-				callback.CharacterData = false
-			end
-		elseif name == "name" then
-			callback.CharacterData = function(parser, data)
-				mob.name = data
-				callback.CharacterData = false
-			end
-		elseif name == "description" then
-			callback.CharacterData = function(parser, data)
-				mob.description = data
-				callback.CharacterData = false
-			end
-		elseif name == "experience" then
-			mob.level = tonumber(attributes.level)
-			callback.CharacterData = function(parser, data)
-				mob.experience = tonumber(data)
-				callback.CharacterData = false
-			end
-		elseif name == "health" then
-			callback.CharacterData = function(parser, data)
-				mob.health = tonumber(data)
-				callback.CharacterData = false
-			end
-		elseif name == "mana" then
-			callback.CharacterData = function(parser, data)
-				mob.mana = tonumber(data)
-				callback.CharacterData = false
-			end
-		elseif name == "moves" then
-			callback.CharacterData = function(parser, data)
-				mob.moves = tonumber(data)
-				callback.CharacterData = false
-			end
+	mob:setPassword(data.password)
+	for i,v in ipairs(data) do
+		if v[0] == "name" then
+			mob.name = v[1]
+		elseif v[0] == "description" then
+			mob.description = v[1]
+		elseif v[0] == "level" then
+			mob.level = tonumber(v[1])
+		elseif v[0] == "experience" then
+			mob.experience = tonumber(v[1])
+		elseif v[0] == "health" then
+			mob.health = tonumber(v[1])
+		elseif v[0] == "mana" then
+			mob.mana = tonumber(v[1])
+		elseif v[0] == "moves" then
+			mob.moves = tonumber(v[1])
 		end
 	end
-
-	callback.CharacterData = false
-
-	local parser = lxp.new(callback)
-	parser:parse(xml)
 
 	return mob
 end

@@ -112,6 +112,10 @@ end
 function Client:receive(pattern, prefix)
 	local _, err, input = self.socket:receive(pattern, prefix)
 
+	if input == nil then
+		return nil, err
+	end
+
 	-- remove carriage returns
 	input = string.gsub(input, "\r", "")
 
