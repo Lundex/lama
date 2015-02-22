@@ -20,6 +20,8 @@
 -- @author milkmanjack
 module("CharacterManager", package.seeall)
 
+local md5			= require("md5")
+
 --- Singleton that provides character management utilities.
 -- @class table
 -- @name CharacterManager

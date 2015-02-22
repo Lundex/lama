@@ -21,6 +21,7 @@
 -- @author milkmanjack
 module("Nanny", package.seeall)
 
+local md5			= require("md5")
 local Mob			= require("obj.Mob")
 
 --- Singleton that contains necessary processes for connecting new players,
