@@ -33,7 +33,7 @@ function Who:execute(player, mob)
 		local mob = v:getMob()
 		local TerminalType = client:getTerminalType()
 		local MCCPStatus = client:getDo(Telnet.protocol.MCCP2) and "enabled" or "disabled"
-		msg = string.format("%s\n-> %s (terminal: %s) (MCCP %s)", msg, tostring(v), TerminalType, MCCPStatus)
+		msg = string.format("%s\n %s (terminal: %s) (MCCP %s)", msg, tostring(mob), TerminalType, MCCPStatus)
 	end
 
 	player:sendMessage(msg)
