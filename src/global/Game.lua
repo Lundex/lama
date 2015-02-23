@@ -268,7 +268,7 @@ end
 
 --- Generates a list of every Command for the CommandParser.
 function Game.generateCommands()
-	for i in lfs.dir("obj/command") do
+	for i in lfs.dir("src/obj/command") do
 		if i ~= "." and i ~= ".." then
 			local file = string.match(i, "(.+)%.lua")
 			if file then -- it's an lua file!
