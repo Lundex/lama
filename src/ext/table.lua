@@ -32,14 +32,16 @@ function table.copy(t)
 	return c
 end
 
---- Provides a safe iterator in the same vein as pairs(t) over the members of the given table.
+--- Provides a safe iterator in the same vein as pairs(t) over the members of the given table.<br/>
+-- Safe means you can alter the contents of 't' and the iterator will still be accurate to the original.
 -- @param t Table to be iterated over.
 -- @return An iterator in the same vein as pairs(t)
 function table.safePairs(t)
 	return pairs(table.copy(t))
 end
 
---- Provides a safe iterator in the same vein as ipairs(t) over the members of the given table.
+--- Provides a safe iterator in the same vein as ipairs(t) over the members of the given table.<br/>
+-- Safe means you can alter the contents of 't' and the iterator will still be accurate to the original.
 -- @param t Table to be iterated over.
 -- @return An iterator in the same vein as ipairs(t)
 function table.safeIPairs(t)

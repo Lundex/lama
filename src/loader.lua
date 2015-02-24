@@ -46,6 +46,7 @@ function unloadPackages()
 	_G.GameState							= nil
 	_G.MessageMode							= nil
 	_G.Direction							= nil
+	_G.Color								= nil
 	_G.CharacterManager						= nil
 
 	-- unload packages
@@ -56,6 +57,7 @@ function unloadPackages()
 	package.loaded["global.GameState"]				= nil
 	package.loaded["global.MessageMode"]			= nil
 	package.loaded["global.Direction"]				= nil
+	package.loaded["global.Color"]					= nil
 	package.loaded["global.CharacterManager"]		= nil
 
 	-- unload obj.* packages

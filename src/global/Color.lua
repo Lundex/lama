@@ -43,8 +43,7 @@ Color.C_B_BLUE					= "[1;34m"
 Color.C_B_MAGENTA				= "[1;35m"
 Color.C_B_CYAN					= "[1;36m"
 Color.C_B_WHITE					= "[1;37m"
-
-Color.escape					= "{"
+Color.ESCAPE					= "{"
 
 --- Contains textual representations of colors.
 -- @class table
@@ -116,22 +115,22 @@ function Color.colorize(s, strip)
 			return ""
 		end
 
-		if letter == Color.escape then
-			return Color.escape
+		if letter == Color.ESCAPE then
+			return Color.ESCAPE
 		end
 
 		return Color.letter(letter) or ""
 	end
 
-	return string.gsub(s, Color.escape.."(.?)", swap)
+	return string.gsub(s, Color.ESCAPE.."(.?)", swap)
 end
 
 --- Length of string ignoring colors.
 function Color.safelen(s, strip)
 	s = s .. "{x"
 	local length = string.len(s)
-	for letter in string.gmatch(s, Color.escape.."(.?)") do
-		if letter == Color.escape then
+	for letter in string.gmatch(s, Color.ESCAPE.."(.?)") do
+		if letter == Color.ESCAPE then
 			length = length - 1
 		else
 			length = length - 2

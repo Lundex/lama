@@ -104,6 +104,7 @@ function Game.onOpen()
 		Game.info("Preparing scheduler...")
 		Game.queue(Game.AcceptEvent:new(Game.time()))
 		Game.queue(Game.PollEvent:new(Game.time()))
+		Game.queue(Game.CombatPulseEvent:new(Game.time()))
 	end
 
 	-- load the map
@@ -398,6 +399,29 @@ end
 -- @return Player list.
 function Game.getPlayers()
 	return Game.players
+end
+
+--- This Event propagates combat rounts.
+-- @class table
+-- @name Game.CombatPulseEvent
+Game.CombatPulseEvent					= Event:clone()
+Game.CombatPulseEvent.shouldRepeat		= true
+Game.CombatPulseEvent.repeatMax			= 0
+Game.CombatPulseEvent.repeatInterval	= 4
+
+function Game.CombatPulseEvent:run()
+	for i,mob in ipairs(Game.map:getContents()) do
+		if mob:isCloneOf(Mob) then
+			if mob.victim then
+				if mob:getLoc() ~= mob.victim:getLoc() then
+					mob:disengage()
+					mob.victim:disengage()
+				end
+
+				mob:combatRound()
+			end
+		end
+	end
 end
 
 --- This Event acts as the middle ground for client connections, accepting clients on behalf of the server, and informing the game about it.<br/>

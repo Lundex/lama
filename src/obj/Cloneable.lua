@@ -90,7 +90,7 @@ end
 --- Stringifier for Cloneables.
 -- @return A string to identify this Cloneable.
 function Cloneable:toString()
-	return "{cloneable}"
+	return "[cloneable]"
 end
 
 return Cloneable

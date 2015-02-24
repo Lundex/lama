@@ -32,6 +32,7 @@ local Cloneable	= require("obj.Cloneable")
 local MapObject	= Cloneable.clone()
 
 -- mapobject settings
+MapObject.keywords		= "mapobject"
 MapObject.name			= "mapobject"
 MapObject.description	= "a map object"
 
@@ -64,6 +65,17 @@ end
 -- @return Returns the MapObject's name.
 function MapObject:toString()
 	return self.name
+end
+
+--- Check if the given keywords match the object's keywords.
+-- @param keywords Keywords to check against.
+-- @return true on success.<br/>false otherwise.
+function MapObject:match(keywords)
+	if matchKeywords(keywords, self.keywords) then
+		return true
+	end
+
+	return false
 end
 
 --- Moves a MapObject into a Map.
@@ -191,6 +203,12 @@ function MapObject:removeFromContents(mapObject)
 	if mapObject:getLoc() == self then
 		mapObject:setLoc(nil)
 	end
+end
+
+--- Assign keywords.
+-- @param keyword Keywords to assign.
+function MapObject:setKeywords(keywords)
+	self.keywords = keywords
 end
 
 --- Assign a name.

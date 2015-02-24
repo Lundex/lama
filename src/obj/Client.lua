@@ -96,14 +96,14 @@ function Client:initialize(socket, updateOptions)
 end
 
 --- Returns the string-value of the Client.
--- @return A string in the format of <tt>"client@&lt;client remote address&gt;"</tt>.
+-- @return A string in the format of <tt>"[client@&lt;client remote address&gt;]"</tt>.
 function Client:toString()
 	if not self.socket then
-		return "client@nil"
+		return "[client@nil]"
 	end
 
 	local addr, port = self:getAddress()
-	return string.format("client@%s", addr)
+	return string.format("[client@%s]", addr)
 end
 
 --- Pipe to socket's receive() function.

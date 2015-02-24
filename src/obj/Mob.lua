@@ -38,6 +38,7 @@ local CharacterData = require("obj.CharacterData")
 local Mob			= MapObject:clone()
 
 -- mob data, bro.
+Mob.keywords		= "mob"
 Mob.name			= "mob"
 Mob.description		= "It's a mob."
 
@@ -49,6 +50,7 @@ Mob.mana			= 100
 Mob.moves			= 100
 
 Mob.player			= nil -- this is a cross-reference to a player that is controlling us.
+Mob.victim			= nil -- a mob we're fighting
 
 --- Assigns a character data table.
 function Mob:initialize()
@@ -142,6 +144,30 @@ function Mob:showRoom()
 	end
 
 	self:sendMessage(msg, MessageMode.INFO)
+end
+
+--- Engage another mob in combat.
+-- @param mob The mob to begin fighting.
+function Mob:engage(mob)
+	self.victim = mob
+	if mob.victim == nil then
+		mob:engage(self)
+	end
+end
+
+--- Disengage the current target.
+function Mob:disengage()
+	local oldVictim = self.victim
+	self.victim = nil
+
+	if oldVictim.victim == self then
+		oldVictim:disengage()
+	end
+end
+
+--- Mob combat round.
+function Mob:combatRound()
+	self:sendMessage(string.format("You attack %s!", self.victim:getName()))
 end
 
 --- Assign the mob's password.

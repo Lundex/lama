@@ -31,3 +31,27 @@ function prequire(package)
 
 	return eop -- return the package value
 end
+
+--- Matches a string of keywords to another string of keywords
+function matchKeywords(needle, haystack)
+	local _haystack = {}
+	for i in string.gmatch(haystack, "([a-zA-Z0-9|'|-]+)") do
+		table.insert(_haystack, i)
+	end
+
+	for i in string.gmatch(needle, "([a-zA-Z0-9|'|-]+)") do
+		local found = false
+		for _i, v in ipairs(_haystack) do
+			if string.find(v, i) == 1 then
+				found = true
+			end
+		end
+
+		-- every keyword must be found, or it's not a match
+		if not found then
+			return nil
+		end
+	end
+
+	return haystack
+end

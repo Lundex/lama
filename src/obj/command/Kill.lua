@@ -16,27 +16,30 @@
     along with this program.  If not, see <http://www.gnu.org/licenses/>.
 ]]
 
-require("ext.string")
-local Command	= require("obj.Command")
+--- Command for listing usable commands.
+-- @author milkmanjack
+local Command		= require("obj.Command")
 
---- Command for sending Out of Character chat.
+--- Kill command.
 -- @class table
--- @name OOC
-local OOC		= Command:clone()
-OOC.keyword		= "ooc"
+-- @name Kill
+local Kill		= Command:clone()
+Kill.keyword	= "kill"
 
---- Passes everything after the keyword to the command execution.
-function OOC:parse(player, mob, input)
-	local cmd, msg = string.getWord(input)
-	self:execute(player, mob, msg)
+--- Kill stuff.
+function Kill:parse(player, mob, input)
+	local cmd, keywords = string.getWord(input)
+	for i,victim in ipairs(mob:getLoc():getContents()) do
+		if victim:match(keywords) then
+			self:execute(player, mob, victim)
+			return
+		end
+	end
 end
 
---- Sends a message on the OOC channel.
--- @param player Player chatting
--- @param mob Mob chatting.
--- @param msg Message to be sent.
-function OOC:execute(player, mob, msg)
-	Game.announce(string.format("{Y%s OOC: '{W%s{Y'{x", mob:getName(), msg), MessageMode.CHAT, PlayerState.PLAYING)
+function Kill:execute(player, mob, victim)
+	mob:engage(victim)
+	mob:combatRound()
 end
 
-return OOC
+return Kill

@@ -45,9 +45,9 @@ end
 function config.present()
 	print(string.format("CONFIG:\
 %20s: %s\
-%20s: %s\
+%20s: %d\
 ",
-						"MCCP status",
+						"MCCP2 status",
 						config.enableMCCP2 == true and "enabled" or "disabled",
 						"default port",
 						config.defaultPort
