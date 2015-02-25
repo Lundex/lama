@@ -63,7 +63,8 @@ while Game.isReady() do
 	Game.update()
 	socket.select(nil,nil,0.1)
 
-	-- hotboot handled in game loop.
+	-- handle hotboot
+	-- hotboot is handled here instead of Game.update() due to context issues.
 	if Game:getState() == GameState.HOTBOOT then
 		Game.info("*** Hotbooting game...")
 
@@ -74,7 +75,7 @@ while Game.isReady() do
 		for i,v in ipairs(Game.getPlayers()) do
 			-- kill players that are out of game
 			if v:getState() ~= PlayerState.PLAYING then
-				v:sendLine("\n*** HOTBOOT IN PROGRESS!!! ***\n***    COME BACK LATER!    ***\n")
+				v:sendMessage("\n\n*** HOTBOOT IN PROGRESS!!! ***\n***    COME BACK LATER!    ***\n\n")
 				Game.disconnectPlayer(v)
 
 			-- preserve players that are in-game
@@ -92,7 +93,7 @@ while Game.isReady() do
 
 				-- let the player know what's up.
 				Game.info(string.format("*** Preserved %s for hotboot.", tostring(v)))
-				v:sendLine("\n*** HOTBOOT ***\n") -- inform them of the hotboot
+				v:sendMessage("\n*** HOTBOOT ***\n") -- inform them of the hotboot
 			end
 		end
 

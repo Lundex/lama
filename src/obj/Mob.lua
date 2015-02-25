@@ -35,6 +35,8 @@ local CharacterData = require("obj.CharacterData")
 -- @field moves Current moves.
 -- @field player The Player we're associated with.
 -- @field characterData Character data for this mob.
+-- @field victim The Mob we're fighting.
+-- @field combatEvent The event managing our combat rounds.
 local Mob			= MapObject:clone()
 
 -- mob data, bro.
@@ -50,7 +52,10 @@ Mob.mana			= 100
 Mob.moves			= 100
 
 Mob.player			= nil -- this is a cross-reference to a player that is controlling us.
+
+-- combat stuff
 Mob.victim			= nil -- a mob we're fighting
+Mob.combatEvent		= nil -- current event for combat processing
 
 --- Assigns a character data table.
 function Mob:initialize()
@@ -128,10 +133,10 @@ end
 --- Shows a description of the room the mob inhabits to the mob.
 function Mob:showRoom()
 	local location = self:getLoc()
-	local msg = string.format("%s (%d,%d,%d)\n  %s", location:getName(), location:getX(), location:getY(), location:getZ(), location:getDescription())
+	local msg = string.format("%s (%d,%d,%d)\n %s", location:getName(), location:getX(), location:getY(), location:getZ(), location:getDescription())
 
 	for i,v in ipairs(location:getContents()) do
-		if v:isCloneOf(Mob) then
+		if v:isCloneOf(Mob) and v ~= self then
 			msg = string.format("%s%s  %s is here", msg, "\n", v:getName())
 		end
 	end
@@ -139,7 +144,7 @@ function Mob:showRoom()
 	-- non-mobs. later this'll be Items
 	for i,v in ipairs(location:getContents()) do
 		if not v:isCloneOf(Mob) then
-			msg = string.format("  %s%sa %s is here.", msg, "\n", v:getName())
+			msg = string.format("%s%sA %s is here.", msg, "\n", v:getName())
 		end
 	end
 
@@ -147,27 +152,44 @@ function Mob:showRoom()
 end
 
 --- Engage another mob in combat.
--- @param mob The mob to begin fighting.
-function Mob:engage(mob)
-	self.victim = mob
-	if mob.victim == nil then
-		mob:engage(self)
+-- @param target The mob to begin fighting.
+function Mob:engage(target)
+	self.victim				= target
+
+	if not self.combatEvent then
+		self.combatEvent	= Game.CombatPulseEvent:new(self, Game.time()+4)
+		Game.queue(self.combatEvent)
 	end
 end
 
 --- Disengage the current target.
 function Mob:disengage()
-	local oldVictim = self.victim
 	self.victim = nil
+	Game.deque(self.combatEvent)
+end
 
-	if oldVictim.victim == self then
-		oldVictim:disengage()
+--- One hit.
+function Mob:oneHit(victim)
+	if not self.victim then
+		self:engage(victim)
 	end
+
+	if victim:getVictim() == nil then
+		victim:engage(self)
+	end
+
+	self:sendMessage(string.format("You hit %s!", victim:getName()), MessageMode.COMBAT)
+	victim:sendMessage(string.format("%s hits you!", self:getName()), MessageMode.COMBAT)
 end
 
 --- Mob combat round.
 function Mob:combatRound()
-	self:sendMessage(string.format("You attack %s!", self.victim:getName()))
+	if not self.victim or self.victim:getLoc() ~= self:getLoc() then
+		self:disengage()
+		return
+	end
+
+	self:oneHit(self.victim)
 end
 
 --- Assign the mob's password.
@@ -212,15 +234,21 @@ function Mob:getDescription()
 	return self.description
 end
 
---- Shortcut to player:getMessageMode()
-function Mob:getMessageMode(mode)
-	return self.player and self.player:getMessageMode()
+--- Get the Mob's current victim.
+-- @return Mob's victim.
+function Mob:getVictim()
+	return self.victim
 end
 
 --- Get the Mob's password.
 -- @return The password.
 function Mob:getPassword()
 	return self.characterData.password
+end
+
+--- Shortcut to player:getMessageMode()
+function Mob:getMessageMode(mode)
+	return self.player and self.player:getMessageMode()
 end
 
 --- Check if this Mob has a Player controlling it.

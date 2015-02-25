@@ -59,7 +59,7 @@ end
 
 --- Remove an event from the queue.
 -- @param event	The even to deque.
-function Scheduler:dequeue(event)
+function Scheduler:deque(event)
 	table.removeValue(self.events, event)
 --[[	for i,v in ipairs(self.events) do
 		if v == event then

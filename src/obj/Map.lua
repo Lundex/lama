@@ -62,21 +62,12 @@ function Map:generate(width,height,layers)
 	self.height	= height
 	self.layers	= layers
 
-	-- initial "filling out"
-	for z=1, layers do
-		self.tiles[z] = {}
+	-- fill out and seed tiles
+	for x=1, width do
+		self.tiles[x] = {}
 		for y=1, height do
-			self.tiles[z][y] = {}
-			for x=1, width do
-				self.tiles[z][y][x] = nil
-			end
-		end
-	end
-
-	-- seed generic tiles
-	for z=1, layers do
-		for y=1, height do
-			for x=1, width do
+			self.tiles[x][y] = {}
+			for z=1, layers do
 				self:setTile(MapTile:new(), x, y, z)
 			end
 		end
@@ -129,7 +120,7 @@ function Map:setTile(tile, x, y, z)
 		tile:setXYZLoc(x,y,z)
 	end
 
-	self.tiles[z][y][x] = tile
+	self.tiles[x][y][z] = tile
 end
 
 --- Gets the tile in the given direction from a MapObject.
@@ -204,7 +195,7 @@ function Map:getTile(x,y,z)
 		return nil
 	end
 
-	return self.tiles[z][y][x]
+	return self.tiles[x][y][z]
 end
 
 return Map

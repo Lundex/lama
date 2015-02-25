@@ -51,6 +51,7 @@ function Nanny.process(player, input)
 				local mob = Mob:new()
 				player:setMob(mob)
 				mob:setName(name)
+				mob:setKeywords(name)
 				player:setState(PlayerState.NEW_CHAR_PASSWORD)
 				Nanny.askForNewPassword(player, false)
 			end
@@ -188,7 +189,7 @@ end
 -- @param player Player to be MOTDed.
 function Nanny.MOTD(player)
 	player:sendMessage("\n" .. Nanny.getMOTD())
-	player:sendMessage("< PRESS ENTER >", false)
+	player:sendMessage("< PRESS ENTER >", nil, false)
 end
 
 --- Retreive the text to be used as the MOTD.

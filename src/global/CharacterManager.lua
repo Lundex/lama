@@ -132,6 +132,7 @@ character.experience	= %d\
 character.health		= %d\
 character.mana			= %d\
 character.moves			= %d\
+character.location		= {x=%d,y=%d,z=%d}\
 \
 return character",
 	mob.characterData.password,
@@ -141,7 +142,10 @@ return character",
 	mob.experience,
 	mob.health,
 	mob.mana,
-	mob.moves
+	mob.moves,
+	mob:getLoc():getX(),
+	mob:getLoc():getY(),
+	mob:getLoc():getZ()
 	)
 end
 
@@ -153,15 +157,16 @@ end
 function CharacterManager.readCharacterData(data, mob)
 	mob = mob or Mob:new()
 	mob:setPassword(data.password)
-	mob.keywords = data.name
-	mob.name = data.name
-	mob.description = data.description
+	mob:setKeywords(name)
+	mob:setName(data.name)
+	mob:setDescription(data.description)
 	mob.level = data.level
 	mob.experience = data.experience
 	mob.health = data.health
 	mob.mana = data.mana
 	mob.moves = data.moves
-	return mob
+	local location = Game.map:getTile(data.location.x, data.location.y, data.location.z)
+	return mob, location
 end
 
 --- Format a string so it's safe for saving.

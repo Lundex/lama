@@ -104,7 +104,6 @@ function Game.onOpen()
 		Game.info("Preparing scheduler...")
 		Game.queue(Game.AcceptEvent:new(Game.time()))
 		Game.queue(Game.PollEvent:new(Game.time()))
-		Game.queue(Game.CombatPulseEvent:new(Game.time()))
 	end
 
 	-- load the map
@@ -134,7 +133,7 @@ function Game.shutdown()
 
 	Game.info("Shutting down game...")
 	for i,v in table.safeIPairs(Game:getPlayers()) do
-		self:disconnectPlayer(v)
+		Game.disconnectPlayer(v)
 	end
 
 	Game.setState(GameState.SHUTDOWN)
@@ -172,10 +171,11 @@ function Game.recoverFromHotboot(preservedData)
 		Game.connectPlayer(player, true)
 
 		local mob = Mob:new()
-		CharacterManager.loadCharacter(v.name, mob) -- load the old mob, based on its name
-		mob:moveToMap(Game.map)
-		mob:setXYZLoc(1,1,1)
 		player:setMob(mob)
+		local _, location = CharacterManager.loadCharacter(v.name, mob) -- load the old mob, based on its name
+		print(_, location)
+		mob:moveToMap(Game.map)
+		mob:move(location)
 
 		Game.info(string.format("*** Character loaded: %s->%s", tostring(mob), tostring(player)))
 	end
@@ -401,7 +401,7 @@ function Game.getPlayers()
 	return Game.players
 end
 
---- This Event propagates combat rounts.
+--- This Event propagates combat rounds on an individual basis.
 -- @class table
 -- @name Game.CombatPulseEvent
 Game.CombatPulseEvent					= Event:clone()
@@ -409,19 +409,13 @@ Game.CombatPulseEvent.shouldRepeat		= true
 Game.CombatPulseEvent.repeatMax			= 0
 Game.CombatPulseEvent.repeatInterval	= 4
 
-function Game.CombatPulseEvent:run()
-	for i,mob in ipairs(Game.map:getContents()) do
-		if mob:isCloneOf(Mob) then
-			if mob.victim then
-				if mob:getLoc() ~= mob.victim:getLoc() then
-					mob:disengage()
-					mob.victim:disengage()
-				end
+function Game.CombatPulseEvent:initialize(mob, ...)
+	self.mob = mob
+	Event.initialize(self, ...)
+end
 
-				mob:combatRound()
-			end
-		end
-	end
+function Game.CombatPulseEvent:run()
+	self.mob:combatRound()
 end
 
 --- This Event acts as the middle ground for client connections, accepting clients on behalf of the server, and informing the game about it.<br/>
