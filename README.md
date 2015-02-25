@@ -38,4 +38,4 @@
  * [MD5](http://www.keplerproject.org/md5/)
 
 #Optional Packages:#
- * [lzlib](https://github.com/LuaDist/lzlib) -- **Required for MCCP2.**
+ * [lzlib](https://github.com/LuaDist/lzlib) *Required for MCCP2.*
