@@ -31,7 +31,7 @@ local CharacterManager		= {}
 
 -- file information
 CharacterManager.directory	= "character"
-CharacterManager.extension	= "xml"
+CharacterManager.extension	= "lua"
 
 --- Get the legalized name form of the given string.
 -- @param name Name to be legalized.
@@ -46,7 +46,7 @@ function CharacterManager.legalizeName(name)
 		return string.format("%s%s-%s%s",
 								string.upper(string.sub(hFirst, 1, 1)),
 								string.sub(hFirst, 2),
-								string.upper(string.sub(hLast, 1, 1)),
+								string.sub(hLast, 1, 1),
 								string.sub(hLast, 2)
 							)
 	end
@@ -58,7 +58,7 @@ function CharacterManager.legalizeName(name)
 		return string.format("%s%s'%s%s",
 								string.upper(string.sub(hFirst, 1, 1)),
 								string.sub(hFirst, 2),
-								string.upper(string.sub(hLast, 1, 1)),
+								string.sub(hLast, 1, 1),
 								string.sub(hLast, 2)
 							)
 	end
@@ -116,25 +116,27 @@ end
 -- @return The mob that data was read into.
 function CharacterManager.loadCharacter(name, mob)
 	local filename = CharacterManager.getCharacterFileFromName(name)
-	return CharacterManager.readCharacterData(xml.load(filename), mob)
+	return CharacterManager.readCharacterData(dofile(filename), mob)
 end
 
 --- Get the XML format of a character.
 -- @param mob Mob of the character to generate data of.
 -- @return The XML format of the character.
 function CharacterManager.generateCharacterData(mob)
-	return string.format("<character password='%s'>\
-	<name>%s</name>\
-	<description>%s</description>\
-	<level>%d</level>\
-	<experience>%d</experience>\
-	<health>%d</health>\
-	<mana>%d</mana>\
-	<moves>%d</moves>\
-</character>",
-	md5.sumhexa(mob.characterData.password),
+	return string.format("local character = {}\
+character.password		= \"%s\"\
+character.name			= \"%s\"\
+character.description	= \"%s\"\
+character.level			= %d\
+character.experience	= %d\
+character.health		= %d\
+character.mana			= %d\
+character.moves			= %d\
+\
+return character",
+	mob.characterData.password,
 	mob.name,
-	mob.description,
+	CharacterManager.safeString(mob.description),
 	mob.level,
 	mob.experience,
 	mob.health,
@@ -151,25 +153,24 @@ end
 function CharacterManager.readCharacterData(data, mob)
 	mob = mob or Mob:new()
 	mob:setPassword(data.password)
-	for i,v in ipairs(data) do
-		if v[0] == "name" then
-			mob.name = v[1]
-		elseif v[0] == "description" then
-			mob.description = v[1]
-		elseif v[0] == "level" then
-			mob.level = tonumber(v[1])
-		elseif v[0] == "experience" then
-			mob.experience = tonumber(v[1])
-		elseif v[0] == "health" then
-			mob.health = tonumber(v[1])
-		elseif v[0] == "mana" then
-			mob.mana = tonumber(v[1])
-		elseif v[0] == "moves" then
-			mob.moves = tonumber(v[1])
-		end
-	end
-
+	mob.keywords = data.name
+	mob.name = data.name
+	mob.description = data.description
+	mob.level = data.level
+	mob.experience = data.experience
+	mob.health = data.health
+	mob.mana = data.mana
+	mob.moves = data.moves
 	return mob
+end
+
+--- Format a string so it's safe for saving.
+-- @param s String to format.
+-- @return The formatted string.
+function CharacterManager.safeString(s)
+	s = string.gsub(s, "\r", "\\r")
+	s = string.gsub(s, "\n", "\\n")
+	return s
 end
 
 _G.CharacterManager = CharacterManager

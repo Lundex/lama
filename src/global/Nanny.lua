@@ -43,7 +43,8 @@ function Nanny.process(player, input)
 			if CharacterManager.characterNameTaken(input) then
 				local mob = Mob:new()
 				player:setMob(mob)
-				CharacterManager.loadCharacter(input, mob)
+				local mob, location = CharacterManager.loadCharacter(input, mob)
+				player.nanny.location = location
 				player:setState(PlayerState.OLD_CHAR_PASSWORD)
 				Nanny.askForOldPassword(player)
 			else
@@ -77,7 +78,7 @@ function Nanny.process(player, input)
 			Nanny.askForNewPassword(player, false)
 			player:setState(PlayerState.NEW_CHAR_PASSWORD)
 		else
-			player.mob:setPassword(player.nanny.password)
+			player.mob:setPassword(md5.sumhexa(player.nanny.password))
 			player:setState(PlayerState.MOTD)
 			Nanny.MOTD(player)
 		end
@@ -99,7 +100,11 @@ function Nanny.login(player)
 
 	-- move our mob to starting point
 	mob:moveToMap(Game.map)
-	mob:setXYZLoc(1,1,1)
+	if player.nanny.location then
+		mob:move(player.nanny.location)
+	else
+		mob:setXYZLoc(1,1,1)
+	end
 	player:getMob():showRoom()
 
 	-- introduce us
