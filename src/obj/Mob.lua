@@ -26,10 +26,13 @@ local CharacterData = require("obj.CharacterData")
 --- Cloneable:MapObject that holds data for mobile creatures.
 -- @class table
 -- @name Mob
+-- @field keywords Keywords for the creature.
 -- @field name Name of the creature.
 -- @field description A complete description of the creature.
 -- @field level Experience level of the creature.
 -- @field experience Experience accumulated this level.
+-- @field race Mob's race.
+-- @field class Mob's class.
 -- @field health Current health.
 -- @field mana Current mana.
 -- @field moves Current moves.
@@ -46,6 +49,9 @@ Mob.description		= "It's a mob."
 
 Mob.level			= 1
 Mob.experience		= 0
+
+Mob.race			= require("obj.race.Human")
+Mob.class			= require("obj.class.Warrior")
 
 Mob.health			= 100
 Mob.mana			= 100
@@ -86,6 +92,170 @@ function Mob:step(direction)
 	end
 
 	return false
+end
+
+--- Shows a description of the room the mob inhabits to the mob.
+function Mob:showRoom()
+	local location = self:getLoc()
+	local msg = string.format("%s (%d,%d,%d)\n %s", location:getName(), location:getX(), location:getY(), location:getZ(), location:getDescription())
+
+	for i,v in ipairs(location:getContents()) do
+		if v:isCloneOf(Mob) and v ~= self then
+			msg = string.format("%s%s  %s is here", msg, "\n", v:getName())
+		end
+	end
+
+	-- non-mobs. later this'll be Items
+	for i,v in ipairs(location:getContents()) do
+		if not v:isCloneOf(Mob) then
+			msg = string.format("%s%sA %s is here.", msg, "\n", v:getName())
+		end
+	end
+
+	self:sendMessage(msg, MessageMode.INFO)
+end
+
+-- resource
+function Mob:getHealth()
+	return self.health
+end
+
+function Mob:getBaseHealth()
+	return self.race:getHealthForLevel(self.level) + self.class:getHealthForLevel(self.level) + (self:getConstitution() * Attribute.healthPerConstitution)
+end
+
+function Mob:getMaxHealth()
+	return self:getBaseHealth()
+end
+
+function Mob:restoreHealth()
+	self.health = self:getMaxHealth()
+end
+
+function Mob:modifyHealth(amount)
+	self.health = math.min(math.max(0, self.health + amount), self:getMaxHealth())
+end
+
+function Mob:getMana()
+	return self.mana
+end
+
+function Mob:getBaseMana()
+	return self.race:getManaForLevel(self.level) + self.class:getManaForLevel(self.level) + (self:getIntelligence() * Attribute.manaPerIntelligence)
+end
+
+function Mob:getMaxMana()
+	return self:getBaseMana()
+end
+
+function Mob:restoreMana()
+	self.mana = self:getMaxMana()
+end
+
+function Mob:modifyMana(amount)
+	self.mana = math.min(math.max(0, self.mana + amount), self:getMaxMana())
+end
+
+function Mob:getMoves()
+	return self.moves
+end
+
+function Mob:getBaseMoves()
+	return self.race:getMovesForLevel(self.level) + self.class:getMovesForLevel(self.level) + (self:getConstitution() * Attribute.movesPerConstitution)
+end
+
+function Mob:getMaxMoves()
+	return self:getBaseMoves()
+end
+
+function Mob:restoreMoves()
+	self.moves = self:getMaxMoves()
+end
+
+function Mob:modifyMoves(amount)
+	self.moves = math.min(math.max(0, self.moves + amount), self:getMaxMoves())
+end
+
+-- secondary attributes
+function Mob:getBaseStrength()
+	return self.race:getStrengthForLevel(self.level)
+end
+
+function Mob:getStrength()
+	return self:getBaseStrength()
+end
+
+function Mob:getBaseAgility()
+	return self.race:getAgilityForLevel(self.level)
+end
+
+function Mob:getAgility()
+	return self:getBaseAgility()
+end
+
+function Mob:getBaseDexterity()
+	return self.race:getDexterityForLevel(self.level)
+end
+
+function Mob:getDexterity()
+	return self:getBaseDexterity()
+end
+
+function Mob:getBaseConstitution()
+	return self.race:getConstitutionForLevel(self.level)
+end
+
+function Mob:getConstitution()
+	return self:getBaseConstitution()
+end
+
+function Mob:getBaseIntelligence()
+	return self.race:getIntelligenceForLevel(self.level)
+end
+
+function Mob:getIntelligence()
+	return self:getBaseIntelligence()
+end
+
+--- Engage another mob in combat.
+-- @param target The mob to begin fighting.
+function Mob:engage(target)
+	self.victim				= target
+
+	if not self.combatEvent then
+		self.combatEvent	= Game.CombatPulseEvent:new(self, Game.time()+4)
+		Game.queue(self.combatEvent)
+	end
+end
+
+--- Disengage the current target.
+function Mob:disengage()
+	self.victim = nil
+	Game.deque(self.combatEvent)
+end
+
+--- One hit.
+function Mob:oneHit(victim)
+	if not self.victim then
+		self:engage(victim)
+	end
+
+	if victim:getVictim() == nil then
+		victim:engage(self)
+	end
+
+	self:sendMessage(string.format("You hit %s!", victim:getName()), MessageMode.COMBAT)
+	victim:sendMessage(string.format("%s hits you!", self:getName()), MessageMode.COMBAT)
+end
+
+--- Mob combat round.
+function Mob:combatRound()
+	if not self.victim or self.victim:getLoc() ~= self:getLoc() then
+		self:disengage()
+		return
+	end
+
+	self:oneHit(self.victim)
 end
 
 --- Shortcut to player:send(data,i,j)
@@ -130,68 +300,6 @@ function Mob:askQuestion(msg)
 	end
 end
 
---- Shows a description of the room the mob inhabits to the mob.
-function Mob:showRoom()
-	local location = self:getLoc()
-	local msg = string.format("%s (%d,%d,%d)\n %s", location:getName(), location:getX(), location:getY(), location:getZ(), location:getDescription())
-
-	for i,v in ipairs(location:getContents()) do
-		if v:isCloneOf(Mob) and v ~= self then
-			msg = string.format("%s%s  %s is here", msg, "\n", v:getName())
-		end
-	end
-
-	-- non-mobs. later this'll be Items
-	for i,v in ipairs(location:getContents()) do
-		if not v:isCloneOf(Mob) then
-			msg = string.format("%s%sA %s is here.", msg, "\n", v:getName())
-		end
-	end
-
-	self:sendMessage(msg, MessageMode.INFO)
-end
-
---- Engage another mob in combat.
--- @param target The mob to begin fighting.
-function Mob:engage(target)
-	self.victim				= target
-
-	if not self.combatEvent then
-		self.combatEvent	= Game.CombatPulseEvent:new(self, Game.time()+4)
-		Game.queue(self.combatEvent)
-	end
-end
-
---- Disengage the current target.
-function Mob:disengage()
-	self.victim = nil
-	Game.deque(self.combatEvent)
-end
-
---- One hit.
-function Mob:oneHit(victim)
-	if not self.victim then
-		self:engage(victim)
-	end
-
-	if victim:getVictim() == nil then
-		victim:engage(self)
-	end
-
-	self:sendMessage(string.format("You hit %s!", victim:getName()), MessageMode.COMBAT)
-	victim:sendMessage(string.format("%s hits you!", self:getName()), MessageMode.COMBAT)
-end
-
---- Mob combat round.
-function Mob:combatRound()
-	if not self.victim or self.victim:getLoc() ~= self:getLoc() then
-		self:disengage()
-		return
-	end
-
-	self:oneHit(self.victim)
-end
-
 --- Assign the mob's password.
 -- @param password New password.
 function Mob:setPassword(password)
@@ -234,12 +342,6 @@ function Mob:getDescription()
 	return self.description
 end
 
---- Get the Mob's current victim.
--- @return Mob's victim.
-function Mob:getVictim()
-	return self.victim
-end
-
 --- Get the Mob's password.
 -- @return The password.
 function Mob:getPassword()
@@ -251,16 +353,22 @@ function Mob:getMessageMode(mode)
 	return self.player and self.player:getMessageMode()
 end
 
+--- Get current Player.
+-- @return Current Player, if any.
+function Mob:getPlayer()
+	return self.player
+end
+
 --- Check if this Mob has a Player controlling it.
 -- @return true if this Mob is controlled by a Player.<br/>false otherwise.
 function Mob:isPlayerControlled()
 	return self.player ~= nil
 end
 
---- Get current Player.
--- @return Current Player, if any.
-function Mob:getPlayer()
-	return self.player
+--- Get the Mob's current victim.
+-- @return Mob's victim.
+function Mob:getVictim()
+	return self.victim
 end
 
 return Mob

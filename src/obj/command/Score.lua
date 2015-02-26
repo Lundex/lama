@@ -31,10 +31,18 @@ function Score:execute(player, mob)
 	mob:sendMessage(string.format("%s, the human puncher-of-babies.\
     '%s'\
 You are currently level %d, with %d experience collected in total.\
-You have %d health, %d mana, and %d moves.",
+Str: %d (%d)  Agi: %d (%d)  Dex: %d (%d)  Con: %d (%d)  Int: %d (%d)\
+You have %d/%d health, %d/%d mana, and %d/%d moves.",
 					mob.name, mob.description or "Nothing worth mentioning.",
 					mob.level, mob.experience,
-					mob.health, mob.mana, mob.moves
+					mob:getStrength(), mob:getBaseStrength(),
+					mob:getAgility(), mob:getBaseAgility(),
+					mob:getDexterity(), mob:getBaseDexterity(),
+					mob:getConstitution(), mob:getBaseConstitution(),
+					mob:getIntelligence(), mob:getBaseIntelligence(),
+					mob:getHealth(), mob:getMaxHealth(),
+					mob:getMana(), mob:getMaxMana(),
+					mob:getMoves(), mob:getMaxMoves()
 					)
 	)
 end

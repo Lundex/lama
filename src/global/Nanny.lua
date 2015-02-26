@@ -106,6 +106,7 @@ function Nanny.login(player)
 	else
 		mob:setXYZLoc(1,1,1)
 	end
+
 	player:getMob():showRoom()
 
 	-- introduce us

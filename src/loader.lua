@@ -30,6 +30,7 @@ function loadPackages()
 	require("global.MessageMode")
 	require("global.Direction")
 	require("global.Color")
+	require("global.Attribute")
 	require("global.CharacterManager")
 	require("global.Game") -- make sure this is always loaded last.
 	-- the Game package requires other packages that require the
@@ -39,26 +40,28 @@ end
 --- Unloads all of the game packages.
 function unloadPackages()
 	-- unload globals
-	_G.Game									= nil
-	_G.Nanny								= nil
-	_G.Telnet								= nil
-	_G.PlayerState							= nil
-	_G.GameState							= nil
-	_G.MessageMode							= nil
-	_G.Direction							= nil
-	_G.Color								= nil
-	_G.CharacterManager						= nil
+	_G.Game										= nil
+	_G.Nanny									= nil
+	_G.Telnet									= nil
+	_G.PlayerState								= nil
+	_G.GameState								= nil
+	_G.MessageMode								= nil
+	_G.Direction								= nil
+	_G.Color									= nil
+	_G.Attribute								= nil
+	_G.CharacterManager							= nil
 
 	-- unload packages
-	package.loaded["global.Game"]					= nil
-	package.loaded["global.Nanny"]					= nil
+	package.loaded["global.Game"]				= nil
+	package.loaded["global.Nanny"]				= nil
 	package.loaded["global.Telnet"]				= nil
-	package.loaded["global.PlayerState"]			= nil
-	package.loaded["global.GameState"]				= nil
-	package.loaded["global.MessageMode"]			= nil
-	package.loaded["global.Direction"]				= nil
-	package.loaded["global.Color"]					= nil
-	package.loaded["global.CharacterManager"]		= nil
+	package.loaded["global.PlayerState"]		= nil
+	package.loaded["global.GameState"]			= nil
+	package.loaded["global.MessageMode"]		= nil
+	package.loaded["global.Direction"]			= nil
+	package.loaded["global.Color"]				= nil
+	package.loaded["global.Attribute"]			= nil
+	package.loaded["global.CharacterManager"]	= nil
 
 	-- unload obj.* packages
 	for i,v in pairs(package.loaded) do
