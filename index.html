@@ -1,70 +1,46 @@
 <!doctype html>
-<!-- The Time Machine GitHub pages theme was designed and developed by Jon Rohan, on Feb 7, 2012. -->
-<!-- Follow him for fun. http://twitter.com/jonrohan. Tail his code on http://github.com/jonrohan -->
 <html>
-<head>
-  <meta charset="utf-8">
-  <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="chrome=1">
+    <title>lama by milkmanjack</title>
 
-  <link rel="stylesheet" href="stylesheets/stylesheet.css" media="screen">
-  <link rel="stylesheet" href="stylesheets/pygment_trac.css">
-  <script type="text/javascript" src="https://ajax.googleapis.com/ajax/libs/jquery/1.7.1/jquery.min.js"></script>
-  <script type="text/javascript" src="javascripts/script.js"></script>
+    <link rel="stylesheet" href="stylesheets/styles.css">
+    <link rel="stylesheet" href="stylesheets/pygment_trac.css">
+    <script src="javascripts/scale.fix.js"></script>
+    <meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no">
+    <!--[if lt IE 9]>
+    <script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script>
+    <![endif]-->
+  </head>
+  <body>
+    <div class="wrapper">
+      <header>
+        <h1 class="header">lama</h1>
+        <p class="header">A MUD kit made in Lua.</p>
 
-  <title>lama</title>
-  <meta name="description" content="A MUD kit made in Lua.">
+        <ul>
+          <li class="download"><a class="buttons" href="https://github.com/milkmanjack/lama/zipball/master">Download ZIP</a></li>
+          <li class="download"><a class="buttons" href="https://github.com/milkmanjack/lama/tarball/master">Download TAR</a></li>
+          <li><a class="buttons github" href="https://github.com/milkmanjack/lama">View On GitHub</a></li>
+        </ul>
 
-  <meta name="viewport" content="width=device-width,initial-scale=1">
+        <p class="header">This project is maintained by <a class="header name" href="https://github.com/milkmanjack">milkmanjack</a></p>
 
-</head>
 
-<body>
-
-  <div class="wrapper">
-    <header>
-      <h1 class="title">lama</h1>
-    </header>
-    <div id="container">
-      <p class="tagline">A MUD kit made in Lua.</p>
-      <div id="main" role="main">
-        <div class="download-bar">
-        <div class="inner">
-          <a href="https://github.com/milkmanjack/lama/tarball/master" class="download-button tar"><span>Download</span></a>
-          <a href="https://github.com/milkmanjack/lama/zipball/master" class="download-button zip"><span>Download</span></a>
-          <a href="https://github.com/milkmanjack/lama" class="code">View lama on GitHub</a>
-        </div>
-        <span class="blc"></span><span class="trc"></span>
-        </div>
-        <article class="markdown-body">
-          <h1>
-<a id="features-and-explanations" class="anchor" href="#features-and-explanations" aria-hidden="true"><span class="octicon octicon-link"></span></a>Features and Explanations:</h1>
-
-<ul>
-<li><p>The project is split into individual packages, with <em>singletons</em> defined in the source directory, and <em>classes</em> defined in the obj/ directory.</p></li>
-<li><p>When a <em>singleton</em> is loaded with require() or dofile(), it is stored in the global context in an entry of the same name as the file. For example, the <em>Game singleton</em>, found in Game.lua, is stored in <em>_G.Game</em>. (There is a package loading interface in main.lua, which happens to load all of these singletons on project startup.)</p></li>
-<li><p>When a <em>class</em> is included, is returned by the require() call for use locally.</p></li>
-<li><p>A special table, called <em>Cloneable</em> (stored in obj/Cloneable.lua), provides psuedo-inheritance across tables. If you check the documentation, a <em>Cloneable</em> has three fundamental functions. Cloneable.clone(), Cloneable.new(), and Cloneable.initialize().</p></li>
-<li><p>Cloneable.clone(parent) provides an interface to create a new table with its metatable index set to the given parent, which should generally be a <em>Cloneable</em>. We call this new table a <em>Cloneable</em>, as it is a clone of the parent, which should be a clone of <em>Cloneable</em>. In essence, it inherets the functions and attributes of every clone in the heirarchy all the way up to <em>Cloneable</em>. We call this a "pure" clone, and they generally act like classes in other languages.</p></li>
-<li><p>Cloneable.new(parent, ...) acts like Cloneable.clone(parent) for the most part, but after creating the clone, calls its Cloneable.initialize(...) function. This essentially means this clone has been initialized for use in a practical environment. As such, we call this an "instance-style" clone, and they generally act like object instances in other languages.</p></li>
-<li><p>Cloneable.initialize(...) merely performs operations that every instance of a clone should have performed. Usually this means assigning unique values, or preparing stock values.</p></li>
-<li><p>The <em>Game singleton</em> uses an event scheduler (obj/Scheduler.lua). The <em>Game</em>'s scheduler uses timestamps based on socket.select(). This can be changed as needed.</p></li>
-<li><p>A <em>Map</em> class is included. In the current implementation, it's just a <em>Cloneable</em> that contains a 3 dimensional grid in the format of layer-&gt;column-&gt;row (or z-&gt;y-&gt;x), though most references to locations will take arguments in the order of row,column,layer (or x,y,z). By default, The Game generates a 100x100x1 Map and fills it with generic MapTile instances, mostly just for demonstration purposes.</p></li>
-<li><p><em>config.lua</em> contains optional configurations for the MUD server.</p></li>
-</ul>
-
-<hr>
-
-<h1>
+      </header>
+      <section>
+        <h1>
 <a id="using-lama" class="anchor" href="#using-lama" aria-hidden="true"><span class="octicon octicon-link"></span></a>Using lama:</h1>
 
 <ol>
-<li>Install Lua (only tested on 5.2).</li>
+<li>Install Lua (tested on 5.1 &amp; 5.2).</li>
 <li>Install libraries listed below in your Lua implementation.</li>
 <li>Run main.lua.
 
-<ul>
+<ol>
 <li>Run '<code>lua main.lua [optional port to host server on]</code>'</li>
-</ul>
+</ol>
 </li>
 <li>???</li>
 <li>Profit.</li>
@@ -90,26 +66,12 @@
 <a href="https://github.com/LuaDist/lzlib">lzlib</a> <em>Required for MCCP2.</em>
 </li>
 </ul>
-        </article>
-      </div>
+      </section>
+      <footer>
+        <p><small>Hosted on <a href="http://pages.github.com">GitHub Pages</a> using the Dinky theme</small></p>
+      </footer>
     </div>
-    <footer>
-      <div class="owner">
-      <p><a href="https://github.com/milkmanjack" class="avatar"><img src="https://avatars0.githubusercontent.com/u/1297496?v=3&amp;s=60" width="48" height="48"></a> <a href="https://github.com/milkmanjack">milkmanjack</a> maintains <a href="https://github.com/milkmanjack/lama">lama</a></p>
-
-
-      </div>
-      <div class="creds">
-        <small>This page generated using <a href="http://pages.github.com/">GitHub Pages</a><br>theme by <a href="https://twitter.com/jonrohan/">Jon Rohan</a></small>
-      </div>
-    </footer>
-  </div>
-  <div class="current-section">
-    <a href="#top">Scroll to top</a>
-    <a href="https://github.com/milkmanjack/lama/tarball/master" class="tar">tar</a><a href="https://github.com/milkmanjack/lama/zipball/master" class="zip">zip</a><a href="" class="code">source code</a>
-    <p class="name"></p>
-  </div>
-
-  
-</body>
+    <!--[if !IE]><script>fixScale(document);</script><![endif]-->
+		
+  </body>
 </html>
