@@ -1,5 +1,5 @@
 #Using lama:#
- 1. Install Lua (only tested on 5.2).
+ 1. Install Lua (tested on 5.1 & 5.2).
  2. Install libraries listed below in your Lua implementation.
  3. Run main.lua.
     1. Run '`lua main.lua [optional port to host server on]`'
