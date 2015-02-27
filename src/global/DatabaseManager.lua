@@ -30,8 +30,29 @@ local md5			= require("md5")
 local DatabaseManager		= {}
 
 -- file information
+DatabaseManager.dataDirectory	= "data"
 DatabaseManager.charDirectory	= "character"
-DatabaseManager.extension		= "slua"
+DatabaseManager.raceDirectory	= "race"
+DatabaseManager.classDirectory	= "class"
+DatabaseManager.extension		= "lua"
+
+-- runtime information
+DatabaseManager.races			= {}
+DatabaseManager.classes			= {}
+
+-- header information
+function DatabaseManager.getHeader(type)
+	return string.format("--[[\
+	[%s] %s file generated for %s (%s).\
+]]
+", os.date(), string.upper(type or "save"), Game.getName(), Game.getVersion())
+end
+
+function DatabaseManager.loadRaces()
+end
+
+function DatabaseManager.loadClasses()
+end
 
 --- Get the legalized name form of the given string.
 -- @param name Name to be legalized.
@@ -121,9 +142,7 @@ end
 -- @param mob Mob of the character to generate data of.
 -- @return The XML format of the character.
 function DatabaseManager.generateCharacterData(mob)
-	return string.format("--[[\
-	Character data generated in lama.\
-]]\
+	return string.format("%s\
 local character = {}\
 character.password		= \"%s\"\
 character.name			= \"%s\"\
@@ -136,6 +155,7 @@ character.moves			= %d\
 character.location		= {x=%d,y=%d,z=%d}\
 \
 return character",
+	DatabaseManager.getHeader("character"),
 	mob.characterData.password,
 	mob.name,
 	DatabaseManager.safeString(mob.description),

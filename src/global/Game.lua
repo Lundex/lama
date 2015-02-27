@@ -58,10 +58,6 @@ Game.scheduler			= nil
 Game.map				= nil
 Game.parser				= nil
 
--- races and classes
-Game.races				= {}
-Game.classes			= {}
-
 --- Contains all Players connected to the game.
 -- @class table
 -- @name Game.players
