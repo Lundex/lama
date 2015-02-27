@@ -20,8 +20,9 @@
 -- @author milkmanjack
 module("obj.Mob", package.seeall)
 
-local MapObject	= require("obj.MapObject")
-local CharacterData = require("obj.CharacterData")
+local MapObject		= require("obj.MapObject")
+local CharacterData	= require("obj.CharacterData")
+local Event			= require("obj.Event")
 
 --- Cloneable:MapObject that holds data for mobile creatures.
 -- @class table
@@ -115,104 +116,162 @@ function Mob:showRoom()
 	self:sendMessage(msg, MessageMode.INFO)
 end
 
--- resource
+--- Get the Mob's current health.
+-- @return Mob's health.
 function Mob:getHealth()
 	return self.health
 end
 
+--- Get the Mob's base health.<br/>
+-- Base health being the health provided by theirs race, class, and constitution.
+-- @return Mob's base health.
 function Mob:getBaseHealth()
 	return self.race:getHealthForLevel(self.level) + self.class:getHealthForLevel(self.level) + (self:getConstitution() * Attribute.healthPerConstitution)
 end
 
+--- Get the Mob's max health.<br/>
+-- Max health being the health provided by their race, class, constitution, equipment, and enhancements.
+-- @return Mob's max health.
 function Mob:getMaxHealth()
 	return self:getBaseHealth()
 end
 
+--- Restores the Mob's health to max.
 function Mob:restoreHealth()
 	self.health = self:getMaxHealth()
 end
 
+--- Modifies the Mob's health, keeping it between 0 and their max health.
 function Mob:modifyHealth(amount)
 	self.health = math.min(math.max(0, self.health + amount), self:getMaxHealth())
 end
 
+--- Get the Mob's current mana.
+-- @return Mob's mana.
 function Mob:getMana()
 	return self.mana
 end
 
+--- Get the Mob's base mana.<br/>
+-- Base mana being the mana provided by their race, class, and intelligence.
+-- @return Mob's base mana.
 function Mob:getBaseMana()
 	return self.race:getManaForLevel(self.level) + self.class:getManaForLevel(self.level) + (self:getIntelligence() * Attribute.manaPerIntelligence)
 end
 
+--- Get the Mob's max mana.<br/>
+-- Max mana being the mana provided by their race, class, intelligence, equipment, and enhancements.
+-- @return Mob's max mana.
 function Mob:getMaxMana()
 	return self:getBaseMana()
 end
 
+--- Restores the Mob's mana to max.
 function Mob:restoreMana()
 	self.mana = self:getMaxMana()
 end
 
+--- Modifies the Mob's mana, keeping it between 0 and their max mana.
 function Mob:modifyMana(amount)
 	self.mana = math.min(math.max(0, self.mana + amount), self:getMaxMana())
 end
 
+--- Get the Mob's current moves.
+-- @return Mob's moves.
 function Mob:getMoves()
 	return self.moves
 end
 
+--- Get the Mob's base moves.<br/>
+-- Base moves being the moves provided by their race, class, and constitution.
+-- @return Mob's base moves.
 function Mob:getBaseMoves()
 	return self.race:getMovesForLevel(self.level) + self.class:getMovesForLevel(self.level) + (self:getConstitution() * Attribute.movesPerConstitution)
 end
 
+--- Get the Mob's max moves.<br/>
+-- Max moves being the moves provided by their race, class, constitution, equipment, and enhancements.
+-- @return Mob's max moves.
 function Mob:getMaxMoves()
 	return self:getBaseMoves()
 end
 
+--- Restores the Mob's moves to max.
 function Mob:restoreMoves()
 	self.moves = self:getMaxMoves()
 end
 
+--- Modifies the Mob's moves, keeping it between 0 and their max moves.
 function Mob:modifyMoves(amount)
 	self.moves = math.min(math.max(0, self.moves + amount), self:getMaxMoves())
 end
 
--- secondary attributes
+--- Get the Mob's base strength.<br/>
+-- Base strength being the strength provided by their race and class.
+-- @return Mob's base strength.
 function Mob:getBaseStrength()
 	return self.race:getStrengthForLevel(self.level)
 end
 
+--- Get the Mob's current strength.<br/>
+-- Current strength being the strength provided by their race, class, equipment, and enhancements.
+-- @return Mob's base strength.
 function Mob:getStrength()
 	return self:getBaseStrength()
 end
 
+--- Get the Mob's base agility.<br/>
+-- Base agility being the agility provided by their race and class.
+-- @return Mob's base agility.
 function Mob:getBaseAgility()
 	return self.race:getAgilityForLevel(self.level)
 end
 
+--- Get the Mob's current agility.<br/>
+-- Current agility being the agility provided by their race, class, equipment, and enhancements.
+-- @return Mob's base agility.
 function Mob:getAgility()
 	return self:getBaseAgility()
 end
 
+--- Get the Mob's base dexterity.<br/>
+-- Base dexterity being the dexterity provided by their race and class.
+-- @return Mob's base dexterity.
 function Mob:getBaseDexterity()
 	return self.race:getDexterityForLevel(self.level)
 end
 
+--- Get the Mob's current dexterity.<br/>
+-- Current dexterity being the dexterity provided by their race, class, equipment, and enhancements.
+-- @return Mob's base dexterity.
 function Mob:getDexterity()
 	return self:getBaseDexterity()
 end
 
+--- Get the Mob's base constitution.<br/>
+-- Base constitution being the constitution provided by their race and class.
+-- @return Mob's base constitution.
 function Mob:getBaseConstitution()
 	return self.race:getConstitutionForLevel(self.level)
 end
 
+--- Get the Mob's current constitution.<br/>
+-- Current constitution being the constitution provided by their race, class, equipment, and enhancements.
+-- @return Mob's base constitution.
 function Mob:getConstitution()
 	return self:getBaseConstitution()
 end
 
+--- Get the Mob's base intelligence.<br/>
+-- Base intelligence being the intelligence provided by their race and class.
+-- @return Mob's base intelligence.
 function Mob:getBaseIntelligence()
 	return self.race:getIntelligenceForLevel(self.level)
 end
 
+--- Get the Mob's current intelligence.<br/>
+-- Current intelligence being the intelligence provided by their race, class, equipment, and enhancements.
+-- @return Mob's base intelligence.
 function Mob:getIntelligence()
 	return self:getBaseIntelligence()
 end
@@ -223,7 +282,8 @@ function Mob:engage(target)
 	self.victim				= target
 
 	if not self.combatEvent then
-		self.combatEvent	= Game.CombatPulseEvent:new(self, Game.time()+4)
+		self.combatEvent		= Event:new(Game.time(), function() self.mob:combatRound() end, true, 0, 4)
+		self.combatEvent.mob	= self
 		Game.queue(self.combatEvent)
 	end
 end
@@ -235,6 +295,7 @@ function Mob:disengage()
 end
 
 --- One hit.
+-- @param victim Mob to hit.
 function Mob:oneHit(victim)
 	if not self.victim then
 		self:engage(victim)

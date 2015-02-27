@@ -24,5 +24,6 @@ local Class						= require("obj.Class")
 local Warrior					= Class:clone()
 
 Warrior.name					= "warrior"
+Warrior.who						= "Warrior"
 
 return Warrior

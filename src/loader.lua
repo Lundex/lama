@@ -31,7 +31,7 @@ function loadPackages()
 	require("global.Direction")
 	require("global.Color")
 	require("global.Attribute")
-	require("global.CharacterManager")
+	require("global.DatabaseManager")
 	require("global.Game") -- make sure this is always loaded last.
 	-- the Game package requires other packages that require the
 	-- other singletons, so always load it last.
@@ -49,7 +49,7 @@ function unloadPackages()
 	_G.Direction								= nil
 	_G.Color									= nil
 	_G.Attribute								= nil
-	_G.CharacterManager							= nil
+	_G.DatabaseManager							= nil
 
 	-- unload packages
 	package.loaded["global.Game"]				= nil
@@ -61,7 +61,7 @@ function unloadPackages()
 	package.loaded["global.Direction"]			= nil
 	package.loaded["global.Color"]				= nil
 	package.loaded["global.Attribute"]			= nil
-	package.loaded["global.CharacterManager"]	= nil
+	package.loaded["global.DatabaseManager"]	= nil
 
 	-- unload obj.* packages
 	for i,v in pairs(package.loaded) do

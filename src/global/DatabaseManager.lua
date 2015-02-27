@@ -16,27 +16,27 @@
     along with this program.  If not, see <http://www.gnu.org/licenses/>.
 ]]
 
---- Singleton that provides character management utilities.
+--- Singleton that provides database management utilities.
 -- @author milkmanjack
-module("CharacterManager", package.seeall)
+module("DatabaseManager", package.seeall)
 
 local md5			= require("md5")
 
---- Singleton that provides character management utilities.
+--- Singleton that provides database management utilities.
 -- @class table
--- @name CharacterManager
--- @field directory Where saves are stored.
+-- @name DatabaseManager
+-- @field charDirectory Where character saves are stored.
 -- @field extension File extension for saves.
-local CharacterManager		= {}
+local DatabaseManager		= {}
 
 -- file information
-CharacterManager.directory	= "character"
-CharacterManager.extension	= "lua"
+DatabaseManager.charDirectory	= "character"
+DatabaseManager.extension		= "slua"
 
 --- Get the legalized name form of the given string.
 -- @param name Name to be legalized.
 -- @return The legalized name, or nil followed by an error message.
-function CharacterManager.legalizeName(name)
+function DatabaseManager.legalizeName(name)
 	name = string.lower(name) -- lowercase please
 
 	-- names with 1 hyphen are legal
@@ -79,17 +79,17 @@ end
 --- Get the character filename for a given name.
 -- @param name Name of the character to generate a filename for.
 -- @return Properly formatted filename for character based on its name.
-function CharacterManager.getCharacterFileFromName(name)
-	name = string.lower(CharacterManager.legalizeName(name)) -- legalize it.
+function DatabaseManager.getCharacterFileFromName(name)
+	name = string.lower(DatabaseManager.legalizeName(name)) -- legalize it.
 	name = string.gsub(name, "[^a-zA-Z]", "") -- remove non-alpha characters.
-	return string.format("%s/%s.%s", CharacterManager.directory, name, CharacterManager.extension)
+	return string.format("%s/%s.%s", DatabaseManager.charDirectory, name, DatabaseManager.extension)
 end
 
 --- Check if a character name is in use.
 -- @param name Name to check.
 -- @return true if name is taken.<br/>false otherwise.
-function CharacterManager.characterNameTaken(name)
-	local filename = CharacterManager.getCharacterFileFromName(name)
+function DatabaseManager.characterNameTaken(name)
+	local filename = DatabaseManager.getCharacterFileFromName(name)
 	local file = io.open(filename, "r")
 	if not file then
 		return false
@@ -101,12 +101,10 @@ end
 
 --- Save a mob as a character.
 -- @param mob Mob of the character to save.
-function CharacterManager.saveCharacter(mob)
-	lfs.mkdir(CharacterManager.directory)
-	local filename = CharacterManager.getCharacterFileFromName(mob:getName())
-	os.remove(filename) -- just in case
-	local file = io.open(filename, "w")
-	file:write(CharacterManager.generateCharacterData(mob))
+function DatabaseManager.saveCharacter(mob)
+	local filename = DatabaseManager.getCharacterFileFromName(mob:getName())
+	local file = io.open(filename, "w+")
+	file:write(DatabaseManager.generateCharacterData(mob))
 	file:close()
 end
 
@@ -114,16 +112,19 @@ end
 -- @param name Name of the character to be loaded.
 -- @param mob The mob for character data to be read into.<br/>if nil, a new mob will be generated and returned.
 -- @return The mob that data was read into.
-function CharacterManager.loadCharacter(name, mob)
-	local filename = CharacterManager.getCharacterFileFromName(name)
-	return CharacterManager.readCharacterData(dofile(filename), mob)
+function DatabaseManager.loadCharacter(name, mob)
+	local filename = DatabaseManager.getCharacterFileFromName(name)
+	return DatabaseManager.readCharacterData(dofile(filename), mob)
 end
 
 --- Get the XML format of a character.
 -- @param mob Mob of the character to generate data of.
 -- @return The XML format of the character.
-function CharacterManager.generateCharacterData(mob)
-	return string.format("local character = {}\
+function DatabaseManager.generateCharacterData(mob)
+	return string.format("--[[\
+	Character data generated in lama.\
+]]\
+local character = {}\
 character.password		= \"%s\"\
 character.name			= \"%s\"\
 character.description	= \"%s\"\
@@ -137,7 +138,7 @@ character.location		= {x=%d,y=%d,z=%d}\
 return character",
 	mob.characterData.password,
 	mob.name,
-	CharacterManager.safeString(mob.description),
+	DatabaseManager.safeString(mob.description),
 	mob.level,
 	mob.experience,
 	mob.health,
@@ -154,7 +155,7 @@ end
 -- @param xml The XML to be read.
 -- @param mob Optional mob to read data into.<br/>If not specified, will return a new mob created with the XML data.
 -- @return The mob that the data was applied to.
-function CharacterManager.readCharacterData(data, mob)
+function DatabaseManager.readCharacterData(data, mob)
 	mob = mob or Mob:new()
 	mob:setPassword(data.password)
 	mob:setKeywords(name)
@@ -172,12 +173,12 @@ end
 --- Format a string so it's safe for saving.
 -- @param s String to format.
 -- @return The formatted string.
-function CharacterManager.safeString(s)
+function DatabaseManager.safeString(s)
 	s = string.gsub(s, "\r", "\\r")
 	s = string.gsub(s, "\n", "\\n")
 	return s
 end
 
-_G.CharacterManager = CharacterManager
+_G.DatabaseManager = DatabaseManager
 
-return CharacterManager
+return DatabaseManager

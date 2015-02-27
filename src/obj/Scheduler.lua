@@ -41,13 +41,18 @@ end
 --- Polls the Scheduler for Events waiting to fire.
 -- @param timestamp	This is the current timestamp to compare to the destination timestamps.
 function Scheduler:poll(timestamp)
-	for i,v in table.safeIPairs(self.events) do
-		if v:isReady(timestamp) then
-			v:execute(timestamp)
-			if v:isDone() then
-				self:dequeue(v)
+	local i = 1
+	while i <= #self.events do
+		local event = self.events[i]
+		if event:isReady(timestamp) then
+			event:execute(timestamp)
+			if event:isDone() then
+				self:dequeue(event)
+				i = i - 1
 			end
 		end
+
+		i = i + 1
 	end
 end
 

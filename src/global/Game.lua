@@ -52,16 +52,20 @@ Game.version			= "v0.7a-2"
 Game.developers			= {"milkmanjack"}
 
 -- current game info
-Game.state				= 0
-Game.playerID			= 0
+Game.state				= GameState.NEW
 Game.server				= nil
 Game.scheduler			= nil
 Game.map				= nil
 Game.parser				= nil
 
+-- races and classes
+Game.races				= {}
+Game.classes			= {}
+
 --- Contains all Players connected to the game.
 -- @class table
 -- @name Game.players
+Game.playerID			= 0
 Game.players			= {}
 
 -- loggers for the game
@@ -172,7 +176,7 @@ function Game.recoverFromHotboot(preservedData)
 
 		local mob = Mob:new()
 		player:setMob(mob)
-		local _, location = CharacterManager.loadCharacter(v.name, mob) -- load the old mob, based on its name
+		local _, location = DatabaseManager.loadCharacter(v.name, mob) -- load the old mob, based on its name
 		print(_, location)
 		mob:moveToMap(Game.map)
 		mob:move(location)
@@ -253,20 +257,6 @@ function Game.onPlayerInput(player, input)
 	Game.parser:parse(player, player:getMob(), input)
 end
 
---- Announce something to connecting Players.<br/>
--- This is mostly temporary, but I'm leaving it in now for testing purposes.<br/>
--- More reasonable implementation later.
--- @param message The message to be announced.
--- @param mode The mode of the message.<br/>Must be a valid member of MessageMode.
--- @param minState The state a Player must be at to see the message (or "higher").
-function Game.announce(message, mode, minState)
-	for i,v in ipairs(Game.getPlayers()) do
-		if not minState or v:getState() >= minState then
-			v:sendMessage(message, mode)
-		end
-	end
-end
-
 --- Generates a list of every Command for the CommandParser.
 function Game.generateCommands()
 	for i in lfs.dir("src/obj/command") do
@@ -279,6 +269,20 @@ function Game.generateCommands()
 					Game.parser:addCommand(command:new())
 				end
 			end
+		end
+	end
+end
+
+--- Announce something to connecting Players.<br/>
+-- This is mostly temporary, but I'm leaving it in now for testing purposes.<br/>
+-- More reasonable implementation later.
+-- @param message The message to be announced.
+-- @param mode The mode of the message.<br/>Must be a valid member of MessageMode.
+-- @param minState The state a Player must be at to see the message (or "higher").
+function Game.announce(message, mode, minState)
+	for i,v in ipairs(Game.getPlayers()) do
+		if not minState or v:getState() >= minState then
+			v:sendMessage(message, mode)
 		end
 	end
 end
@@ -378,7 +382,7 @@ end
 --- Retreive the Game's list of developers.
 -- @return A tuple of each developer
 function Game.getDevelopers()
-	return unpack(Game.developers)
+	return Game.developers
 end
 
 --- Retreive the Game's state.
@@ -399,23 +403,6 @@ end
 -- @return Player list.
 function Game.getPlayers()
 	return Game.players
-end
-
---- This Event propagates combat rounds on an individual basis.
--- @class table
--- @name Game.CombatPulseEvent
-Game.CombatPulseEvent					= Event:clone()
-Game.CombatPulseEvent.shouldRepeat		= true
-Game.CombatPulseEvent.repeatMax			= 0
-Game.CombatPulseEvent.repeatInterval	= 4
-
-function Game.CombatPulseEvent:initialize(mob, ...)
-	self.mob = mob
-	Event.initialize(self, ...)
-end
-
-function Game.CombatPulseEvent:run()
-	self.mob:combatRound()
 end
 
 --- This Event acts as the middle ground for client connections, accepting clients on behalf of the server, and informing the game about it.<br/>
@@ -461,24 +448,29 @@ function Game.PollEvent:run()
 		return
 	end
 
-	for i,v in table.safeIPairs(Game.players) do
-		local client = v:getClient()
+	local i = 1
+	while i <= #Game.players do
+		local player = Game.players[i]
+		local client = player:getClient()
 		local input, err = client:receive("*a")
 		if err == 'closed' then
-			Game.disconnectPlayer(v)
+			Game.disconnectPlayer(player)
+			i = i - 1
 
 		elseif input and string.len(input) > 0 then
 			local multiple = string.gmatch(input, "(.-)\n")
 			local first = multiple()
 			if first then
-				Game.onPlayerInput(v, first)
+				Game.onPlayerInput(player, first)
 				for cmd in multiple do
-					Game.onPlayerInput(v, cmd)
+					Game.onPlayerInput(player, cmd)
 				end
 			else
-				Game.debug(string.format("bad input from %s: {%s}", tostring(v:getClient()), input))
+				Game.debug(string.format("bad input from %s: {%s}", tostring(player:getClient()), input))
 			end
 		end
+
+		i = i + 1
 	end
 end
 

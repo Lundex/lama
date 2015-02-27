@@ -108,3 +108,30 @@ function string.truncate(s)
 
 	return string.sub(s, _start, _end)
 end
+
+--- Matches a string of keywords to another string of keywords
+-- @param haystack Keywords to compare to.
+-- @param needle Keywords to compare.
+-- @return Returns 'haystack' on a successful match.<br/>nil otherwise.
+function string.matchKeywords(haystack, needle)
+	local _haystack = {}
+	for i in string.gmatch(haystack, "([a-zA-Z0-9|'|-]+)") do
+		table.insert(_haystack, i)
+	end
+
+	for i in string.gmatch(needle, "([a-zA-Z0-9|'|-]+)") do
+		local found = false
+		for _i, v in ipairs(_haystack) do
+			if string.find(v, i) == 1 then
+				found = true
+			end
+		end
+
+		-- every keyword must be found, or it's not a match
+		if not found then
+			return nil
+		end
+	end
+
+	return haystack
+end

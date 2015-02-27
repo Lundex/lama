@@ -29,7 +29,8 @@ local Cloneable						= require("obj.Cloneable")
 -- @field name Name of the classification.
 local Classification				= Cloneable.clone()
 Classification.id					= 0
-Classification.name					= "Classification"
+Classification.name					= "classification"
+Classification.who					= "Classification"
 
 -- resources
 Classification.baseHealth			= 0
@@ -50,6 +51,18 @@ Classification.baseConstitution		= 0
 Classification.constitutionPerLevel	= 0
 Classification.baseIntelligence		= 0
 Classification.intelligencePerLevel	= 0
+
+function Classification:getID()
+	return self.ID
+end
+
+function Classification:getName()
+	return self.name
+end
+
+function Classification:getWho()
+	return self.who
+end
 
 function Classification:getBaseHealth()
 	return self.baseHealth

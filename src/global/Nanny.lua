@@ -35,16 +35,16 @@ local Nanny			= {}
 -- @param input The input to process.
 function Nanny.process(player, input)
 	if player:getState() == PlayerState.NAME then
-		local name = CharacterManager.legalizeName(input)
+		local name = DatabaseManager.legalizeName(input)
 		if string.len(input) < 3 or string.len(input) > 12 then
 			Nanny.messageNameLengthLimit(player)
 			Nanny.askForName(player)
 		else
-			if CharacterManager.characterNameTaken(input) then
+			if DatabaseManager.characterNameTaken(input) then
 				local mob = Mob:new()
-				player:setMob(mob)
-				local mob, location = CharacterManager.loadCharacter(input, mob)
-				player.nanny.location = location
+				local mob, location = DatabaseManager.loadCharacter(input, mob)
+				player.nanny.mob		= mob
+				player.nanny.location	= location
 				player:setState(PlayerState.OLD_CHAR_PASSWORD)
 				Nanny.askForOldPassword(player)
 			else
@@ -58,12 +58,14 @@ function Nanny.process(player, input)
 		end
 
 	elseif player:getState() == PlayerState.OLD_CHAR_PASSWORD then
-		if md5.sumhexa(input) ~= player.mob:getPassword() then
+		if md5.sumhexa(input) ~= player.nanny.mob:getPassword() then
 			player:sendMessage("That password doesn't match the old password!", MessageMode.FAILURE)
-			player:unsetMob()
+			player.nanny.mob		= nil
+			player.nanny.location	= nil
 			player:setState(PlayerState.NAME)
 			Nanny.askForName(player)
 		else
+			player:setMob(player.nanny.mob)
 			player:setState(PlayerState.MOTD)
 			Nanny.MOTD(player)
 		end
@@ -206,7 +208,7 @@ function Nanny.getGreeting()
 	local file = io.open("txt/GREETING", "r")
 	if file then
 		local txt = file:read("*a")
-		local formatted = string.format(txt, Game.getName(), Game.getVersion(), Game.getDevelopers())
+		local formatted = string.format(txt, Game.getName(), Game.getVersion(), table.concat(Game.getDevelopers(), ", "))
 		return formatted
 	end
 

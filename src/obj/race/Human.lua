@@ -24,5 +24,6 @@ local Race						= require("obj.Race")
 local Human						= Race:clone()
 
 Human.name						= "human"
+Human.who						= "Human"
 
 return Human
