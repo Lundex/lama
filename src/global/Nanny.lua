@@ -82,9 +82,8 @@ function Nanny.process(player, input)
 			player:setState(PlayerState.NEW_CHAR_PASSWORD)
 		else
 			player.mob:setPassword(md5.sumhexa(player.nanny.password))
-			player.mob.race = DatabaseManager.getRaceByName("human")
-			print(player.mob.race:getID())
-			player.mob.class = DatabaseManager.getClassByName("warrior")
+			player.mob.race = DatabaseManager.getRaceByID(1)
+			player.mob.class = DatabaseManager.getClassByID(1)
 			player:setState(PlayerState.MOTD)
 			Nanny.MOTD(player)
 		end

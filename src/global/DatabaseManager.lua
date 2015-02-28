@@ -185,6 +185,8 @@ function DatabaseManager.readCharacterData(data, mob)
 	mob:setKeywords(name)
 	mob:setName(data.name)
 	mob:setDescription(data.description)
+	mob.race = DatabaseManager.getRaceByID(data.race)
+	mob.class = DatabaseManager.getClassByID(data.class)
 	mob.level = data.level
 	mob.experience = data.experience
 	mob.health = data.health
@@ -198,6 +200,14 @@ end
 function DatabaseManager.getRaceByName(name)
 	for i,race in ipairs(DatabaseManager.races) do
 		if string.find(race:getName(), name) == 1 then
+			return race
+		end
+	end
+end
+
+function DatabaseManager.getRaceByID(id)
+	for i,race in ipairs(DatabaseManager.races) do
+		if race:getID() == id then
 			return race
 		end
 	end
@@ -283,6 +293,14 @@ function DatabaseManager.getClassByName(name)
 	end
 end
 
+function DatabaseManager.getClassByID(id)
+	for i,class in ipairs(DatabaseManager.classes) do
+		if class:getID() == id then
+			return class
+		end
+	end
+end
+
 function DatabaseManager.loadClasses()
 	local dir = string.format("%s/%s", DatabaseManager.dataDirectory, DatabaseManager.classDirectory)
 	for i in lfs.dir(dir) do
@@ -317,7 +335,7 @@ function DatabaseManager.loadClass(data)
 	class.constitutionPerLevel		= data.constitutionPerLevel
 	class.baseIntelligence			= data.baseIntelligence
 	class.intelligencePerLevel		= data.intelligencePerLevel
-	return race
+	return class
 end
 
 function DatabaseManager.generateClassData(class)
