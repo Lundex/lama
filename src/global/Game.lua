@@ -121,6 +121,9 @@ function Game.onOpen()
 	end
 
 	-- load database stuff
+	Game.info("Loading database info...")
+	DatabaseManager.loadGeneral()
+
 	Game.info("Loading races...")
 	DatabaseManager.loadRaces()
 

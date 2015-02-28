@@ -1,0 +1,6 @@
+%s
+local general			= {}
+general.raceID			= %d
+general.classID			= %d
+
+return general

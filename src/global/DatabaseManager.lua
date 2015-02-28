@@ -41,7 +41,6 @@ DatabaseManager.extension		= "lua"
 -- ID stuff
 DatabaseManager.raceID			= 1
 DatabaseManager.classID			= 1
-DatabaseManager.characterID		= 1
 
 -- runtime information
 DatabaseManager.races			= {}
@@ -107,6 +106,33 @@ function DatabaseManager.safeString(s)
 	return s
 end
 
+-- database file stuff
+function DatabaseManager.saveGeneral()
+	local filename = string.format("%s/general.lua", DatabaseManager.dataDirectory)
+	local file = io.open(filename, "w+")
+	file:write(DatabaseManager.generateGeneralData(mob))
+end
+
+function DatabaseManager.generateGeneralData()
+	local tmpFilename = string.format("%s/general.tmp", DatabaseManager.dataDirectory)
+	local templateFile = io.open(tmpFilename, "r")
+	local template = templateFile:read("*a")
+	return string.format(template,
+	DatabaseManager.getHeader("general"),
+	DatabaseManager.raceID,
+	DatabaseManager.classID
+	)
+end
+
+function DatabaseManager.loadGeneral()
+	local filename = string.format("%s/general.lua", DatabaseManager.dataDirectory)
+	DatabaseManager.readGeneral(dofile(filename))
+end
+
+function DatabaseManager.readGeneral(data)
+	raceID = data.raceID
+	classID = data.classID
+end
 
 --- Get the character filename for a given name.
 -- @param name Name of the character to generate a filename for.
@@ -335,7 +361,7 @@ function DatabaseManager.loadClass(data)
 	class.constitutionPerLevel		= data.constitutionPerLevel
 	class.baseIntelligence			= data.baseIntelligence
 	class.intelligencePerLevel		= data.intelligencePerLevel
-	return class
+	table.insert(DatabaseManager.classes, class)
 end
 
 function DatabaseManager.generateClassData(class)
@@ -344,32 +370,32 @@ function DatabaseManager.generateClassData(class)
 	local template = templateFile:read("*a")
 	return string.format(template,
 	DatabaseManager.getHeader("class"),
-	race:getID(),
-	race:getName(),
-	race:getWho(),
-	race:getBaseHealth(),
-	race:getHealthPerLevel(),
-	race:getBaseMana(),
-	race:getManaPerLevel(),
-	race:getBaseMoves(),
-	race:getMovesPerLevel(),
-	race:getBaseStrength(),
-	race:getStrengthPerLevel(),
-	race:getBaseDexterity(),
-	race:getDexterityPerLevel(),
-	race:getBaseAgility(),
-	race:getAgilityPerLevel(),
-	race:getBaseConstitution(),
-	race:getConstitutionPerLevel(),
-	race:getBaseIntelligence(),
-	race:getIntelligencePerLevel()
+	class:getID(),
+	class:getName(),
+	class:getWho(),
+	class:getBaseHealth(),
+	class:getHealthPerLevel(),
+	class:getBaseMana(),
+	class:getManaPerLevel(),
+	class:getBaseMoves(),
+	class:getMovesPerLevel(),
+	class:getBaseStrength(),
+	class:getStrengthPerLevel(),
+	class:getBaseDexterity(),
+	class:getDexterityPerLevel(),
+	class:getBaseAgility(),
+	class:getAgilityPerLevel(),
+	class:getBaseConstitution(),
+	class:getConstitutionPerLevel(),
+	class:getBaseIntelligence(),
+	class:getIntelligencePerLevel()
 	)
 end
 
 function DatabaseManager.saveClass(class)
 	local filename = string.format("%s/%s/%s.lua", DatabaseManager.dataDirectory, DatabaseManager.classDirectory)
 	local file = io.open(filename, "w+")
-	file:write(DatabaseManager.generateClassData(race))
+	file:write(DatabaseManager.generateClassData(class))
 end
 
 _G.DatabaseManager = DatabaseManager
