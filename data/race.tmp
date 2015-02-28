@@ -1,0 +1,23 @@
+%s
+local race						= {}
+race.id							= %d
+race.name						= "%s"
+race.who						= "%s"
+race.baseHealth					= %d
+race.healthPerLevel				= %d
+race.baseMana					= %d
+race.manaPerLevel				= %d
+race.baseMoves					= %d
+race.movesPerLevel				= %d
+race.baseStrength				= %d
+race.strengthPerLevel			= %d
+race.baseAgility				= %d
+race.agilityPerLevel			= %d
+race.baseDexterity				= %d
+race.dexterityPerLevel			= %d
+race.baseConstitution			= %d
+race.constitutionPerLevel		= %d
+race.baseIntelligence			= %d
+race.intelligencePerLevel		= %d
+
+return race

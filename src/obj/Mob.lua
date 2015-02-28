@@ -51,8 +51,8 @@ Mob.description		= "It's a mob."
 Mob.level			= 1
 Mob.experience		= 0
 
-Mob.race			= require("obj.race.Human")
-Mob.class			= require("obj.class.Warrior")
+Mob.race			= require("obj.Race")
+Mob.class			= require("obj.Class")
 
 Mob.health			= 100
 Mob.mana			= 100
@@ -210,7 +210,7 @@ end
 -- Base strength being the strength provided by their race and class.
 -- @return Mob's base strength.
 function Mob:getBaseStrength()
-	return self.race:getStrengthForLevel(self.level)
+	return self.race:getStrengthForLevel(self.level) + self.class:getStrengthForLevel(self.level)
 end
 
 --- Get the Mob's current strength.<br/>
@@ -224,7 +224,7 @@ end
 -- Base agility being the agility provided by their race and class.
 -- @return Mob's base agility.
 function Mob:getBaseAgility()
-	return self.race:getAgilityForLevel(self.level)
+	return self.race:getAgilityForLevel(self.level) + self.class:getStrengthForLevel(self.level)
 end
 
 --- Get the Mob's current agility.<br/>
@@ -238,7 +238,7 @@ end
 -- Base dexterity being the dexterity provided by their race and class.
 -- @return Mob's base dexterity.
 function Mob:getBaseDexterity()
-	return self.race:getDexterityForLevel(self.level)
+	return self.race:getDexterityForLevel(self.level) + self.class:getStrengthForLevel(self.level)
 end
 
 --- Get the Mob's current dexterity.<br/>
@@ -252,7 +252,7 @@ end
 -- Base constitution being the constitution provided by their race and class.
 -- @return Mob's base constitution.
 function Mob:getBaseConstitution()
-	return self.race:getConstitutionForLevel(self.level)
+	return self.race:getConstitutionForLevel(self.level) + self.class:getStrengthForLevel(self.level)
 end
 
 --- Get the Mob's current constitution.<br/>
@@ -266,7 +266,7 @@ end
 -- Base intelligence being the intelligence provided by their race and class.
 -- @return Mob's base intelligence.
 function Mob:getBaseIntelligence()
-	return self.race:getIntelligenceForLevel(self.level)
+	return self.race:getIntelligenceForLevel(self.level) + self.class:getStrengthForLevel(self.level)
 end
 
 --- Get the Mob's current intelligence.<br/>

@@ -1,0 +1,23 @@
+%s
+local class						= {}
+class.id						= %d
+class.name						= "%s"
+class.who						= "%s"
+class.baseHealth				= %d
+class.healthPerLevel			= %d
+class.baseMana					= %d
+class.manaPerLevel				= %d
+class.baseMoves					= %d
+class.movesPerLevel				= %d
+class.baseStrength				= %d
+class.strengthPerLevel			= %d
+class.baseAgility				= %d
+class.agilityPerLevel			= %d
+class.baseDexterity				= %d
+class.dexterityPerLevel			= %d
+class.baseConstitution			= %d
+class.constitutionPerLevel		= %d
+class.baseIntelligence			= %d
+class.intelligencePerLevel		= %d
+
+return class

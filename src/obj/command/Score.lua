@@ -28,12 +28,13 @@ Score.keyword	= "score"
 -- @param player Player to show.
 -- @param mob Mob to show.
 function Score:execute(player, mob)
-	mob:sendMessage(string.format("%s, the human puncher-of-babies.\
+	mob:sendMessage(string.format("%s, the %s %s.\
     '%s'\
 You are currently level %d, with %d experience collected in total.\
 Str: %d (%d)  Agi: %d (%d)  Dex: %d (%d)  Con: %d (%d)  Int: %d (%d)\
 You have %d/%d health, %d/%d mana, and %d/%d moves.",
-					mob.name, mob.description or "Nothing worth mentioning.",
+					mob.name, mob.race:getName(), mob.class:getName(),
+					mob.description or "Nothing worth mentioning.",
 					mob.level, mob.experience,
 					mob:getStrength(), mob:getBaseStrength(),
 					mob:getAgility(), mob:getBaseAgility(),

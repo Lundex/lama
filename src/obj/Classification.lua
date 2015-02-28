@@ -53,7 +53,7 @@ Classification.baseIntelligence		= 0
 Classification.intelligencePerLevel	= 0
 
 function Classification:getID()
-	return self.ID
+	return self.id
 end
 
 function Classification:getName()
@@ -68,7 +68,7 @@ function Classification:getBaseHealth()
 	return self.baseHealth
 end
 
-function Classification:getHealthPerLevel(level)
+function Classification:getHealthPerLevel()
 	return self.healthPerLevel
 end
 
@@ -80,7 +80,7 @@ function Classification:getBaseMana()
 	return self.baseMana
 end
 
-function Classification:getManaPerLevel(level)
+function Classification:getManaPerLevel()
 	return self.manaPerLevel
 end
 
@@ -92,7 +92,7 @@ function Classification:getBaseMoves()
 	return self.baseMoves
 end
 
-function Classification:getMovesPerLevel(level)
+function Classification:getMovesPerLevel()
 	return self.movesPerLevel
 end
 
@@ -104,7 +104,7 @@ function Classification:getBaseStrength()
 	return self.baseStrength
 end
 
-function Classification:getStrengthPerLevel(level)
+function Classification:getStrengthPerLevel()
 	return self.strengthPerLevel
 end
 
@@ -116,7 +116,7 @@ function Classification:getBaseAgility()
 	return self.baseAgility
 end
 
-function Classification:getAgilityPerLevel(level)
+function Classification:getAgilityPerLevel()
 	return self.agilityPerLevel
 end
 
@@ -128,7 +128,7 @@ function Classification:getBaseDexterity()
 	return self.baseDexterity
 end
 
-function Classification:getDexterityPerLevel(level)
+function Classification:getDexterityPerLevel()
 	return self.dexterityPerLevel
 end
 
@@ -140,7 +140,7 @@ function Classification:getBaseConstitution()
 	return self.baseConstitution
 end
 
-function Classification:getConstitutionPerLevel(level)
+function Classification:getConstitutionPerLevel()
 	return self.constitutionPerLevel
 end
 
@@ -152,7 +152,7 @@ function Classification:getBaseIntelligence()
 	return self.baseIntelligence
 end
 
-function Classification:getIntelligencePerLevel(level)
+function Classification:getIntelligencePerLevel()
 	return self.intelligencePerLevel
 end
 

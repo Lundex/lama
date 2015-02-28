@@ -120,6 +120,13 @@ function Game.onOpen()
 		Game.generateCommands()
 	end
 
+	-- load database stuff
+	Game.info("Loading races...")
+	DatabaseManager.loadRaces()
+
+	Game.info("Loading classes...")
+	DatabaseManager.loadClasses()
+
 	Game.setState(GameState.READY)
 	Game.info("Game is ready for business...")
 end
