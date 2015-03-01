@@ -21,8 +21,7 @@
 module("DatabaseManager", package.seeall)
 
 local md5					= require("md5")
-local Race					= require("obj.Race")
-local Class					= require("obj.Class")
+local Mob					= require("obj.Mob")
 
 --- Singleton that provides database management utilities.
 -- @class table
@@ -31,18 +30,32 @@ local Class					= require("obj.Class")
 -- @field extension File extension for saves.
 local DatabaseManager		= {}
 
+-- templates for savefiles
+DatabaseManager.charTemplate	= [[%s
+local character			= {}
+character.password		= "%s"
+character.name			= "%s"
+character.description	= "%s"
+character.race			= "%s"
+character.class			= "%s"
+character.level			= %d
+character.experience	= %d
+character.health		= %d
+character.mana			= %d
+character.moves			= %d
+character.location		= {x=%d,y=%d,z=%d}
+
+return character
+]]
+
 -- file information
 DatabaseManager.dataDirectory	= "data"
-DatabaseManager.charDirectory	= "character"
 DatabaseManager.raceDirectory	= "race"
 DatabaseManager.classDirectory	= "class"
+DatabaseManager.charDirectory	= "character"
 DatabaseManager.extension		= "lua"
 
--- ID stuff
-DatabaseManager.raceID			= 1
-DatabaseManager.classID			= 1
-
--- runtime information
+-- runtime data
 DatabaseManager.races			= {}
 DatabaseManager.classes			= {}
 
@@ -106,34 +119,6 @@ function DatabaseManager.safeString(s)
 	return s
 end
 
--- database file stuff
-function DatabaseManager.saveGeneral()
-	local filename = string.format("%s/general.lua", DatabaseManager.dataDirectory)
-	local file = io.open(filename, "w+")
-	file:write(DatabaseManager.generateGeneralData(mob))
-end
-
-function DatabaseManager.generateGeneralData()
-	local tmpFilename = string.format("%s/general.tmp", DatabaseManager.dataDirectory)
-	local templateFile = io.open(tmpFilename, "r")
-	local template = templateFile:read("*a")
-	return string.format(template,
-	DatabaseManager.getHeader("general"),
-	DatabaseManager.raceID,
-	DatabaseManager.classID
-	)
-end
-
-function DatabaseManager.loadGeneral()
-	local filename = string.format("%s/general.lua", DatabaseManager.dataDirectory)
-	DatabaseManager.readGeneral(dofile(filename))
-end
-
-function DatabaseManager.readGeneral(data)
-	raceID = data.raceID
-	classID = data.classID
-end
-
 --- Get the character filename for a given name.
 -- @param name Name of the character to generate a filename for.
 -- @return Properly formatted filename for character based on its name.
@@ -157,6 +142,29 @@ function DatabaseManager.characterNameTaken(name)
 	return true
 end
 
+--- Get the XML format of a character.
+-- @param mob Mob of the character to generate data of.
+-- @return The XML format of the character.
+function DatabaseManager.generateCharacterData(mob)
+	local template = DatabaseManager.charTemplate
+	return string.format(template,
+	DatabaseManager.getHeader("character"),
+	mob.characterData.password,
+	mob.name,
+	DatabaseManager.safeString(mob.description),
+	mob.race:getName(),
+	mob.class:getName(),
+	mob.level,
+	mob.experience,
+	mob.health,
+	mob.mana,
+	mob.moves,
+	mob:getLoc():getX(),
+	mob:getLoc():getY(),
+	mob:getLoc():getZ()
+	)
+end
+
 --- Save a mob as a character.
 -- @param mob Mob of the character to save.
 function DatabaseManager.saveCharacter(mob)
@@ -170,59 +178,25 @@ end
 -- @param name Name of the character to be loaded.
 -- @param mob The mob for character data to be read into.<br/>if nil, a new mob will be generated and returned.
 -- @return The mob that data was read into.
-function DatabaseManager.loadCharacter(name, mob)
+function DatabaseManager.loadCharacter(name)
 	local filename = DatabaseManager.getCharacterFileFromName(name)
-	return DatabaseManager.readCharacterData(dofile(filename), mob)
-end
-
---- Get the XML format of a character.
--- @param mob Mob of the character to generate data of.
--- @return The XML format of the character.
-function DatabaseManager.generateCharacterData(mob)
-	local tmpFilename = string.format("%s/character.tmp", DatabaseManager.dataDirectory)
-	local templateFile = io.open(tmpFilename, "r")
-	local template = templateFile:read("*a")
-	return string.format(template,
-	DatabaseManager.getHeader("character"),
-	mob.characterData.password,
-	mob.name,
-	DatabaseManager.safeString(mob.description),
-	mob.race:getID(),
-	mob.class:getID(),
-	mob.level,
-	mob.experience,
-	mob.health,
-	mob.mana,
-	mob.moves,
-	mob:getLoc():getX(),
-	mob:getLoc():getY(),
-	mob:getLoc():getZ()
-	)
-end
-
---- Read XML data into a mob's attributes.<br/>
--- <b>I am not liking the Expat library. I might switch to LuaXML.</b>
--- @param xml The XML to be read.
--- @param mob Optional mob to read data into.<br/>If not specified, will return a new mob created with the XML data.
--- @return The mob that the data was applied to.
-function DatabaseManager.readCharacterData(data, mob)
-	mob = mob or Mob:new()
+	local data = dofile(filename)
+	local location = Game.map:getTile(data.location.x, data.location.y, data.location.z)
+	local mob = Mob:new()
 	mob:setPassword(data.password)
 	mob:setKeywords(name)
 	mob:setName(data.name)
 	mob:setDescription(data.description)
-	mob.race = DatabaseManager.getRaceByID(data.race)
-	mob.class = DatabaseManager.getClassByID(data.class)
+	mob.race = DatabaseManager.getRaceByName(data.race)
+	mob.class = DatabaseManager.getClassByName(data.class)
 	mob.level = data.level
 	mob.experience = data.experience
 	mob.health = data.health
 	mob.mana = data.mana
 	mob.moves = data.moves
-	local location = Game.map:getTile(data.location.x, data.location.y, data.location.z)
 	return mob, location
 end
 
--- race stuff
 function DatabaseManager.getRaceByName(name)
 	for i,race in ipairs(DatabaseManager.races) do
 		if string.find(race:getName(), name) == 1 then
@@ -231,86 +205,20 @@ function DatabaseManager.getRaceByName(name)
 	end
 end
 
-function DatabaseManager.getRaceByID(id)
-	for i,race in ipairs(DatabaseManager.races) do
-		if race:getID() == id then
-			return race
-		end
-	end
-end
-
+--- Load races.
 function DatabaseManager.loadRaces()
-	local dir = string.format("%s/%s", DatabaseManager.dataDirectory, DatabaseManager.raceDirectory)
-	for i in lfs.dir(dir) do
+	local directory = string.format("%s/%s", DatabaseManager.dataDirectory, DatabaseManager.raceDirectory)
+	for i in lfs.dir(directory) do
 		if i ~= "." and i ~= ".." then
-			local file = string.match(i, "(.+)%.lua")
-			if file then -- it's an lua file!
-				local data = dofile(dir .. "/" .. file .. ".lua")
-				DatabaseManager.loadRace(data)
+			if string.match(i, ".+%.lua") then -- it's an lua file!
+				local race = dofile(directory .. "/" .. i)
+				Game.info("Loading race '" .. race:getName() .. "'")
+				table.insert(DatabaseManager.races, race)
 			end
 		end
 	end
 end
 
-function DatabaseManager.loadRace(data)
-	local race						= Race:clone()
-	race.id							= data.id
-	race.name						= data.name
-	race.who						= data.who
-	race.baseHealth					= data.baseHealth
-	race.healthPerLevel				= data.healthPerLevel
-	race.baseMana					= data.baseMana
-	race.manaPerLevel				= data.manaPerLevel
-	race.baseMoves					= data.baseMoves
-	race.movesPerLevel				= data.movesPerLevel
-	race.baseStrength				= data.baseStrength
-	race.strengthPerLevel			= data.strengthPerLevel
-	race.baseAgility				= data.baseAgility
-	race.agilityPerLevel			= data.agilityPerLevel
-	race.baseDexterity				= data.baseDexterity
-	race.dexterityPerLevel			= data.dexterityPerLevel
-	race.baseConstitution			= data.baseConstitution
-	race.constitutionPerLevel		= data.constitutionPerLevel
-	race.baseIntelligence			= data.baseIntelligence
-	race.intelligencePerLevel		= data.intelligencePerLevel
-	table.insert(DatabaseManager.races, race)
-end
-
-function DatabaseManager.generateRaceData(race)
-	local tmpFilename = string.format("%s/race.tmp", DatabaseManager.dataDirectory)
-	local templateFile = io.open(tmpFilename, "r")
-	local template = templateFile:read("*a")
-	return string.format(template,
-	DatabaseManager.getHeader("race"),
-	race:getID(),
-	race:getName(),
-	race:getWho(),
-	race:getBaseHealth(),
-	race:getHealthPerLevel(),
-	race:getBaseMana(),
-	race:getManaPerLevel(),
-	race:getBaseMoves(),
-	race:getMovesPerLevel(),
-	race:getBaseStrength(),
-	race:getStrengthPerLevel(),
-	race:getBaseDexterity(),
-	race:getDexterityPerLevel(),
-	race:getBaseAgility(),
-	race:getAgilityPerLevel(),
-	race:getBaseConstitution(),
-	race:getConstitutionPerLevel(),
-	race:getBaseIntelligence(),
-	race:getIntelligencePerLevel()
-	)
-end
-
-function DatabaseManager.saveRace(race)
-	local filename = string.format("%s/%s/%s.lua", DatabaseManager.dataDirectory, DatabaseManager.raceDirectory)
-	local file = io.open(filename, "w+")
-	file:write(DatabaseManager.generateRaceData(race))
-end
-
--- class stuff
 function DatabaseManager.getClassByName(name)
 	for i,class in ipairs(DatabaseManager.classes) do
 		if string.find(class:getName(), name) == 1 then
@@ -319,83 +227,18 @@ function DatabaseManager.getClassByName(name)
 	end
 end
 
-function DatabaseManager.getClassByID(id)
-	for i,class in ipairs(DatabaseManager.classes) do
-		if class:getID() == id then
-			return class
-		end
-	end
-end
-
+--- Load classes.
 function DatabaseManager.loadClasses()
-	local dir = string.format("%s/%s", DatabaseManager.dataDirectory, DatabaseManager.classDirectory)
-	for i in lfs.dir(dir) do
+	local directory = string.format("%s/%s", DatabaseManager.dataDirectory, DatabaseManager.classDirectory)
+	for i in lfs.dir(directory) do
 		if i ~= "." and i ~= ".." then
-			local file = string.match(i, "(.+)%.lua")
-			if file then -- it's an lua file!
-				local data = dofile(dir .. "/" .. file .. ".lua")
-				DatabaseManager.loadClass(data)
+			if string.match(i, ".+%.lua") then -- it's an lua file!
+				local class = dofile(directory .. "/" .. i)
+				Game.info("Loading class '" .. class:getName() .. "'")
+				table.insert(DatabaseManager.classes, class)
 			end
 		end
 	end
-end
-
-function DatabaseManager.loadClass(data)
-	local class						= Class:clone()
-	class.id						= data.id
-	class.name						= data.name
-	class.who						= data.who
-	class.baseHealth				= data.baseHealth
-	class.healthPerLevel			= data.healthPerLevel
-	class.baseMana					= data.baseMana
-	class.manaPerLevel				= data.manaPerLevel
-	class.baseMoves					= data.baseMoves
-	class.movesPerLevel				= data.movesPerLevel
-	class.baseStrength				= data.baseStrength
-	class.strengthPerLevel			= data.strengthPerLevel
-	class.baseAgility				= data.baseAgility
-	class.agilityPerLevel			= data.agilityPerLevel
-	class.baseDexterity				= data.baseDexterity
-	class.dexterityPerLevel			= data.dexterityPerLevel
-	class.baseConstitution			= data.baseConstitution
-	class.constitutionPerLevel		= data.constitutionPerLevel
-	class.baseIntelligence			= data.baseIntelligence
-	class.intelligencePerLevel		= data.intelligencePerLevel
-	table.insert(DatabaseManager.classes, class)
-end
-
-function DatabaseManager.generateClassData(class)
-	local tmpFilename = string.format("%s/class.tmp", DatabaseManager.dataDirectory)
-	local templateFile = io.open(tmpFilename, "r")
-	local template = templateFile:read("*a")
-	return string.format(template,
-	DatabaseManager.getHeader("class"),
-	class:getID(),
-	class:getName(),
-	class:getWho(),
-	class:getBaseHealth(),
-	class:getHealthPerLevel(),
-	class:getBaseMana(),
-	class:getManaPerLevel(),
-	class:getBaseMoves(),
-	class:getMovesPerLevel(),
-	class:getBaseStrength(),
-	class:getStrengthPerLevel(),
-	class:getBaseDexterity(),
-	class:getDexterityPerLevel(),
-	class:getBaseAgility(),
-	class:getAgilityPerLevel(),
-	class:getBaseConstitution(),
-	class:getConstitutionPerLevel(),
-	class:getBaseIntelligence(),
-	class:getIntelligencePerLevel()
-	)
-end
-
-function DatabaseManager.saveClass(class)
-	local filename = string.format("%s/%s/%s.lua", DatabaseManager.dataDirectory, DatabaseManager.classDirectory)
-	local file = io.open(filename, "w+")
-	file:write(DatabaseManager.generateClassData(class))
 end
 
 _G.DatabaseManager = DatabaseManager

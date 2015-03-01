@@ -72,6 +72,14 @@ function Map:generate(width,height,layers)
 			end
 		end
 	end
+
+	local tile = self:getTile(1,1,1)
+	local Mob = require("obj.Mob")
+	local mob = Mob:new()
+	mob:setName("Judas")
+	mob:setKeywords("Judas")
+	mob:moveToMap(self)
+	mob:move(tile)
 end
 
 --- Adds a MapObject to our contents.

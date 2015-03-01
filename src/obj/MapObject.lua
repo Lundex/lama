@@ -71,7 +71,7 @@ end
 -- @param keywords Keywords to check against.
 -- @return true on success.<br/>false otherwise.
 function MapObject:match(keywords)
-	if matchKeywords(self.keywords, keywords) then
+	if string.matchKeywords(self.keywords, keywords) then
 		return true
 	end
 

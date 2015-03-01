@@ -23,6 +23,8 @@ module("Nanny", package.seeall)
 
 local md5			= require("md5")
 local Mob			= require("obj.Mob")
+local Race			= require("obj.Race")
+local Class			= require("obj.Class")
 
 --- Singleton that contains necessary processes for connecting new players,
 -- as well as processing their input during these stages.
@@ -41,8 +43,7 @@ function Nanny.process(player, input)
 			Nanny.askForName(player)
 		else
 			if DatabaseManager.characterNameTaken(input) then
-				local mob = Mob:new()
-				local mob, location = DatabaseManager.loadCharacter(input, mob)
+				local mob, location = DatabaseManager.loadCharacter(input)
 				player.nanny.mob		= mob
 				player.nanny.location	= location
 				player:setState(PlayerState.OLD_CHAR_PASSWORD)
@@ -82,8 +83,8 @@ function Nanny.process(player, input)
 			player:setState(PlayerState.NEW_CHAR_PASSWORD)
 		else
 			player.mob:setPassword(md5.sumhexa(player.nanny.password))
-			player.mob.race = DatabaseManager.getRaceByID(1)
-			player.mob.class = DatabaseManager.getClassByID(1)
+			player.mob.race = DatabaseManager.getRaceByName("human")
+			player.mob.class = DatabaseManager.getClassByName("warrior")
 			player:setState(PlayerState.MOTD)
 			Nanny.MOTD(player)
 		end
@@ -98,7 +99,7 @@ end
 -- @param player Player that is logging in.
 function Nanny.login(player)
 	local mob = player:getMob()
-	player:setID(Game.nextPlayerID()) -- now that they're finally playing
+	player:setID(Game.getNextPlayerID()) -- now that they're finally playing
 	Nanny.introduce(player)
 
 	Game.info(string.format("%s has joined.", tostring(player), tostring(mob)))

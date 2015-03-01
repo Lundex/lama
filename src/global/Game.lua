@@ -120,10 +120,7 @@ function Game.onOpen()
 		Game.generateCommands()
 	end
 
-	-- load database stuff
-	Game.info("Loading database info...")
-	DatabaseManager.loadGeneral()
-
+	-- load other database stuff
 	Game.info("Loading races...")
 	DatabaseManager.loadRaces()
 
@@ -263,7 +260,8 @@ function Game.onPlayerInput(player, input)
 	Game.parser:parse(player, player:getMob(), input)
 end
 
---- Generates a list of every Command for the CommandParser.
+--- Generates a list of every Command for the CommandParser.<br/>
+-- This probably makes more sense as part of the database manager. Not sure yet.
 function Game.generateCommands()
 	for i in lfs.dir("src/obj/command") do
 		if i ~= "." and i ~= ".." then
@@ -399,7 +397,7 @@ end
 
 --- Get a unique player ID.
 -- @return A unique player ID.
-function Game.nextPlayerID()
+function Game.getNextPlayerID()
 	local id = Game.playerID
 	Game.playerID = Game.playerID+1
 	return id

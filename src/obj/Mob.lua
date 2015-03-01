@@ -116,6 +116,26 @@ function Mob:showRoom()
 	self:sendMessage(msg, MessageMode.INFO)
 end
 
+--- Get the Mob's level.
+function Mob:getLevel()
+	return self.level
+end
+
+--- Get the Mob's experience.
+function Mob:getExperience()
+	return self.experience
+end
+
+--- Get the Mob's race.
+function Mob:getRace()
+	return self.race
+end
+
+--- Get the Mob's class.
+function Mob:getClass()
+	return self.class
+end
+
 --- Get the Mob's current health.
 -- @return Mob's health.
 function Mob:getHealth()
@@ -282,8 +302,7 @@ function Mob:engage(target)
 	self.victim				= target
 
 	if not self.combatEvent then
-		self.combatEvent		= Event:new(Game.time(), function() self.mob:combatRound() end, true, 0, 4)
-		self.combatEvent.mob	= self
+		self.combatEvent		= Event:new(Game.time()+4, function() self:combatRound() end, true, 0, 4)
 		Game.queue(self.combatEvent)
 	end
 end
@@ -297,7 +316,7 @@ end
 --- One hit.
 -- @param victim Mob to hit.
 function Mob:oneHit(victim)
-	if not self.victim then
+	if self.victim == nil then
 		self:engage(victim)
 	end
 
@@ -330,13 +349,6 @@ end
 function Mob:sendString(str)
 	if self.player then
 		return self.player:sendString(str)
-	end
-end
-
---- Shortcut to player:sendLine(str)
-function Mob:sendLine(str)
-	if self.player then
-		return self.player:sendLine(str)
 	end
 end
 

@@ -27,15 +27,14 @@ Who.keyword		= "who"
 
 --- Send a list of players to the player.
 function Who:execute(player, mob)
-	local msg = "\[ Connected Players ]"
+	local msg = ".-L-.- Race ---- Class -."
 	for i,v in ipairs(Game.getPlayers()) do
 		local client = v:getClient()
 		local mob = v:getMob()
-		local TerminalType = client:getTerminalType()
-		local MCCPStatus = client:getDo(Telnet.protocol.MCCP2) and "enabled" or "disabled"
-		msg = string.format("%s\n %s (terminal: %s) (MCCP %s)", msg, tostring(mob), TerminalType, MCCPStatus)
+		msg = string.format("%s\n|%3d| %-8s %8s | %s", msg, mob:getLevel(), mob:getRace():getWho(), mob:getClass():getWho(), mob:getName())
 	end
 
+	msg = string.format("%s\n%s", msg, "'---'-------------------'")
 	player:sendMessage(msg)
 end
 

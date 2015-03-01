@@ -115,7 +115,7 @@ function Event:execute(timestamp)
 
 	-- prepare for the next repeation, if necessary
 	if self:willRepeat() then
-		self.destination = timestamp + self.repeatInterval
+		self.destination = self.destination + self.repeatInterval
 	end
 end
 
