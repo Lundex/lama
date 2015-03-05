@@ -29,6 +29,11 @@ Kill.keyword	= "kill"
 --- Kill stuff.
 function Kill:parse(player, mob, input)
 	local cmd, keywords = string.getWord(input)
+	if not keywords then
+		player:sendMessage("Kill whom?")
+		return
+	end
+
 	for i,victim in ipairs(mob:getLoc():getContents()) do
 		if victim:match(keywords) then
 			self:execute(player, mob, victim)

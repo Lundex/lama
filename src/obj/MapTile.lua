@@ -30,7 +30,6 @@ local MapObject	= require("obj.MapObject")
 -- @field x X location.
 -- @field y Y location.
 -- @field z Z location.
-
 local MapTile	= MapObject:clone()
 
 -- we have a tricky situation here cause MapTiles inherit from MapObjects (which I think I should change).
@@ -52,15 +51,8 @@ MapTile.z			= 0
 -- @param x X loc to be assigned.
 -- @param y Y loc to be assigned.
 -- @param z Z loc to be assigned.
-function MapTile:initialize(map,x,y,z)
+function MapTile:initialize()
 	self.contents	= {}
-	if map then
-		self:moveToMap(map)
-	end
-
-	if x and y and z then
-		self:setXYZLoc(x,y,z)
-	end
 end
 
 --- Assigns a complete XYZ location.

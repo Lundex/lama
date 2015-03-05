@@ -52,34 +52,22 @@ function Map:initialize()
 	self.contents = {}
 end
 
---- Generates a new map of the given dimensions.
--- @param width Width of the map.
--- @param height Height of the map.
--- @param layers Layers of the map.
-function Map:generate(width,height,layers)
-	self.tiles	= {}
-	self.width	= width
-	self.height	= height
-	self.layers	= layers
+--- Set proportions of the map.
+function Map:setProportions(width,height,layers)
+	self.width = width
+	self.height = height
+	self.layers = layers
 
-	-- fill out and seed tiles
+	-- generate tables
+	self.tiles = {}
 	for x=1, width do
 		self.tiles[x] = {}
 		for y=1, height do
 			self.tiles[x][y] = {}
 			for z=1, layers do
-				self:setTile(MapTile:new(), x, y, z)
 			end
 		end
 	end
-
-	local tile = self:getTile(1,1,1)
-	local Mob = require("obj.Mob")
-	local mob = Mob:new()
-	mob:setName("Judas")
-	mob:setKeywords("Judas")
-	mob:moveToMap(self)
-	mob:move(tile)
 end
 
 --- Adds a MapObject to our contents.
@@ -124,10 +112,7 @@ function Map:setTile(tile, x, y, z)
 		tile:moveToMap(self)
 	end
 
-	if tile:getX() ~= x or tile:getY() ~= y or tile:getZ() ~= z then
-		tile:setXYZLoc(x,y,z)
-	end
-
+	tile:setXYZLoc(x,y,z)
 	self.tiles[x][y][z] = tile
 end
 

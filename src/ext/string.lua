@@ -114,14 +114,17 @@ end
 -- @param needle Keywords to compare.
 -- @return Returns 'haystack' on a successful match.<br/>nil otherwise.
 function string.matchKeywords(haystack, needle)
+	haystack = string.lower(haystack)
+	needle = string.lower(needle)
 	local _haystack = {}
-	for i in string.gmatch(haystack, "([a-zA-Z0-9|'|-]+)") do
+	for i in string.gmatch(haystack, "([a-zA-Z0-9'-]+)") do
 		table.insert(_haystack, i)
 	end
 
-	for i in string.gmatch(needle, "([a-zA-Z0-9|'|-]+)") do
+	for i in string.gmatch(needle, "([a-zA-Z0-9'-]+)") do
 		local found = false
-		for _i, v in ipairs(_haystack) do
+		for j, v in ipairs(_haystack) do
+			print(i, v)
 			if string.find(v, i) == 1 then
 				found = true
 			end
@@ -129,9 +132,9 @@ function string.matchKeywords(haystack, needle)
 
 		-- every keyword must be found, or it's not a match
 		if not found then
-			return nil
+			return false
 		end
 	end
 
-	return haystack
+	return true
 end

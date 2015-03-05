@@ -29,7 +29,7 @@ Save.keyword	= "save"
 -- @param mob Mob to be saved.
 function Save:execute(player, mob)
 	DatabaseManager.saveCharacter(mob)
-	mob:sendMessage("SAVED!", MessageMode.INFO)
+	mob:sendMessage("SAVED!")
 end
 
 return Save

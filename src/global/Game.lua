@@ -108,9 +108,8 @@ function Game.onOpen()
 
 	-- load the map
 	if not Game.map then
-		Game.map = Map:new()
-		Game.info("Generating map...")
-		Game.map:generate(100,100,1)
+		Game.info("Loading map...")
+		Game.map = require("data.map.worldmap")
 	end
 
 	-- load the parser

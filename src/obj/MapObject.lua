@@ -155,9 +155,9 @@ function MapObject:setXYZLoc(x,y,z)
 	local tile = self.map:getTile(x,y,z)
 	if not tile then
 		self:setLoc()
-  else
-    self:setLoc(tile)
-  end
+	else
+		self:setLoc(tile)
+	end
 end
 
 --- Check if this MapObject will perment the given MapObject to enter.
@@ -221,6 +221,12 @@ end
 -- @param description Descrition to assign.
 function MapObject:setDescription(description)
 	self.description = description
+end
+
+--- Get current name.
+-- @return Current name.
+function MapObject:getKeywords()
+	return self.keywords
 end
 
 --- Get current name.
