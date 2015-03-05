@@ -134,8 +134,8 @@ function Game.shutdown()
 	end
 
 	Game.info("Shutting down game...")
-	for i,v in table.safeIPairs(Game:getPlayers()) do
-		Game.disconnectPlayer(v)
+	while #Game.players >= 1 do
+		Game.disconnectPlayer(Game.players[1])
 	end
 
 	Game.setState(GameState.SHUTDOWN)
