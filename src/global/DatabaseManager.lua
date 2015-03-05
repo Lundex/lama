@@ -52,9 +52,11 @@ DatabaseManager.dataDirectory	= "data"
 DatabaseManager.raceDirectory	= "race"
 DatabaseManager.classDirectory	= "class"
 DatabaseManager.charDirectory	= "character"
+DatabaseManager.cmdDirectory	= "command"
 DatabaseManager.extension		= "lua"
 
 -- runtime data
+DatabaseManager.commands		= {}
 DatabaseManager.races			= {}
 DatabaseManager.classes			= {}
 
@@ -235,6 +237,20 @@ function DatabaseManager.loadClasses()
 				local class = dofile(directory .. "/" .. i)
 				Game.info("Loading class '" .. class:getName() .. "'")
 				table.insert(DatabaseManager.classes, class)
+			end
+		end
+	end
+end
+
+--- Load commands.
+function DatabaseManager.loadCommands()
+	local directory = string.format("%s/%s", DatabaseManager.dataDirectory, DatabaseManager.cmdDirectory)
+	for i in lfs.dir(directory) do
+		if i ~= "." and i ~= ".." and i ~= "Movement.lua" then
+			if string.match(i, ".+%.lua") then -- it's an lua file!
+				local command = dofile(directory .. "/" .. i)
+				Game.info("Loading command '" .. command:getKeyword() .. "'")
+				table.insert(DatabaseManager.commands, command)
 			end
 		end
 	end

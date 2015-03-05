@@ -110,9 +110,12 @@ function Game.onOpen()
 	-- load the parser
 	Game.parser = CommandParser:new()
 	Game.info("Generating commands...")
-	Game.generateCommands()
 
 	-- load other database stuff
+	Game.info("Loading commands...")
+	DatabaseManager.loadCommands()
+	Game.parser.commands = DatabaseManager.commands
+
 	Game.info("Loading races...")
 	DatabaseManager.loadRaces()
 
@@ -248,23 +251,6 @@ function Game.onPlayerInput(player, input)
 
 	-- command parsing for in-game players
 	Game.parser:parse(player, player:getMob(), input)
-end
-
---- Generates a list of every Command for the CommandParser.<br/>
--- This probably makes more sense as part of the database manager. Not sure yet.
-function Game.generateCommands()
-	for i in lfs.dir("src/obj/command") do
-		if i ~= "." and i ~= ".." then
-			local file = string.match(i, "(.+)%.lua")
-			if file then -- it's an lua file!
-				local package = string.format("obj.command.%s", file)
-				if package ~= "obj.command.Movement" then
-					local command = require(package)
-					Game.parser:addCommand(command:new())
-				end
-			end
-		end
-	end
 end
 
 --- Announce something to connecting Players.<br/>

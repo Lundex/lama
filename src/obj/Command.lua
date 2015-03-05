@@ -52,4 +52,10 @@ end
 function Command:execute(player, mob)
 end
 
+--- Get the Command's keyword.
+-- @return Command's keyword.
+function Command:getKeyword()
+	return self.keyword
+end
+
 return Command
