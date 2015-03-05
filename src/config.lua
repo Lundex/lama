@@ -18,14 +18,13 @@
 
 --- Configuration table for the Server.
 -- @author milkmanjack
-module("config", package.seeall)
 
 --- Configuration table for the Server.
 -- @class table
 -- @name config
 -- @field defaultPort Default port to host the game on.
 -- @field enableMCCP2 Should MCCP2 be enabled?
-local config		= {}
+config				= {}
 config.defaultPort	= 8000
 config.enableMCCP2	= true
 
@@ -54,7 +53,5 @@ function config.present()
 					)
 	)
 end
-
-_G.config = config
 
 return config

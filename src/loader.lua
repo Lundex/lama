@@ -39,18 +39,6 @@ end
 
 --- Unloads all of the game packages.
 function unloadPackages()
-	-- unload globals
-	_G.Game										= nil
-	_G.Nanny									= nil
-	_G.Telnet									= nil
-	_G.PlayerState								= nil
-	_G.GameState								= nil
-	_G.MessageMode								= nil
-	_G.Direction								= nil
-	_G.Color									= nil
-	_G.Attribute								= nil
-	_G.DatabaseManager							= nil
-
 	-- unload packages
 	package.loaded["global.Game"]				= nil
 	package.loaded["global.Nanny"]				= nil
@@ -66,7 +54,7 @@ function unloadPackages()
 	-- unload obj.* packages
 	for i,v in pairs(package.loaded) do
 		if string.find(i, "obj.") == 1 then
-			package.loaded[i] = nil
+			package.loaded[i]					= nil
 		end
 	end
 end

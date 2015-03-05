@@ -18,12 +18,11 @@
 
 --- Singleton that contains all telnet-specific data and operations.
 -- @author milkmanjack
-module("Telnet", package.seeall)
 
 --- Singleton that contains all telnet-specific data and operations.
 -- @class table
 -- @name Telnet
-local Telnet  									= {}
+Telnet  											= {}
 
 --- Contains telnet command options.
 -- @class table

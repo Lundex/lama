@@ -18,7 +18,6 @@
 
 --- Singleton that contains enum-styled values for Game.state.
 -- @author milkmanjack
-module("GameState", package.seeall)
 
 --- Singleton that contains enum-styled values for Game.state.
 -- @class table
@@ -26,7 +25,7 @@ module("GameState", package.seeall)
 -- @field NEW The Game is in its introductory stages.
 -- @field READY The Game is currently running, and ready for play.
 -- @field SHUTDOWN The Game is shutting down.
-local GameState		= {}
+GameState			= {}
 GameState.NEW		= 0
 GameState.READY		= 1
 GameState.HOTBOOT	= 2
@@ -51,7 +50,5 @@ GameState.names[GameState.SHUTDOWN]		= "shutdown"
 function GameState.name(state)
 	return GameState.names[state]
 end
-
-_G.GameState = GameState
 
 return GameState

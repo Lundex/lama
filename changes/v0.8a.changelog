@@ -1,0 +1,37 @@
+	Changes in v0.8a (3/4/2015)
+	------------------------------
+	* Moved change logs to separate directory.
+
+	* Removed all module references. This will probably mess up LuaDoc, but it's already messed up.
+
+	* Fixed some bugs in the mapping system. Hadn't done much with it other than the initial construction, so there is some expected failures.
+
+	* Removed a lot of inefficient junk. Like table.safePairs and table.safeiPairs. I created these so I could modify a table on-the-fly without messing up the iterator. Instead, I just manually control the iterator. Not as intuitive, but certainly better.
+
+	* Races and classes added.
+
+	* Attributes added. Attributes are all provided by your race and class as of now. In the future, affects will be added which will modify these as well.
+
+	* Removed redundant verbose README that explains every last fine detail of the project's design.
+
+	* Removed XML database stuff. Switching to pure Lua implementation.
+
+	* The beginnings of the combat system are in. You can't actually fight or die, but the Event fires, and messages are shown.
+
+	* Reorganized the file structure. Less clutter everywhere.
+
+	* Character passwords are saved using the Lua MD5 library.
+
+	* Color stuff is now useable.
+
+	* Removed Client:sendLine since it's pretty redundant.
+
+	* Added Color singleton.
+
+	* Added a CharacterData structure that all Mobs will have. This stores data that is unique to player characters but should persist across instances.
+
+	* Added config.preset() to show off the current settings in a presentable manner.
+
+	* Added an etc package and loader package so I can keep main.lua "clean."
+
+	* Added a prequire function which just runs require() in protected mode, so I can stop it from crashing on a failed require. I'm using this to test for optional packages like the lzlib library I use for MCCP2 support. Even if you enable it, if it fails to include the lzlib package, it'll disable it. Very convenient and now I don't have to keep changing it back to true when I commit.

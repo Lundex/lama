@@ -18,7 +18,6 @@
 
 --- Singleton that provides database management utilities.
 -- @author milkmanjack
-module("DatabaseManager", package.seeall)
 
 local md5					= require("md5")
 local Mob					= require("obj.Mob")
@@ -28,10 +27,10 @@ local Mob					= require("obj.Mob")
 -- @name DatabaseManager
 -- @field charDirectory Where character saves are stored.
 -- @field extension File extension for saves.
-local DatabaseManager		= {}
+DatabaseManager				= {}
 
 -- templates for savefiles
-DatabaseManager.charTemplate	= [[%s
+DatabaseManager.charTemplate= [[%s
 local character			= {}
 character.password		= "%s"
 character.name			= "%s"

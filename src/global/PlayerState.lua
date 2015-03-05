@@ -18,7 +18,6 @@
 
 --- Singleton that contains enum-styled values for Player.state.
 -- @author milkmanjack
-module("PlayerState", package.seeall)
 
 --- Singleton that contains enum-styled values for Player.state.
 -- @class table
@@ -32,7 +31,7 @@ module("PlayerState", package.seeall)
 -- @field LOAD_CHAR_PASSWORD Asking for the password for an existent character.
 -- @field MOTD Getting the MOTD.
 -- @field PLAYING Playing the game.
-local PlayerState						= {}
+PlayerState								= {}
 PlayerState.NEW							= 0
 PlayerState.DISCONNECTING				= 1
 PlayerState.NAME						= 2

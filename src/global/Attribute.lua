@@ -18,13 +18,12 @@
 
 --- Singleton that contains enum-styled values for Player.state.
 -- @author milkmanjack
-module("Attribute", package.seeall)
 
 --- Singleton that contains enum-styled values for Player.state.
 -- @class table
 -- @name PlayerState
 -- @field healthPerStrength Health given per point of strength.
-local Attribute						= {}
+Attribute							= {}
 Attribute.healthPerConstitution		= 8
 Attribute.movesPerConstitution		= 8
 Attribute.manaPerIntelligence		= 8

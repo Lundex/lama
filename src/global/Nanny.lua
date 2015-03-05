@@ -19,8 +19,6 @@
 --- Singleton that contains necessary processes for connecting new players,
 -- as well as processing their input during these stages.
 -- @author milkmanjack
-module("Nanny", package.seeall)
-
 local md5			= require("md5")
 local Mob			= require("obj.Mob")
 local Race			= require("obj.Race")
@@ -30,7 +28,7 @@ local Class			= require("obj.Class")
 -- as well as processing their input during these stages.
 -- @class table
 -- @name Nanny
-local Nanny			= {}
+Nanny				= {}
 
 --- Processes input from a player.
 -- @param player The player to process.

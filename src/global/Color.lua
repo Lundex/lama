@@ -19,12 +19,11 @@
 
 --- Singleton that contains ANSI color codes.
 -- @author milkmanjack
-module("Color", package.seeall)
 
 --- Singleton that contains ANSI color codes.
 -- @class table
 -- @name Color
-local Color						= {}
+Color							= {}
 Color.CLEAR						= "[0m"
 Color.BLINK						= "[5m"
 Color.C_BLACK					= "[0;30m"

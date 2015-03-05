@@ -18,7 +18,6 @@
 
 --- Singleton that contains enum-styled values for directional movement.
 -- @author milkmanjack
-module("Direction", package.seeall)
 
 --- Singleton that contains enum-styled values for directional movement.
 -- @class table
@@ -31,7 +30,7 @@ module("Direction", package.seeall)
 -- @field NORTHWEST Northwest.
 -- @field SOUTHEAST Southeast.
 -- @field SOUTHWEST Southwest.
-local Direction							= {}
+Direction								= {}
 Direction.NORTH							= 0
 Direction.SOUTH							= 1
 Direction.EAST							= 2

@@ -18,7 +18,6 @@
 
 --- Entry point for the game.
 -- @author milkmanjack
-module("main", package.seeall)
 package.path = package.path .. ";./src/?.lua"
 
 -- local packages that provide extra functionality
@@ -81,7 +80,7 @@ while Game.isReady() do
 			-- preserve players that are in-game
 			else
 				local client, mob = v:getClient(), v:getMob()
-				CharacterManager.saveCharacter(mob) -- save the mob
+				DatabaseManager.saveCharacter(mob) -- save the mob
 
 				-- compile this player's relevant data
 				local data = {}

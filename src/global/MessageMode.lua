@@ -18,7 +18,6 @@
 
 --- Singleton that contains enum-styled values for Player.messageMode.
 -- @author milkmanjack
-module("MessageMode", package.seeall)
 
 --- Singleton that contains enum-styled values for Player.messageMode.
 -- @class table
@@ -31,7 +30,7 @@ module("MessageMode", package.seeall)
 -- @field MOVEMENT Movement updates.
 -- @field COMBAT Combat updates.
 -- @field FAILURE Error messages.
-local MessageMode							= {}
+MessageMode									= {}
 MessageMode.GENERAL							= 0 -- miscellaneous messages
 MessageMode.CHAT							= 1 -- chatting
 MessageMode.ANNOUNCEMENT					= 2 -- game updates (logins, deaths, other stuff)

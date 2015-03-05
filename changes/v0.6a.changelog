@@ -19,4 +19,4 @@
 
 	* Renamed "logs" directory to "log", as that was more consistent.
 
-	* Player:toString() is not a little more sensible. Since Players stand to connect clients and mobs, the stringified version is now "{#id}mob@client address".
+	* Player:toString() is now a little more sensible. Since Players stand to connect clients and mobs, the stringified version is now "{#id}mob@client address".

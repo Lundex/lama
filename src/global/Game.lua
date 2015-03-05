@@ -18,7 +18,6 @@
 
 --- Singleton that provides the necessary operations for running the game.
 -- @author milkmanjack
-module("Game", package.seeall)
 
 local Event			= require("obj.Event")
 local Scheduler		= require("obj.Scheduler")
@@ -44,11 +43,11 @@ local CommandParser	= require("obj.CommandParser")
 -- @field logger Logger that prints to the standard output.
 -- @field fileLogger Logger that prints to the standard log file for this session.
 -- @field commandLogger Logger that prints all command input to the standard command log file for this session.
-local Game				= {}
+Game					= {}
 
 -- game data
 Game.name				= "lama"
-Game.version			= "v0.7a-2"
+Game.version			= "v0.8a"
 Game.developers			= {"milkmanjack"}
 
 -- current game info
@@ -99,25 +98,19 @@ end
 -- Specifies further action after opening the game.
 function Game.onOpen()
 	-- load the scheduler
-	if not Game.scheduler then
-		Game.scheduler = Scheduler:new()
-		Game.info("Preparing scheduler...")
-		Game.queue(Game.AcceptEvent:new(Game.time()))
-		Game.queue(Game.PollEvent:new(Game.time()))
-	end
+	Game.scheduler = Scheduler:new()
+	Game.info("Preparing scheduler...")
+	Game.queue(Game.AcceptEvent:new(Game.time()))
+	Game.queue(Game.PollEvent:new(Game.time()))
 
 	-- load the map
-	if not Game.map then
-		Game.info("Loading map...")
-		Game.map = require("data.map.worldmap")
-	end
+	Game.info("Loading map...")
+	Game.map = dofile("data/map/worldmap.lua")
 
 	-- load the parser
-	if not Game.parser then
-		Game.parser = CommandParser:new()
-		Game.info("Generating commands...")
-		Game.generateCommands()
-	end
+	Game.parser = CommandParser:new()
+	Game.info("Generating commands...")
+	Game.generateCommands()
 
 	-- load other database stuff
 	Game.info("Loading races...")
@@ -176,10 +169,8 @@ function Game.recoverFromHotboot(preservedData)
 		player:setID(v.id)
 		Game.connectPlayer(player, true)
 
-		local mob = Mob:new()
+		local mob, location = DatabaseManager.loadCharacter(v.name)
 		player:setMob(mob)
-		local _, location = DatabaseManager.loadCharacter(v.name, mob) -- load the old mob, based on its name
-		print(_, location)
 		mob:moveToMap(Game.map)
 		mob:move(location)
 
@@ -476,7 +467,5 @@ function Game.PollEvent:run()
 		i = i + 1
 	end
 end
-
-_G.Game = Game
 
 return Game
