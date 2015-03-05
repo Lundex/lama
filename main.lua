@@ -19,7 +19,7 @@
 --- Entry point for the game.
 -- @author milkmanjack
 module("main", package.seeall)
-package.path = package.path .. ";.\\src\\?.lua"
+package.path = package.path .. ";./src/?.lua"
 
 -- local packages that provide extra functionality
 require("config")
