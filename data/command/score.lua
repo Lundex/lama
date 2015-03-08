@@ -45,7 +45,7 @@ You have %d/%d health, %d/%d mana, and %d/%d moves.",
 					mob:getMana(), mob:getMaxMana(),
 					mob:getMoves(), mob:getMaxMoves()
 					)
-	)
+	, MessageMode.COMMAND)
 end
 
 return Score

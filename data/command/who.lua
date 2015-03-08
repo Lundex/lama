@@ -16,26 +16,26 @@
     along with this program.  If not, see <http://www.gnu.org/licenses/>.
 ]]
 
---- Command for listing usable commands.
--- @author milkmanjack
+require("ext.string")
+local Command	= require("obj.Command")
 
-local Command		= require("obj.Command")
-
---- Command for listing usable commands.
+--- Command for checking who is online.
 -- @class table
--- @name Commands
-local Commands		= Command:clone()
-Commands.keyword	= "commands"
+-- @name Who
+local Who		= Command:clone()
+Who.keyword		= "who"
 
---- Show commands.
-function Commands:execute(player, mob)
-	local msg = "--- Commands ---"
-	local perLine = 5
-	for i,v in ipairs(Game.parser:getCommands()) do
-		msg = string.format("%s%s%16s", msg, math.mod(i-1, perLine) == 0 and "\n" or "", v.keyword)
+--- Send a list of players to the player.
+function Who:execute(player, mob)
+	local msg = ".-L-.- Race ---- Class -."
+	for i,v in ipairs(Game.getPlayers()) do
+		local client = v:getClient()
+		local mob = v:getMob()
+		msg = string.format("%s\n|%3d| %-8s %8s | %s", msg, mob:getLevel(), mob:getRace():getWho(), mob:getClass():getWho(), mob:getName())
 	end
 
-	mob:sendMessage(msg, MessageMode.INFO)
+	msg = string.format("%s\n%s", msg, "'---'-------------------'")
+	player:sendMessage(msg, MessageMode.COMMAND)
 end
 
-return Commands
+return Who

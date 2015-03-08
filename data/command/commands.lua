@@ -16,20 +16,26 @@
     along with this program.  If not, see <http://www.gnu.org/licenses/>.
 ]]
 
-local Command	= require("obj.Command")
+--- Command for listing usable commands.
+-- @author milkmanjack
 
---- Command for saving our character.
+local Command		= require("obj.Command")
+
+--- Command for listing usable commands.
 -- @class table
--- @name Save
-local Save		= Command:clone()
-Save.keyword	= "save"
+-- @name Commands
+local Commands		= Command:clone()
+Commands.keyword	= "commands"
 
---- Save the character.
--- @param player Player to be saved.
--- @param mob Mob to be saved.
-function Save:execute(player, mob)
-	DatabaseManager.saveCharacter(mob)
-	mob:sendMessage("SAVED!")
+--- Show commands.
+function Commands:execute(player, mob)
+	local msg = "--- Commands ---"
+	local perLine = 5
+	for i,v in ipairs(Game.parser:getCommands()) do
+		msg = string.format("%s%s%16s", msg, math.mod(i-1, perLine) == 0 and "\n" or "", v.keyword)
+	end
+
+	mob:sendMessage(msg, MessageMode.COMMAND)
 end
 
-return Save
+return Commands

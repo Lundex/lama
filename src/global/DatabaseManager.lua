@@ -30,21 +30,21 @@ local Mob					= require("obj.Mob")
 DatabaseManager				= {}
 
 -- templates for savefiles
-DatabaseManager.charTemplate= [[%s
-local character			= {}
-character.password		= "%s"
-character.name			= "%s"
-character.description	= "%s"
-character.race			= "%s"
-character.class			= "%s"
-character.level			= %d
-character.experience	= %d
-character.health		= %d
-character.mana			= %d
-character.moves			= %d
-character.location		= {x=%d,y=%d,z=%d}
-
-return character
+DatabaseManager.charTemplate= [[
+--	Character file generated %s
+return {
+	password	= "%s",
+	name		= "%s",
+	description	= "%s",
+	race		= "%s",
+	class		= "%s",
+	level		= %d,
+	experience	= %d,
+	health		= %d,
+	mana		= %d,
+	moves		= %d,
+	location	= {x=%d,y=%d,z=%d}
+}
 ]]
 
 -- file information
@@ -59,14 +59,6 @@ DatabaseManager.extension		= "lua"
 DatabaseManager.commands		= {}
 DatabaseManager.races			= {}
 DatabaseManager.classes			= {}
-
--- header information
-function DatabaseManager.getHeader(type)
-	return string.format("--[[\
-	[%s] %s file generated for %s (%s).\
-]]\
-", os.date(), string.upper(type or "save"), Game.getName(), Game.getVersion())
-end
 
 --- Get the legalized name form of the given string.
 -- @param name Name to be legalized.
@@ -149,7 +141,7 @@ end
 function DatabaseManager.generateCharacterData(mob)
 	local template = DatabaseManager.charTemplate
 	return string.format(template,
-	DatabaseManager.getHeader("character"),
+	os.date(),
 	mob.characterData.password,
 	mob.name,
 	DatabaseManager.safeString(mob.description),
@@ -246,7 +238,7 @@ end
 function DatabaseManager.loadCommands()
 	local directory = string.format("%s/%s", DatabaseManager.dataDirectory, DatabaseManager.cmdDirectory)
 	for i in lfs.dir(directory) do
-		if i ~= "." and i ~= ".." and i ~= "Movement.lua" then
+		if i ~= "." and i ~= ".." and i ~= "movement.lua" then
 			if string.match(i, ".+%.lua") then -- it's an lua file!
 				local command = dofile(directory .. "/" .. i)
 				Game.info("Loading command '" .. command:getKeyword() .. "'")

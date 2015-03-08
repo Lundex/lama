@@ -107,20 +107,19 @@ function Game.onOpen()
 	Game.info("Loading map...")
 	Game.map = dofile("data/map/worldmap.lua")
 
-	-- load the parser
-	Game.parser = CommandParser:new()
-	Game.info("Generating commands...")
-
 	-- load other database stuff
-	Game.info("Loading commands...")
-	DatabaseManager.loadCommands()
-	Game.parser.commands = DatabaseManager.commands
-
 	Game.info("Loading races...")
 	DatabaseManager.loadRaces()
 
 	Game.info("Loading classes...")
 	DatabaseManager.loadClasses()
+
+	Game.info("Loading commands...")
+	DatabaseManager.loadCommands()
+
+	-- load the parser
+	Game.parser = CommandParser:new()
+	Game.parser.commands = DatabaseManager.commands
 
 	Game.setState(GameState.READY)
 	Game.info("Game is ready for business...")
@@ -237,8 +236,6 @@ end
 -- @param player The Player providing the input.
 -- @param input The input to be processed.
 function Game.onPlayerInput(player, input)
-	Game.logCommand(player, input)
-
 	-- this assumes that there will be echoing at some stage
 	-- in the future, only do this if we know there will be echoing
 	player:clearMessageMode()

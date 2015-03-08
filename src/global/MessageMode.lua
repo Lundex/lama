@@ -34,11 +34,12 @@ MessageMode									= {}
 MessageMode.GENERAL							= 0 -- miscellaneous messages
 MessageMode.CHAT							= 1 -- chatting
 MessageMode.ANNOUNCEMENT					= 2 -- game updates (logins, deaths, other stuff)
-MessageMode.INFO							= 3
+MessageMode.INFO							= 3 -- general info
 MessageMode.QUESTION						= 4 -- questions
 MessageMode.MOVEMENT						= 5 -- movement updates (people moving, you moving, information about the rooms you enter)
 MessageMode.COMBAT							= 6 -- combat updates (attacking one another, dodging, using skills, etc...)
-MessageMode.FAILURE							= 7 -- a failure message!
+MessageMode.FAILURE							= 7 -- a failure message
+MessageMode.COMMAND							= 8 -- messages sent as a response to inputs (so they always are unique)
 
 --- Contains textual representations of MessageMode enums.
 -- @class table
@@ -56,10 +57,11 @@ MessageMode.names[MessageMode.GENERAL]		= "general"
 MessageMode.names[MessageMode.CHAT]			= "chat"
 MessageMode.names[MessageMode.ANNOUNCEMENT]	= "announcement"
 MessageMode.names[MessageMode.INFO]			= "info"
-MessageMode.names[MessageMode.FAILURE]		= "failure"
 MessageMode.names[MessageMode.QUESTION]		= "question"
 MessageMode.names[MessageMode.MOVEMENT]		= "movement"
 MessageMode.names[MessageMode.COMBAT]		= "combat"
+MessageMode.names[MessageMode.FAILURE]		= "failure"
+MessageMode.names[MessageMode.COMMAND]		= "command"
 
 --- Allows for quick reference to MessageMode.names enums.
 -- @param state The state to retrieve the name of.

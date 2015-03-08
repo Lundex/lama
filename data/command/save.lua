@@ -16,26 +16,20 @@
     along with this program.  If not, see <http://www.gnu.org/licenses/>.
 ]]
 
-require("ext.string")
 local Command	= require("obj.Command")
 
---- Command for checking who is online.
+--- Command for saving our character.
 -- @class table
--- @name Who
-local Who		= Command:clone()
-Who.keyword		= "who"
+-- @name Save
+local Save		= Command:clone()
+Save.keyword	= "save"
 
---- Send a list of players to the player.
-function Who:execute(player, mob)
-	local msg = ".-L-.- Race ---- Class -."
-	for i,v in ipairs(Game.getPlayers()) do
-		local client = v:getClient()
-		local mob = v:getMob()
-		msg = string.format("%s\n|%3d| %-8s %8s | %s", msg, mob:getLevel(), mob:getRace():getWho(), mob:getClass():getWho(), mob:getName())
-	end
-
-	msg = string.format("%s\n%s", msg, "'---'-------------------'")
-	player:sendMessage(msg)
+--- Save the character.
+-- @param player Player to be saved.
+-- @param mob Mob to be saved.
+function Save:execute(player, mob)
+	DatabaseManager.saveCharacter(mob)
+	mob:sendMessage("SAVED!", MessageMode.COMMAND)
 end
 
-return Who
+return Save

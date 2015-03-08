@@ -36,7 +36,14 @@ end
 -- @param mob Mob chatting.
 -- @param msg Message to be sent.
 function OOC:execute(player, mob, msg)
-	Game.announce(string.format("{Y%s OOC: '{W%s{Y'{x", mob:getName(), msg), MessageMode.CHAT, PlayerState.PLAYING)
+	local formatted = string.format("{Y%s OOC: '{W%s{Y'{x", mob:getName(), msg)
+	for i,p in ipairs(Game.players) do
+		if p == player then
+			p:sendMessage(string.format("{YYou OOC: '{W%s{Y'{x", msg), MessageMode.COMMAND)
+		elseif p:getState() == PlayerState.PLAYING then
+			p:sendMessage(formatted, MessageMode.CHAT)
+		end
+	end
 end
 
 return OOC

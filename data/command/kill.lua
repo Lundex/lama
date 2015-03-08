@@ -30,7 +30,7 @@ Kill.keyword	= "kill"
 function Kill:parse(player, mob, input)
 	local cmd, keywords = string.getWord(input)
 	if not keywords then
-		player:sendMessage("Kill whom?")
+		player:sendMessage("Kill whom?", MessageMode.COMMAND)
 		return
 	end
 

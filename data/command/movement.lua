@@ -16,26 +16,23 @@
     along with this program.  If not, see <http://www.gnu.org/licenses/>.
 ]]
 
---- Command for listing usable commands.
--- @author milkmanjack
-local Command		= require("obj.Command")
+local Command	= require("obj.Command")
 
---- Test command.
+--- Command template for directional movement.
 -- @class table
--- @name Test
-local Test		= Command:clone()
-Test.keyword	= "test"
+-- @name Movement
+local Movement		= Command:clone()
+Movement.direction	= Direction.NORTH
 
---- Tests stuff.
-function Test:parse(player, mob, input)
-	local cmd, _ = string.getWord(input)
-	local a, _ = string.getWord(_)
-	local b, _ = string.getWord(_)
-	self:execute(player, mob, a, b)
+--- Take a step in a direction.
+-- @param player Player taking a step.
+-- @param mob Mob taking a step.
+function Movement:execute(player, mob)
+	if mob:step(self.direction) then
+		mob:showRoom()
+	else
+		player:sendMessage("Alas, you cannot go that way.", MessageMode.COMMAND)
+	end
 end
 
-function Test:execute(player, mob, a, b)
-	mob:sendMessage(matchKeywords(a, b) or "not matched", MessageMode.INFO)
-end
-
-return Test
+return Movement
